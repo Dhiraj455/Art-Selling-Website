@@ -1,7 +1,10 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
+const fs = require("fs");
 
 module.exports.register = async (req, res) => {
+  console.log(req.file.filename);
+  // const image = "http://localhost:8000/public/images/UserPic/"+req.file.filename
   const { name, email, password, cpassword } = req.body;
   if (!name || !email || !password || !cpassword) {
     return res.status(422).json({ message: "Please fill all the fields" });
@@ -11,11 +14,18 @@ module.exports.register = async (req, res) => {
     if (user) {
       return res.json({ message: "User already exists" }).status(200);
     }
-    const newUser = new User({ name, email, password, cpassword });
+    const newUser = new User({
+      image: {
+        data: fs.readFileSync("public/images/UserPic/" + req.file.filename),
+        contentType: "image/png",
+      },
+      name,
+      email,
+      password,
+      cpassword,
+    });
     await newUser.save();
-    res
-      .json({ message: "User created successfully", user: newUser })
-      .status(200);
+    res.json({ message: "User created successfully With Image", user: newUser }).status(200);
   } catch (err) {
     console.log(err);
   }

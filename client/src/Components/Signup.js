@@ -1,17 +1,15 @@
 import React from "react";
+import { register } from "../Services/User";
 // import axios from "axios";
 
 function Signup() {
-  // const cloud_name = "miniprojectsem5";
-  // const cloud_apikey = "511684939184442"
   const [user, setUser] = React.useState({
     name: "",
     email: "",
     password: "",
     cpassword: "",
+    pic: "",
   });
-  // const [pic, setPic] = React.useState("");
-  
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -24,45 +22,54 @@ function Signup() {
     });
   };
 
-  
+  const handlePic = (e) => {
+    e.preventDefault();
+    console.log(user);
+    var pic = e.target.files[0];
+    console.log(pic);
+    setUser({
+      ...user,
+      pic: pic,
+    });
+    console.log(pic.name);
+  };
+
+  const form = new FormData();
+  form.append("pic", user.pic || user.pic.name);
+  form.set("pic", user.pic);
+  form.set("name", user.name);
+  form.set("email", user.email);
+  form.set("password", user.password);
+  form.set("cpassword", user.cpassword);
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    const { name, email, password, cpassword, pic } = user;
+    const { password, cpassword } = user;
 
-    const response = await fetch("/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, email, password,cpassword,pic }),
-    });
-
-    const data = await response.json();
-    console.log(data);
-    if (data.message === "Please fill all the fields") {
-      console.log("if");
-      alert(data.message);
-    }
-    else if(data.message === "User already exists"){
-      console.log("else if");
-      alert(data.message);
-    }
-    else if(password !== cpassword) {
+    register(form).then((data) => {
+      console.log(data);
+      if (data.message === "Please fill all the fields") {
+        console.log("if");
+        alert(data.message);
+      } else if (data.message === "User already exists") {
+        console.log("else if");
+        alert(data.message);
+      } else if (password !== cpassword) {
         alert("Password does not match");
         return;
+      } else {
+        console.log("else");
+        alert(data.message);
+        window.location.href = "/login";
       }
-    else {
-      console.log("else");
-      alert(data.message);
-      window.location.href = "/login";
-    }
+    });
   };
 
   return (
     <>
       <div className="App">
         <h3>Signup</h3>
-        <form method="POST">
+        <form method="POST" onSubmit={handleLogin}>
           <div className="mb-3">
             <label htmlFor="name" className="form-label">
               Name
@@ -116,15 +123,15 @@ function Signup() {
               name="cpassword"
               value={user.cpassword}
             />
-            {/* <input type="file" p="1.5" accept="image/*" name="pic" onChange={(e) => {
-              postdetails(e.target.files[0])
-            }} /> */}
+            <input
+              type="file"
+              p="1.5"
+              accept="image/*"
+              name="pic"
+              onChange={handlePic}
+            />
           </div>
-          <button
-            type="submit"
-            className="btn btn-primary"
-            onClick={handleLogin}
-          >
+          <button type="submit" className="btn btn-primary">
             Submit
           </button>
         </form>

@@ -5,13 +5,17 @@ const user = require('./models/user');
 const cookieParser = require('cookie-parser')
 const initRoute = require('./routers/initRoute');
 const multer = require('multer');
-// const cors = require('cors');
+const bodyParser = require('body-parser');
 
-// app.use(cors);
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+const cors = require('cors');
+
+app.use(cors());
 app.use(cookieParser())
 
 const upload = multer({
-    destination: 'Public/',
+    destination: 'public/images',
 });
 
 const dotenv = require('dotenv');

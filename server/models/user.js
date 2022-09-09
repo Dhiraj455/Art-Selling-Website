@@ -6,8 +6,8 @@ dotenv.config();
 
 const UserSchema = new mongoose.Schema({
     image: {
-        type:Buffer,
-        contentType: String
+        data: Buffer,
+        contentType: String,
     },
     name: {
         type: String,
