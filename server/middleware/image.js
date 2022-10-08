@@ -9,7 +9,6 @@ const setDestination = (dest) => {
     next();
   };
 };
-console.log("setDestination", destination);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

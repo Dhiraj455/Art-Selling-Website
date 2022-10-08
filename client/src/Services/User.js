@@ -5,7 +5,16 @@ export const register = async (form) => {
         method: "post",
         url: "/register",
         data: form,
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { "Content-Type": "application/json" },
+    })
+}
+
+export const login = async (form) => {
+    return await axios({
+        method: "post",
+        url: "/login",
+        data: form,
+        headers: { "Content-Type": "application/json" },
     })
 }
 

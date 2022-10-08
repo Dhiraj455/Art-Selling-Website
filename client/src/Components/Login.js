@@ -1,4 +1,5 @@
 import React from "react";
+import { login } from "../Services/User"
 // import axios from "axios";
 
 function Login() {
@@ -20,30 +21,30 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const { email, password } = user;
-    const response = await fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await response.json();
-    // console.log(data);
-    if (data.message === "Please fill all the fields") {
-      alert(data.message);
-    } else if (data.message === "Invalid Credentials") {
-      alert(data.message);
-    } else if (data.message === "User does not exist") {
-      // window.location.href = "/signup";
-      alert(data.message);
-    } else {
-      // dispatch({type:"USER",payload:true});
-      alert(data.message);
-      window.location.href = "/";
-    }
-    // console.log(user);
+    login(user).then((data) => {
+      // const data = await response.json();
+      console.log(data.data);
+      if (data.data.message === "Please fill all the fields") {
+        alert(data.data.message);
+      } else if (data.data.message === "Invalid Credentials") {
+        alert(data.data.message);
+      } else if (data.data.message === "User does not exist") {
+        window.location.href = "/signup";
+        alert(data.data.message);
+      } else {
+        // dispatch({type:"USER",payload:true});
+        alert(data.data.message);
+        window.location.href = "/";
+      }
+      // console.log(user);
+    })
+    // const response = await fetch("/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ email, password }),
+    // });   
   };
 
   return (

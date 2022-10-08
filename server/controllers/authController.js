@@ -3,8 +3,12 @@ const User = require("../models/user");
 const fs = require("fs");
 
 module.exports.register = async (req, res) => {
-  console.log(req.file.filename);
-  // const image = "http://localhost:8000/public/images/UserPic/"+req.file.filename
+  // console.log(req.file.filename);
+  const response = {
+    success : true,
+    message : "",
+    errMessage : "",
+  }
   const { name, email, password, cpassword } = req.body;
   if (!name || !email || !password || !cpassword) {
     return res.status(422).json({ message: "Please fill all the fields" });
@@ -15,21 +19,23 @@ module.exports.register = async (req, res) => {
       return res.json({ message: "User already exists" }).status(200);
     }
     const newUser = new User({
-      image: {
-        data: fs.readFileSync("public/images/UserPic/" + req.file.filename),
-        contentType: "image/png",
-      },
+      // image: {
+      //   data: fs.readFileSync("public/images/UserPic/" + req.file.filename),
+      //   contentType: "image/png",
+      // },
       name,
       email,
       password,
       cpassword,
     });
     await newUser.save();
-    res.json({ message: "User created successfully With Image", user: newUser }).status(200);
+    response.success = true;
+    response.message = "User created successfully With Image"
+    console.log(response);
+    res.status(200).json(response);
   } catch (err) {
     console.log(err);
   }
-  console.log(req.body);
 };
 
 module.exports.login = async (req, res) => {
@@ -46,7 +52,6 @@ module.exports.login = async (req, res) => {
     } else {
       const isMatch = await bcrypt.compare(password, user.password);
       token = await user.generateAuthToken();
-      console.log(token);
       const maxAge = 1000 * 60;
       res.cookie("jwttoken", token, {
         httpOnly: true,
@@ -64,5 +69,4 @@ module.exports.login = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-  console.log(req.body);
 };

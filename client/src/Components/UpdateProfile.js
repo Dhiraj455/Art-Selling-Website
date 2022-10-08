@@ -23,6 +23,7 @@ function UpdateProfile() {
       console.log(err);
     }
   };
+
   //   const Update = async () => {
   //     try {
   //       const response = await fetch("/auth", {

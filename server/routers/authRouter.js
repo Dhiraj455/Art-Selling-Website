@@ -6,8 +6,8 @@ const set = require("../middleware/image");
 
 router.post(
   "/register",
-  set.setDestination("./public/images/UserPic/"),
-  set.upload.single("pic"),
+  // set.setDestination("./public/images/UserPic/"),
+  // set.upload.single("pic"),
   authcontrol.register
 );
 

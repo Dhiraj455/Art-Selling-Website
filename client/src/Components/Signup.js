@@ -8,7 +8,7 @@ function Signup() {
     email: "",
     password: "",
     cpassword: "",
-    pic: "",
+    // pic: "",
   });
 
   const handleChange = (e) => {
@@ -22,44 +22,44 @@ function Signup() {
     });
   };
 
-  const handlePic = (e) => {
-    e.preventDefault();
-    console.log(user);
-    var pic = e.target.files[0];
-    console.log(pic);
-    setUser({
-      ...user,
-      pic: pic,
-    });
-    console.log(pic.name);
-  };
+  // const handlePic = (e) => {
+  //   e.preventDefault();
+  //   console.log(user);
+  //   var pic = e.target.files[0];
+  //   console.log(pic);
+  //   setUser({
+  //     ...user,
+  //     pic: pic,
+  //   });
+  //   console.log(pic.name);
+  // };
 
-  const form = new FormData();
-  form.append("pic", user.pic || user.pic.name);
-  form.set("pic", user.pic);
-  form.set("name", user.name);
-  form.set("email", user.email);
-  form.set("password", user.password);
-  form.set("cpassword", user.cpassword);
+  // const form = new FormData();
+  // form.append("pic", user.pic || user.pic.name);
+  // form.set("pic", user.pic);
+  // form.set("name", user.name);
+  // form.set("email", user.email);
+  // form.set("password", user.password);
+  // form.set("cpassword", user.cpassword);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     const { password, cpassword } = user;
 
-    register(form).then((data) => {
-      console.log(data);
-      if (data.message === "Please fill all the fields") {
+    register(user).then((data) => {
+      console.log(data.data);
+      if (data.data.message === "Please fill all the fields") {
         console.log("if");
-        alert(data.message);
-      } else if (data.message === "User already exists") {
+        alert(data.data.message);
+      } else if (data.data.message === "User already exists") {
         console.log("else if");
-        alert(data.message);
+        alert(data.data.message);
       } else if (password !== cpassword) {
         alert("Password does not match");
         return;
       } else {
         console.log("else");
-        alert(data.message);
+        alert(data.data.message);
         window.location.href = "/login";
       }
     });
@@ -123,13 +123,13 @@ function Signup() {
               name="cpassword"
               value={user.cpassword}
             />
-            <input
+            {/* <input
               type="file"
               p="1.5"
               accept="image/*"
               name="pic"
               onChange={handlePic}
-            />
+            /> */}
           </div>
           <button type="submit" className="btn btn-primary">
             Submit
