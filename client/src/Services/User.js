@@ -26,3 +26,12 @@ export const update = async (form) => {
         headers: { "Content-Type": "multipart/form-data" },
     })
 };
+
+export const getProfile = async (id) => {
+    return await axios({
+        method: "get",
+        url: `/profile/${id}`,
+        // data: form,
+        // headers: { "Content-Type": "application/json" },
+    })
+}

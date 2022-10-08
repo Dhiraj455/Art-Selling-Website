@@ -1,11 +1,11 @@
 const express = require('express');
 require('./config/db');
 const app = express();
-const user = require('./models/user');
 const cookieParser = require('cookie-parser')
 const initRoute = require('./routers/initRoute');
 const multer = require('multer');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -17,6 +17,7 @@ app.use(cookieParser())
 const upload = multer({
     destination: 'public/images',
 });
+app.use(express.static(path.join(__dirname, 'public')));
 
 const dotenv = require('dotenv');
 dotenv.config();

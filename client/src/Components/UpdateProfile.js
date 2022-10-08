@@ -10,6 +10,7 @@ function UpdateProfile() {
     name: "",
     email: "",
     description: "",
+    oldImage:"",
     pic: "",
   });
   console.log(user);
@@ -17,8 +18,8 @@ function UpdateProfile() {
     try {
       const x = await Autho();
       console.log(x);
-      const { name, description, email } = x;
-      setUser({...user, name:name, description:description, email:email });
+      const { name, description, email, image } = x;
+      setUser({...user, name:name, description:description, email:email, oldImage:image });
     } catch (err) {
       console.log(err);
     }
@@ -65,6 +66,7 @@ function UpdateProfile() {
   form2.set("name", user.name);
   form2.set("description", user.description);
   form2.set("email", user.email);
+  form2.set("oldImage", user.oldImage);
   form2.set("pic", user.pic);
 
   const handleUpdate = async (e) => {
@@ -129,7 +131,7 @@ function UpdateProfile() {
           type="file"
           p="1.5"
           accept="image/*"
-          name="pic"
+          name="image"
           onChange={handlePic}
         />
         <button
