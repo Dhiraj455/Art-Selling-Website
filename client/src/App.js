@@ -8,6 +8,7 @@ import Register from "./Pages/Register";
 import Login from "./Components/Login";
 import UpdateProfile from "./Components/UpdateProfile";
 import Logout from "./Components/Logout";
+import Post from "./Pages/Post";
 
 function Routing() {
   return (
@@ -18,6 +19,7 @@ function Routing() {
       <Route path="/login" element={<Login />} />
       <Route path="/update" element={<UpdateProfile />} />
       <Route path="/logout" element={<Logout />} />
+      <Route path="/post" element={<Post />} />
     </Routes>
   );
 }
@@ -25,8 +27,8 @@ function Routing() {
 function App() {
   return (
     <div>
-        <Navbar />
-        <Routing />
+      <Navbar />
+      <Routing />
     </div>
   );
 }

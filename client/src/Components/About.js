@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Autho from "../Helpers/AuthHelp";
 import "./s.css";
 import { getProfile } from "../Services/User";
+import { Link } from "react-router-dom"
 // import { useParams } from "react-router-dom";
 
 function About(res) {
@@ -63,6 +64,7 @@ function About(res) {
             </li>
           </ul>
         </div>
+        <Link to="/post">POST</Link>
       </div>
     </>
   );

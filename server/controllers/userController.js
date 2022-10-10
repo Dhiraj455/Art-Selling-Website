@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports.update = async (req, res) => {
-  console.log("Updating");
+  // console.log("Updating");
   let response = {
     success: false,
     message: "",
@@ -55,12 +55,15 @@ module.exports.update = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err);
+    console.log("Error", err);
+    response.message = "Something went wrong!";
+    response.errMessage = err.message;
+    res.status(400).json(response);
   }
 };
 
 module.exports.getProfile = async (req, res) => {
-  console.log("Profile");
+  // console.log("Profile");
   let response = {
     success: true,
     message: "",
@@ -68,12 +71,11 @@ module.exports.getProfile = async (req, res) => {
     result: "",
   };
   let { id } = req.params;
-  console.log(id);
   try {
     await User.findOne({ _id: id })
       // .populate([{ select: "name description image" }])
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         // let imageName = result.image.split("/");
         // console.log(imageName);
         // console.log(imageName[imageName.length - 1]);
