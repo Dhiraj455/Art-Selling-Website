@@ -4,9 +4,19 @@ import { post } from "../Services/User";
 
 function Post() {
   //   const navigate = useNavigate();
+
+  const [posts, setPosts] = useState({
+    title: "",
+    description: "",
+    price: "",
+    postImage: "",
+    userId: "",
+  });
+
   const Update = async () => {
     try {
-      await Autho();
+      let x = await Autho();
+      setPosts({ ...posts, userId: x._id });
     } catch (err) {
       console.log(err);
     }
@@ -16,12 +26,6 @@ function Post() {
     Update();
   }, []);
 
-  const [posts, setPosts] = useState({
-    title: "",
-    description: "",
-    price: "",
-    postImage: "",
-  });
   const handlePost = (e) => {
     e.preventDefault();
     var pic = e.target.files[0];
@@ -33,6 +37,7 @@ function Post() {
   form.append("description", posts.description);
   form.append("price", posts.price);
   form.append("post", posts.postImage);
+  form.append("userId",posts.userId);
   console.log(posts);
 
   const handleAdd = async (e) => {

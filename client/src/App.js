@@ -9,6 +9,7 @@ import Login from "./Components/Login";
 import UpdateProfile from "./Components/UpdateProfile";
 import Logout from "./Components/Logout";
 import Post from "./Pages/Post";
+import AllProducts from "./Pages/AllProduct";
 
 function Routing() {
   return (
@@ -20,6 +21,7 @@ function Routing() {
       <Route path="/update" element={<UpdateProfile />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/post" element={<Post />} />
+      <Route path="/allProduct" element={<AllProducts />} />
     </Routes>
   );
 }

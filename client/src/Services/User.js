@@ -44,3 +44,10 @@ export const post = async (form) => {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
+
+export const getPost = async () => {
+  return await axios({
+    method: "get",
+    url: "/getPosts",
+  });
+}

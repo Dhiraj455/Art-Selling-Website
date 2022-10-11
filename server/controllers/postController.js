@@ -7,7 +7,7 @@ module.exports.postArt = async (req, res) => {
     message: "",
     errMessage: "",
   };
-  const { title, description, price } = req.body;
+  const { title, description, price, userId } = req.body;
   console.log(req.body);
   console.log(req.file);
   let post;
@@ -16,20 +16,24 @@ module.exports.postArt = async (req, res) => {
   }
   try {
     const postArt = new Post({
-        title, 
-        description, 
-        price, 
-        post
+      title,
+      description,
+      price,
+      createdBy: userId,
+      post,
     });
-    await postArt.save().then((data) => {
+    await postArt
+      .save()
+      .then((data) => {
         console.log(data);
         response.success = true;
-        response.message = "Posted successfully"
+        response.message = "Posted successfully";
         res.status(200).json(response);
-    }).catch((err) => {
+      })
+      .catch((err) => {
         console.log(err);
         fs.unlinkSync(req.file.path);
-    });
+      });
   } catch (err) {
     fs.unlinkSync(req.file.path);
     console.log("Error", err);
@@ -39,10 +43,28 @@ module.exports.postArt = async (req, res) => {
   }
 };
 
-module.exports.getPosts = async (req,res) => {
+module.exports.getPosts = async (req, res) => {
+  const response = {
+    success: true,
+    message: "",
+    errMessage: "",
+    result: "",
+  };
+  try {
+    Post.find({
+      isSold: false,
+    }).then((data) => {
+      response.success = true;
+      response.result = data;
+      console.log(data);
+      res.status(200).json(response);
+    });
+  } catch (err) {
+    console.log("Error", err);
+    response.message = "Something went wrong!";
+    response.errMessage = err.message;
+    res.status(400).json(response);
+  }
+};
 
-}
-
-module.exports.deletePost = async (req, res) => {
-    
-}
+module.exports.deletePost = async (req, res) => {};

@@ -64,6 +64,7 @@ module.exports.update = async (req, res) => {
 
 module.exports.getProfile = async (req, res) => {
   // console.log("Profile");
+  console.log(req.user)
   let response = {
     success: true,
     message: "",
