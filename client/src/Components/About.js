@@ -65,6 +65,7 @@ function About(res) {
           </ul>
         </div>
         <Link to="/post">POST</Link>
+        <Link to="/post">POST</Link>
       </div>
     </>
   );

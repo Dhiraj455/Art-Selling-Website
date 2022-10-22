@@ -11,6 +11,7 @@ import Logout from "./Components/Logout";
 import Post from "./Pages/Post";
 import AllProducts from "./Pages/AllProduct";
 import SinglePost from "./Pages/SinglePost";
+import MyCart from "./Pages/MyCart";
 
 function Routing() {
   return (
@@ -24,6 +25,7 @@ function Routing() {
       <Route path="/post" element={<Post />} />
       <Route path="/allProduct" element={<AllProducts />} />
       <Route path="/aProduct/:id" element={<SinglePost />} />
+      <Route path="/mycart" element={<MyCart />} />
     </Routes>
   );
 }

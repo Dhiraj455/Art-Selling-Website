@@ -76,3 +76,12 @@ export const updatePost = async (form) => {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
+
+// export const addtocart = async (form) => {
+//   return await axios({
+//     method: "post",
+//     url: "/addtocart",
+//     data: form,
+//     headers: { "Content-Type": "application/json" },
+//   });
+// };

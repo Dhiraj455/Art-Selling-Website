@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Post = require("../models/post");
 const fs = require("fs");
 const path = require("path");
 
@@ -96,3 +97,25 @@ module.exports.getProfile = async (req, res) => {
     res.status(400).json(response);
   }
 };
+
+module.exports.getMyPost = async (req, res) => {
+  let response = {
+    success: true,
+    message: "",
+    errMessage: "",
+    result: "",
+  };
+  let { id } = req.params;
+  try{
+    Post.find({createdBy: id}).then((result) => {
+      response.result = result
+      response.success = true;
+      res.status(200).json(response);
+    })
+  }catch(err){
+    console.log("Error", err);
+    response.message = "Something went wrong!";
+    response.errMessage = err.message;
+    res.status(400).json(response);
+  }
+}

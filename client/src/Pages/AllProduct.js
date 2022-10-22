@@ -11,11 +11,12 @@ function AllProducts() {
   //     userId:""
   //   }
   // ]);
-
+  const [x,setX] = useState([]);
   const Update = async () => {
     try {
-      let x = await Autho();
-      console.log(x._id);
+      let user = await Autho();
+      setX(user)
+      console.log(user._id);
       getPost().then((data) => {
         setProducts(data.data.result);
         console.log(data.data.result);
@@ -24,7 +25,7 @@ function AllProducts() {
       console.log(err);
     }
   };
-  console.log(products);
+  console.log(x);
   useEffect(() => {
     Update();
   }, []);
@@ -32,9 +33,9 @@ function AllProducts() {
   return (
     <>
       <h1>Hello</h1>
-      {products.map((product) => (
+      {products.map((product,key) => (
         <div className="container">
-          <ProductCard product={product} userId={product.createdBy}/>
+          <ProductCard key={key} product={product} userId={x._id}/>
           <br/>
           <br/>
         </div>

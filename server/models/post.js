@@ -31,6 +31,11 @@ const PostSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
+  upVotes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+    }
+  ],
   boughtBy: [
     {
       type: mongoose.Schema.Types.ObjectId,
