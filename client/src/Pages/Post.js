@@ -11,6 +11,7 @@ function Post() {
     price: "",
     postImage: "",
     userId: "",
+    count :"",
   });
 
   const Update = async () => {
@@ -38,6 +39,7 @@ function Post() {
   form.append("price", posts.price);
   form.append("post", posts.postImage);
   form.append("userId",posts.userId);
+  form.append("count",posts.count);
   console.log(posts);
 
   const handleAdd = async (e) => {
@@ -98,6 +100,20 @@ function Post() {
               setPosts({ ...posts, description: e.target.value })
             }
           ></textarea>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="count" className="form-label">
+            Count
+          </label>
+          <input
+            type="number"
+            className="form-control"
+            id="count"
+            aria-describedby="emailHelp"
+            name="count"
+            // value={user.name}
+            onChange={(e) => setPosts({ ...posts, count: e.target.value })}
+          />
         </div>
         <input
           type="file"

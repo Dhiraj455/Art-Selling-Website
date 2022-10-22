@@ -51,3 +51,28 @@ export const getPost = async () => {
     url: "/getPosts",
   });
 }
+
+export const deletePost = async (form) => {
+  return await axios({
+    method: "delete",
+    url:"/deletePost",
+    data: form,
+    headers: { "Content-Type": "application/json" },
+  })
+}
+
+export const getAPost = async (id) => {
+  return await axios({
+    method:"get",
+    url: `/getAPost/${id}`,
+  })
+}
+
+export const updatePost = async (form) => {
+  return await axios({
+    method: "put",
+    url: "/updatePost",
+    data: form,
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+};
