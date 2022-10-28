@@ -5,10 +5,10 @@ const CartSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // postBy : {
-    //     type: mongoose.Types.ObjectId,
-    //     ref: 'post'
-    // },
+    postBy : {
+        type: mongoose.Types.ObjectId,
+        ref: 'post'
+    },
     createdBy :{
         type: mongoose.Types.ObjectId,
         ref: 'user'

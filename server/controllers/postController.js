@@ -1,5 +1,6 @@
 const Post = require("../models/post");
 const fs = require("fs");
+const path = require("path");
 
 module.exports.postArt = async (req, res) => {
   let response = {
@@ -76,12 +77,22 @@ module.exports.deletePost = async (req, res) => {
     errMessage: "",
   };
   try {
-    Post.findOneAndDelete({ id, createdBy: userId }).then((data) => {
-      console.log(data);
-      response.success = true;
-      response.message = "Post Deleted Successfully";
-      res.status(200).json(response);
-    });
+    const posts = await Post.findOneAndDelete({ id, createdBy: userId });
+    if (posts){
+        console.log(posts);
+        imageName = posts.post.split("/");
+        let imagepath =
+          path.join(__dirname, "../public/images/Posts/") +
+          imageName[imageName.length - 1];
+        fs.unlinkSync(imagepath);
+        response.success = true;
+        response.message = "Post Deleted Successfully";
+        res.status(200).json(response);
+    }
+    else{
+      response.message = "No Post Found";
+      res.status(400).json(response);
+    }
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
@@ -186,3 +197,7 @@ module.exports.getAPost = async (req, res) => {
     res.status(400).json(response);
   }
 };
+
+module.exports.getMyPosts = async (req, res) => {
+  
+}

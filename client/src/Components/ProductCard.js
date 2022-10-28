@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { addtocart } from "../Services/Buy";
+import { deletePost } from "../Services/User";
 
 function ProductCard(props) {
-  const [productData, setProductData] = useState([]);
+  // const [productData, setProductData] = useState([]);
   const [addToCart, setAddToCart] = useState([
     // {
     //   postId: "",
@@ -12,14 +13,20 @@ function ProductCard(props) {
     //   postImage: "",
     // },
   ]);
+  const [deletePosts, setDeletePosts] = useState([]);
   useEffect(() => {
     console.log(props.product);
-    setProductData(props.product);
-    console.log(productData);
+    // setProductData(props.product);
+    // console.log(productData);
+    setDeletePosts({
+      ...deletePosts,
+      id: props.product._id,
+      userId: props.userId,
+    });
     setAddToCart({
       ...addToCart,
-      // id: props.product._id,
-      title : props.product.title,
+      id: props.product._id,
+      title: props.product.title,
       userId: props.userId,
       price: props.product.price,
       count: 1,
@@ -40,6 +47,19 @@ function ProductCard(props) {
       console.log("Error" + err);
     }
   };
+
+  const handleDelete = () => {
+    try {
+      deletePost(deletePosts).then((data) => {
+        console.log(data.data);
+        alert(data.data.message);
+        window.location.href = `/about`;
+      });
+    } catch (err) {
+      console.log("Error" + err);
+    }
+  };
+
   return (
     <>
       <div className="card">
@@ -64,6 +84,7 @@ function ProductCard(props) {
           <li className="list-group-item">{props.product.count}</li>
         </ul>
         <button onClick={handleBtn}>Add To Cart</button>
+        <button onClick={handleDelete}>Delete</button>
       </div>
     </>
   );
