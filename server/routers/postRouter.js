@@ -22,6 +22,18 @@ router.put(
   postController.updatePost
 );
 
+router.get(
+  "/getMyPosts",
+  authentication,
+  postController.getMyPosts,
+)
+
+router.get(
+  "/getBoughtItems",
+  authentication,
+  postController.getBoughtItems,
+)
+
 router.get("/getAPost/:id", postController.getAPost);
 
 module.exports = router;

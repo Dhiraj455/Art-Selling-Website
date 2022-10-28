@@ -78,18 +78,26 @@ module.exports.updateCart = async (req, res) => {
   };
   try {
     const { id, count } = req.body;
-    await Cart.findOneAndUpdate(
-      { _id: id },
-      {
-        $inc: {
-          count : count
-        },
-      },
-      { new: true }
-    ).then((data) => {
-      response.success = true;
-      response.message = "Cart Updated Successful";
-      res.status(200).json(response);
+    await Cart.findOne({ _id: id }).then((data) => {
+      if (data.count < count) {
+        response.message = "Out Of Stock";
+        return res.status(400).json(response);
+      }
+      else{
+        Cart.findOneAndUpdate(
+          { _id: id },
+          {
+            $inc: {
+              count: count,
+            },
+          },
+          { new: true }
+        ).then((data) => {
+          response.success = true;
+          response.message = "Cart Updated Successful";
+          res.status(200).json(response);
+        });
+      }
     });
   } catch (err) {
     console.log("Error", err);
@@ -114,18 +122,26 @@ module.exports.buyCart = async (req, res) => {
       console.log(item);
       console.log(len);
       for (var i = 0; i < len; i++) {
-        Post.findOneAndUpdate(
-          { _id: item[i].postBy },
-          { $inc: { count: -item[i].count }, $push: { boughtBy: userId } }
-        )
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((err) => {
-            console.log(err);
-            response.message = "Error In Buying";
+        Post.findOne({ _id: item[i].postBy }).then((data) => {
+          if (data.count < item[i].count) {
+            response.message = "Out Of Stock";
             return res.status(400).json(response);
-          });
+          }
+          else{
+            Post.findOneAndUpdate(
+              { _id: item[i].postBy },
+              { $inc: { count: -item[i].count }, $push: { boughtBy: userId } }
+            )
+              .then((data) => {
+                console.log(data);
+              })
+              .catch((err) => {
+                console.log(err);
+                response.message = "Error In Buying";
+                return res.status(400).json(response);
+              });
+          }
+        });
       }
       for (var i = 0; i < len; i++) {
         Cart.findOneAndDelete({ createdBy: item[i].createdBy })

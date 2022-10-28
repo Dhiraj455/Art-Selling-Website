@@ -77,11 +77,16 @@ export const updatePost = async (form) => {
   });
 };
 
-// export const addtocart = async (form) => {
-//   return await axios({
-//     method: "post",
-//     url: "/addtocart",
-//     data: form,
-//     headers: { "Content-Type": "application/json" },
-//   });
-// };
+export const getMyPosts = async () => {
+  return await axios({
+    method: "get",
+    url: "/getMyPosts",
+  })
+}
+
+export const getBoughtItems = async () => {
+  return await axios({
+    method: "get",
+    url: "/getBoughtItems",
+  })
+}

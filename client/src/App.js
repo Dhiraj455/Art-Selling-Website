@@ -12,6 +12,7 @@ import Post from "./Pages/Post";
 import AllProducts from "./Pages/AllProduct";
 import SinglePost from "./Pages/SinglePost";
 import MyCart from "./Pages/MyCart";
+import OtherUser from "./Pages/OtherUser";
 
 function Routing() {
   return (
@@ -25,6 +26,7 @@ function Routing() {
       <Route path="/post" element={<Post />} />
       <Route path="/allProduct" element={<AllProducts />} />
       <Route path="/aProduct/:id" element={<SinglePost />} />
+      <Route path="/otherUser/:id" element={<OtherUser />} />
       <Route path="/mycart" element={<MyCart />} />
     </Routes>
   );

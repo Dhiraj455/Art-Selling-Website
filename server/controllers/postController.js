@@ -53,14 +53,19 @@ module.exports.getPosts = async (req, res) => {
     result: "",
   };
   try {
-    Post.find({
-      isSold: false,
-    }).then((data) => {
-      response.success = true;
-      response.result = data;
-      console.log(data);
-      res.status(200).json(response);
-    });
+    await Post.find({ isSold: false })
+      .select("title description price post count")
+      .populate({
+        path: "createdBy",
+        model: "User",
+        select: "name image",
+      })
+      .then((data) => {
+        response.success = true;
+        response.result = data;
+        console.log(data);
+        res.status(200).json(response);
+      });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
@@ -78,18 +83,17 @@ module.exports.deletePost = async (req, res) => {
   };
   try {
     const posts = await Post.findOneAndDelete({ id, createdBy: userId });
-    if (posts){
-        console.log(posts);
-        imageName = posts.post.split("/");
-        let imagepath =
-          path.join(__dirname, "../public/images/Posts/") +
-          imageName[imageName.length - 1];
-        fs.unlinkSync(imagepath);
-        response.success = true;
-        response.message = "Post Deleted Successfully";
-        res.status(200).json(response);
-    }
-    else{
+    if (posts) {
+      console.log(posts);
+      imageName = posts.post.split("/");
+      let imagepath =
+        path.join(__dirname, "../public/images/Posts/") +
+        imageName[imageName.length - 1];
+      fs.unlinkSync(imagepath);
+      response.success = true;
+      response.message = "Post Deleted Successfully";
+      res.status(200).json(response);
+    } else {
       response.message = "No Post Found";
       res.status(400).json(response);
     }
@@ -199,5 +203,61 @@ module.exports.getAPost = async (req, res) => {
 };
 
 module.exports.getMyPosts = async (req, res) => {
-  
-}
+  const userId = req.userid;
+  let response = {
+    success: true,
+    message: "",
+    errMessage: "",
+    result: "",
+  };
+  try {
+    await Post.find({ createdBy: userId })
+      .select("title description price post count")
+      .populate({
+        path: "createdBy",
+        model: "User",
+        select: "name image",
+      })
+      .then((data) => {
+        response.success = true;
+        response.result = data;
+        console.log(data);
+        res.status(200).json(response);
+      });
+  } catch (err) {
+    console.log("Error", err);
+    response.message = "Something went wrong!";
+    response.errMessage = err.message;
+    res.status(400).json(response);
+  }
+};
+
+module.exports.getBoughtItems = async (req, res) => {
+  const userId = req.userid;
+  let response = {
+    success: true,
+    message: "",
+    errMessage: "",
+    result: "",
+  };
+  try {
+    await Post.find({ boughtBy:  userId })
+      .select("title description price post count")
+      .populate({
+        path: "createdBy",
+        model: "User",
+        select: "name image",
+      })
+      .then((data) => {
+        response.success = true;
+        response.result = data;
+        console.log(data);
+        res.status(200).json(response);
+      });
+  } catch (err) {
+    console.log("Error", err);
+    response.message = "Something went wrong!";
+    response.errMessage = err.message;
+    res.status(400).json(response);
+  }
+};

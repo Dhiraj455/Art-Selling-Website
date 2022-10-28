@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Autho from "../Helpers/AuthHelp";
 import "./s.css";
-import { getProfile } from "../Services/User";
-import { Link } from "react-router-dom"
+import { getProfile, getMyPosts, getBoughtItems } from "../Services/User";
+import { Link } from "react-router-dom";
+import ProductCard from "../Components/ProductCard";
 // import { useParams } from "react-router-dom";
 
 function About(res) {
-  // let { id } = useParams();
   const [data, setData] = useState([]);
   const [desc, setDesc] = useState("");
-  // const [image, setImage] = useState("");
-
+  const [products, setProducts] = useState([]);
+  const [x, setX] = useState([]);
   const callAbout = async () => {
     try {
       const data = await Autho();
-      // console.log(data);
+      setX(data);
       getProfile(data._id).then((profile) => {
         console.log(profile.data);
         setData(profile.data.result);
@@ -23,9 +23,23 @@ function About(res) {
         } else {
           setDesc(profile.data.result.description);
         }
-        // setImage(profile.data.result.image);
       });
-      
+      // getMyPosts().then((data) => {
+      //   setProducts(data.data.result);
+      //   console.log(data.data.result);
+      // });
+      getBoughtItems().then((data) => {
+        setProducts(data.data.result);
+        console.log(data.data.result);
+      });
+      // if (data === "MyPost") {
+        
+      // } else if (data === "Bought") {
+      //   getBoughtItems().then((data) => {
+      //     setProducts(data.data.result);
+      //     console.log(data.data.result);
+      //   });
+      // }
       // const base64string = btoa(
       //   String.fromCharCode(...new Uint8Array(data.image.data.data)).toString()
       // );
@@ -43,11 +57,7 @@ function About(res) {
     <>
       <div className="container">
         <div className="card">
-          <img
-            src={data.image}
-            className="photo card-img-top"
-            alt="Some"
-          />
+          <img src={data.image} className="photo card-img-top" alt="Some" />
           <div className="card-body">
             <h5 className="card-title">Card title</h5>
             <p className="card-text">
@@ -65,8 +75,20 @@ function About(res) {
           </ul>
         </div>
         <Link to="/post">POST</Link>
-        <Link to="/post">POST</Link>
       </div>
+      <br />
+      <br />
+      <button>MyPosts</button>
+      <br />
+      <br />
+      <button>Bought</button>
+      <br />
+      <br />
+      {products.map((product, key) => (
+        <div className="container">
+          <ProductCard product={product} userId={x._id} />
+        </div>
+      ))}
     </>
   );
 }

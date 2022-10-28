@@ -37,6 +37,9 @@ function ProductCard(props) {
   const handleClick = () => {
     window.location.href = `/aProduct/${props.product._id}`;
   };
+  const handleUser = () => {
+    window.location.href = `/otherUser/${props.product.createdBy._id}`;
+  }
   const handleBtn = () => {
     try {
       addtocart(addToCart).then((data) => {
@@ -68,8 +71,13 @@ function ProductCard(props) {
           className="photo card-img-top"
           alt="Some"
         />
+        <img
+          src={props.product.createdBy.image}
+          className="photo card-img-top"
+          alt="Some"
+        />
         <div className="card-body">
-          <h5 className="card-title">Card title</h5>
+          <h5 className="card-title" onClick={handleUser}>{props.product.createdBy.name}</h5>
           <p className="card-text">
             Some quick example text to build on the card title and make up the
             bulk of the card's content.
