@@ -1,12 +1,11 @@
 import { Routes, Route } from "react-router-dom";
-// import Navbar from "./Components/Navbar";
 import Home from "../Pages/Home"
 import About from "../Pages/AboutUser"
-// import Signup from "./Components/Signup";
-import Register from "../Pages/Register";
-import Login from "../Components/Login";
+// import Signup from "../Pages/Signup";
+import Signup from "../Pages/Signup2";
+import Login from "../Pages/Login";
 import UpdateProfile from "../Pages/UpdateProfile";
-import Logout from "../Components/Logout";
+import Logout from "../Pages/Logout";
 import Post from "../Pages/Post";
 import AllProducts from "../Pages/AllProduct";
 import SinglePost from "../Pages/SinglePost";
@@ -18,7 +17,7 @@ function Routers() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/profile" element={<About />} />
-      <Route path="/signup" element={<Register />} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route path="/update" element={<UpdateProfile />} />
       <Route path="/logout" element={<Logout />} />
