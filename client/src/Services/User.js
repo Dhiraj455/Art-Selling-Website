@@ -52,6 +52,13 @@ export const getPost = async () => {
   });
 }
 
+export const getSomePosts = async () => {
+  return await axios({
+    method: "get",
+    url: "/getSomePosts",
+  });
+}
+
 export const deletePost = async (form) => {
   return await axios({
     method: "delete",
@@ -88,5 +95,12 @@ export const getBoughtItems = async () => {
   return await axios({
     method: "get",
     url: "/getBoughtItems",
+  })
+}
+
+export const getUsersPosts = async (id) => {
+  return await axios({
+    method: "get",
+    url: `/getUsersPosts/${id}`,
   })
 }

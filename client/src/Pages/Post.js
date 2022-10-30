@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Autho from "../Helpers/AuthHelp";
 import { post } from "../Services/User";
+import CommonSection from "../Components/Common-section/CommonSection";
 
 function Post() {
   //   const navigate = useNavigate();
@@ -57,6 +58,7 @@ function Post() {
 
   return (
     <>
+    <CommonSection title="Post" />
       <form method="POST">
         <div className="mb-3">
           <label htmlFor="name" className="form-label">

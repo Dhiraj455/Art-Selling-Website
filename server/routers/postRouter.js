@@ -13,6 +13,10 @@ router.post(
 
 router.get("/getPosts", postController.getPosts);
 
+router.get("/getSomePosts", postController.getSomePosts);
+
+router.get("/getUsersPosts/:id", postController.getUsersPosts);
+
 router.delete("/deletePost", postController.deletePost);
 
 router.put(

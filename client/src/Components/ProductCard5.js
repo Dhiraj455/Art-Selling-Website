@@ -53,7 +53,7 @@ function ProductCard(props) {
 
   const handleDelete = () => {
     try {
-      deletePost(deletePosts).then((data) => {
+      deletePost(deletePosts.id).then((data) => {
         console.log(data.data);
         alert(data.data.message);
         window.location.href = `/about`;

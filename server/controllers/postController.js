@@ -74,6 +74,36 @@ module.exports.getPosts = async (req, res) => {
   }
 };
 
+module.exports.getSomePosts = async (req, res) => {
+  let response = {
+    success: true,
+    message: "",
+    errMessage: "",
+    result: "",
+  };
+  try {
+    await Post.find({ isSold: false })
+      .select("title description price post count")
+      .populate({
+        path: "createdBy",
+        model: "User",
+        select: "name image",
+      })
+      .limit(20)
+      .then((data) => {
+        response.success = true;
+        response.result = data;
+        console.log(data);
+        res.status(200).json(response);
+      });
+  } catch (err) {
+    console.log("Error", err);
+    response.message = "Something went wrong!";
+    response.errMessage = err.message;
+    res.status(400).json(response);
+  }
+};
+
 module.exports.deletePost = async (req, res) => {
   const { id, userId } = req.body;
   let response = {
@@ -82,7 +112,7 @@ module.exports.deletePost = async (req, res) => {
     errMessage: "",
   };
   try {
-    const posts = await Post.findOneAndDelete({ id, createdBy: userId });
+    const posts = await Post.findOneAndDelete({ _id: id, createdBy: userId });
     if (posts) {
       console.log(posts);
       imageName = posts.post.split("/");
@@ -188,12 +218,19 @@ module.exports.getAPost = async (req, res) => {
   };
   try {
     const { id } = req.params;
-    Post.findOne({ _id: id }).then((data) => {
-      response.success = true;
-      response.result = data;
-      console.log(data);
-      res.status(200).json(response);
-    });
+    Post.findOne({ _id: id })
+      .select("title description price post count")
+      .populate({
+        path: "createdBy",
+        model: "User",
+        select: "name image",
+      })
+      .then((data) => {
+        response.success = true;
+        response.result = data;
+        console.log(data);
+        res.status(200).json(response);
+      });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
@@ -241,7 +278,7 @@ module.exports.getBoughtItems = async (req, res) => {
     result: "",
   };
   try {
-    await Post.find({ boughtBy:  userId })
+    await Post.find({ boughtBy: userId })
       .select("title description price post count")
       .populate({
         path: "createdBy",
@@ -261,3 +298,34 @@ module.exports.getBoughtItems = async (req, res) => {
     res.status(400).json(response);
   }
 };
+
+module.exports.getUsersPosts = async (req, res) => {
+  let response = {
+    success: true,
+    message: "",
+    errMessage: "",
+    result: "",
+  };
+  const id = req.params.id
+  try{
+    await Post.find({ createdBy: id })
+    .select("title description price post count")
+    .populate({
+      path: "createdBy",
+      model: "User",
+      select: "name image",
+    })
+    .then((data) => {
+      response.success = true;
+      response.result = data;
+      console.log(data);
+      res.status(200).json(response);
+    });
+  }
+  catch(err){
+    console.log("Error", err);
+    response.message = "Something went wrong!";
+    response.errMessage = err.message;
+    res.status(400).json(response);
+  }
+}

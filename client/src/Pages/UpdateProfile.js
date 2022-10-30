@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Autho from "../Helpers/AuthHelp";
 import { update } from "../Services/User";
 import { useNavigate } from "react-router-dom";
+import CommonSection from "../Components/Common-section/CommonSection";
 
 function UpdateProfile() {
   const navigate = useNavigate();
@@ -99,6 +100,7 @@ function UpdateProfile() {
 
   return (
     <>
+    <CommonSection title="Market Place" />
       <form method="POST">
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
