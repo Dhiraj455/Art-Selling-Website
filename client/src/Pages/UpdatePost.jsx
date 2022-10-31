@@ -1,11 +1,12 @@
 import React, { useRef } from "react";
-import { Container, Row, Col } from "reactstrap";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Autho from "../Helpers/AuthHelp";
-import { update } from "../Services/User";
+import { updatePost, getAPost } from "../Services/User";
 import { useNavigate } from "react-router-dom";
 import CommonSection from "../Components/Common-section/CommonSection";
 import styled from "styled-components";
+import { Container, Row, Col } from "reactstrap";
 import "../Assets/css/create-item.css";
 
 const ProfilePic = styled.div`
@@ -32,17 +33,6 @@ const ProfileImage = styled.img`
   margin-bottom: 10px;
 `;
 
-const ProfileContainer = styled.div`
-  background: #001825;
-  border-radius: 20px;
-  border: 1px solid #083f5f;
-  padding: 15px;
-  margin: 30px 5px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-`;
-
 const PseudoProfile = styled.div`
   display: inline-block;
   font-size: 40px;
@@ -62,28 +52,36 @@ const PseudoProfile = styled.div`
 const UpdateProfile = () => {
   const fileRef = useRef(null);
   const navigate = useNavigate();
+  const { id } = useParams();
   const [images, setImages] = useState();
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
+  const [userId, setUserId] = useState();
+  const [update, setUpdate] = useState({
+    id: "",
+    title: "",
     description: "",
-    oldImage: "",
+    oldPost: "",
     pic: "",
+    price: "",
+    count: "",
   });
-  console.log(user);
+  console.log(update);
   const Update = async () => {
     try {
       const x = await Autho();
+      setUserId(x._id);
       console.log(x);
-      const { name, description, email, image } = x;
-      setUser({
-        ...user,
-        name: name,
-        description: description,
-        email: email,
-        oldImage: image,
+      getAPost(id).then((data) => {
+        setUpdate({
+          ...update,
+          id: id,
+          title: data.data.result.title,
+          description: data.data.result.description,
+          oldPost: data.data.result.post,
+          price: data.data.result.price,
+          count: data.data.result.count,
+        });
+        setImages(data.data.result.post);
       });
-      setImages(image);
     } catch (err) {
       console.log(err);
     }
@@ -100,21 +98,24 @@ const UpdateProfile = () => {
     console.log(pic);
     fileReader.onload = function (e) {
       setImages(e.target.result);
-      setUser({ ...user, pic: pic });
+      setUpdate({ ...update, pic: pic });
     };
     fileReader.readAsDataURL(pic);
   };
 
   const form2 = new FormData();
-  form2.set("name", user.name);
-  form2.set("description", user.description);
-  form2.set("email", user.email);
-  form2.set("oldImage", user.oldImage);
-  form2.set("pic", user.pic);
+  form2.set("id", update.id);
+  form2.set("title", update.title);
+  form2.set("description", update.description);
+  form2.set("oldPost", update.oldPost);
+  form2.set("pic", update.pic);
+  form2.set("price", update.price);
+  form2.set("count", update.count);
+  form2.set("userId", userId);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    update(form2).then((data) => {
+    updatePost(form2).then((data) => {
       alert(data.data.message);
       navigate("/profile");
     });
@@ -134,7 +135,7 @@ const UpdateProfile = () => {
                   {images === "" || images === undefined || images === null ? (
                     <PseudoProfile
                       dangerouslySetInnerHTML={{
-                        __html: user.name.split("")[0],
+                        __html: update.title.split("")[0],
                       }}
                     />
                   ) : (
@@ -149,7 +150,6 @@ const UpdateProfile = () => {
                     name="image"
                     onChange={handlePic}
                   />
-                  <br />
                   <button
                     className="bid__btn d-flex align-items-center gap-5 pad"
                     onClick={() => {
@@ -176,9 +176,9 @@ const UpdateProfile = () => {
                       type="text"
                       name="name"
                       placeholder="Enter Name"
-                      value={user.name}
+                      value={update.title}
                       onChange={(e) =>
-                        setUser({ ...user, name: e.target.value })
+                        setUpdate({ ...update, name: e.target.value })
                       }
                     />
                   </div>
@@ -215,16 +215,40 @@ const UpdateProfile = () => {
                   <div className="form__input">
                     <label htmlFor="">Description</label>
                     <textarea
-                      name=""
+                      name="description"
                       id=""
                       rows="7"
                       placeholder="Enter description"
                       className="w-100"
-                      value={user.description}
+                      value={update.description}
                       onChange={(e) =>
-                        setUser({ ...user, description: e.target.value })
+                        setUpdate({ ...update, description: e.target.value })
                       }
                     ></textarea>
+                  </div>
+                  <div className="form__input">
+                    <label htmlFor="">Price</label>
+                    <input
+                      type="number"
+                      name="price"
+                      placeholder="Enter Name"
+                      value={update.price}
+                      onChange={(e) =>
+                        setUpdate({ ...update, price: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="form__input">
+                    <label htmlFor="">Count</label>
+                    <input
+                      type="number"
+                      name="count"
+                      placeholder="Enter Name"
+                      value={update.count}
+                      onChange={(e) =>
+                        setUpdate({ ...update, count: e.target.value })
+                      }
+                    />
                   </div>
                   <button
                     className="bid__btn d-flex align-items-center gap-5 pad"

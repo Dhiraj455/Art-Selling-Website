@@ -18,7 +18,7 @@ export const mycart = async (id) => {
 
 export const updateCart = async (form) => {
   return await axios({
-    method: "put",
+    method: "post",
     url: `/updateCart`,
     data: form,
     headers: { "Content-Type": "application/json" },

@@ -32,6 +32,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    wallet: {
+        type: Number,
+        default: 0,
+    },
     tokens: [{
         token: {
             type: String,

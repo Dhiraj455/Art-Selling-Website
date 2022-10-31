@@ -50,30 +50,30 @@ export const getPost = async () => {
     method: "get",
     url: "/getPosts",
   });
-}
+};
 
 export const getSomePosts = async () => {
   return await axios({
     method: "get",
     url: "/getSomePosts",
   });
-}
+};
 
 export const deletePost = async (form) => {
   return await axios({
     method: "delete",
-    url:"/deletePost",
+    url: "/deletePost",
     data: form,
     headers: { "Content-Type": "application/json" },
-  })
-}
+  });
+};
 
 export const getAPost = async (id) => {
   return await axios({
-    method:"get",
+    method: "get",
     url: `/getAPost/${id}`,
-  })
-}
+  });
+};
 
 export const updatePost = async (form) => {
   return await axios({
@@ -88,19 +88,28 @@ export const getMyPosts = async () => {
   return await axios({
     method: "get",
     url: "/getMyPosts",
-  })
-}
+  });
+};
 
 export const getBoughtItems = async () => {
   return await axios({
     method: "get",
     url: "/getBoughtItems",
-  })
-}
+  });
+};
 
 export const getUsersPosts = async (id) => {
   return await axios({
     method: "get",
     url: `/getUsersPosts/${id}`,
-  })
-}
+  });
+};
+
+export const addWallet = async (form) => {
+  return await axios({
+    method: "post",
+    url: "/addWallet",
+    data: form,
+    headers: { "Content-Type": "application/json" },
+  });
+};

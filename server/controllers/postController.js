@@ -183,7 +183,7 @@ module.exports.updatePost = async (req, res) => {
       );
     }
 
-    res.json({ message: "User updated successfully", post1 });
+    res.json({ message: "Post updated successfully", post1 });
     // oldImage != "" &&
     if (post != oldPost) {
       let imageName = oldPost.split("/");

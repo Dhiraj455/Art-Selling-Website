@@ -1,12 +1,10 @@
 import React, { useRef } from "react";
-import { Container, Row, Col } from "reactstrap";
 import { useEffect, useState } from "react";
 import Autho from "../Helpers/AuthHelp";
 import { update } from "../Services/User";
 import { useNavigate } from "react-router-dom";
 import CommonSection from "../Components/Common-section/CommonSection";
 import styled from "styled-components";
-import "../Assets/css/create-item.css";
 
 const ProfilePic = styled.div`
   display: flex;
@@ -59,7 +57,7 @@ const PseudoProfile = styled.div`
   padding-top: 40px;
 `;
 
-const UpdateProfile = () => {
+function UpdateProfile() {
   const fileRef = useRef(null);
   const navigate = useNavigate();
   const [images, setImages] = useState();
@@ -115,20 +113,18 @@ const UpdateProfile = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     update(form2).then((data) => {
-      alert(data.data.message);
-      navigate("/profile");
+      alert(data.data.message)
+      navigate("/profile")
     });
   };
+
   return (
     <>
-      <CommonSection title="Create Item" />
-
+      <CommonSection title="Update Profile" />
       <section>
-        <Container>
-          <Row>
-            <Col lg="3" md="4" sm="6">
-              <h5 className="mb-4 text-light">Preview Item</h5>
-              {/* <NftCard item={item} /> */}
+        <ProfileContainer>
+          <div className="container">
+            <div className="mb-3">
               <ProfilePic>
                 <Profile>
                   {images === "" || images === undefined || images === null ? (
@@ -149,97 +145,56 @@ const UpdateProfile = () => {
                     name="image"
                     onChange={handlePic}
                   />
-                  <br />
                   <button
-                    className="bid__btn d-flex align-items-center gap-5 pad"
+                    className="bid__btn d-flex align-items-center gap-1 pad"
                     onClick={() => {
                       fileRef.current.click();
                     }}
                   >
-                    <i class="ri-refresh-line"></i> Change
+                    <i class="ri-shopping-bag-line"></i> Delete
                   </button>
                 </Profile>
               </ProfilePic>
-            </Col>
-
-            <Col lg="9" md="8" sm="6">
-              <div className="create__item">
-                <form>
-                  {/* <div className="form__input">
-                    <label htmlFor="">Upload File</label>
-                    <input type="file" className="upload__input" />
-                  </div> */}
-
-                  <div className="form__input">
-                    <label htmlFor="">Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      placeholder="Enter Name"
-                      value={user.name}
-                      onChange={(e) =>
-                        setUser({ ...user, name: e.target.value })
-                      }
-                    />
-                  </div>
-
-                  {/* <div className="form__input">
-                    <label htmlFor="">Description</label>
-                    <input
-                      type="number"
-                      placeholder="Enter Description"
-                      value={user.description}
-                      onChange={(e) =>
-                        setUser({ ...user, description: e.target.value })
-                      }
-                    />
-                  </div>
-
-                  <div className=" d-flex align-items-center gap-4">
-                    <div className="form__input w-50">
-                      <label htmlFor="">Starting Date</label>
-                      <input type="date" />
-                    </div>
-
-                    <div className="form__input w-50">
-                      <label htmlFor="">Expiration Date</label>
-                      <input type="date" />
-                    </div>
-                  </div>
-
-                  <div className="form__input">
-                    <label htmlFor="">Title</label>
-                    <input type="text" placeholder="Enter title" />
-                  </div> */}
-
-                  <div className="form__input">
-                    <label htmlFor="">Description</label>
-                    <textarea
-                      name=""
-                      id=""
-                      rows="7"
-                      placeholder="Enter description"
-                      className="w-100"
-                      value={user.description}
-                      onChange={(e) =>
-                        setUser({ ...user, description: e.target.value })
-                      }
-                    ></textarea>
-                  </div>
-                  <button
-                    className="bid__btn d-flex align-items-center gap-5 pad"
-                    onClick={handleUpdate}
-                  >
-                    <i class="ri-pencil-fill"></i> Update
-                  </button>
-                </form>
-              </div>
-            </Col>
-          </Row>
-        </Container>
+              <label htmlFor="name" className="form-label">
+                Name
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="name"
+                aria-describedby="emailHelp"
+                name="name"
+                value={user.name}
+                onChange={(e) => setUser({ ...user, name: e.target.value })}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="desc" className="form-label">
+                Description
+              </label>
+              <textarea
+                name="description"
+                className="form-control"
+                id="desc"
+                rows="3"
+                value={user.description}
+                onChange={(e) =>
+                  setUser({ ...user, description: e.target.value })
+                }
+              ></textarea>
+            </div>
+            <button
+              className="btn btn-primary"
+              type="submit"
+              onClick={handleUpdate}
+            >
+              Update
+            </button>
+          </div>
+        </ProfileContainer>
       </section>
     </>
   );
-};
+}
 
 export default UpdateProfile;

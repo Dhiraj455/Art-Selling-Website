@@ -65,7 +65,7 @@ module.exports.update = async (req, res) => {
 
 module.exports.getProfile = async (req, res) => {
   // console.log("Profile");
-  console.log(req.user)
+  console.log(req.user);
   let response = {
     success: true,
     message: "",
@@ -106,16 +106,43 @@ module.exports.getMyPost = async (req, res) => {
     result: "",
   };
   let { id } = req.params;
-  try{
-    Post.find({createdBy: id}).then((result) => {
-      response.result = result
+  try {
+    Post.find({ createdBy: id }).then((result) => {
+      response.result = result;
       response.success = true;
       res.status(200).json(response);
-    })
-  }catch(err){
+    });
+  } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
     res.status(400).json(response);
   }
-}
+};
+
+module.exports.addWallet = async (req, res) => {
+  let response = {
+    success: false,
+    message: "",
+    errMessage: "",
+  };
+  console.log(req.body, "Dhiraj");
+  const { id, wallet } = req.body;
+  try {
+    await User.findOneAndUpdate(
+      { _id: id },
+      {
+        $inc: { wallet: wallet },
+      },
+      { new: true }
+    );
+    response.success = true;
+    response.message = "Wallet added successfully";
+    res.status(200).json(response);
+  } catch (err) {
+    console.log("Error", err);
+    response.message = "Something went wrong!";
+    response.errMessage = err.message;
+    res.status(400).json(response);
+  }
+};

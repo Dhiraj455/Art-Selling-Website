@@ -10,6 +10,6 @@ router.delete("/deleteItem", Controller.deleteItem);
 
 router.post("/buyCart", Controller.buyCart);
 
-router.put("/updateCart", Controller.updateCart);
+router.post("/updateCart", Controller.updateCart);
 
 module.exports = router;

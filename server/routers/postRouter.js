@@ -22,7 +22,7 @@ router.delete("/deletePost", postController.deletePost);
 router.put(
   "/updatePost",
   setDestination("./public/images/Posts/"),
-  upload.single("post"),
+  upload.single("pic"),
   postController.updatePost
 );
 

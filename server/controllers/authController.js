@@ -30,7 +30,7 @@ module.exports.register = async (req, res) => {
     });
     await newUser.save();
     response.success = true;
-    response.message = "User created successfully With Image"
+    response.message = "User created successfully"
     console.log(response);
     res.status(200).json(response);
   } catch (err) {

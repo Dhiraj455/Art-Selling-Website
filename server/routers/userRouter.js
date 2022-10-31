@@ -15,4 +15,9 @@ router.get(
   userController.getProfile
 );
 
+router.post(
+  "/addWallet",
+  userController.addWallet,
+)
+
 module.exports = router;

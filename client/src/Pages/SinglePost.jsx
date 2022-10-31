@@ -9,37 +9,54 @@ import "../Assets/css/singlepost.css";
 
 function SinglePost() {
   const [product, setProduct] = useState([]);
-  const [userdata,setUserdata] = useState([]);
+  const [userdata, setUserdata] = useState([]);
+  const [x, setX] = useState([]);
   const { id } = useParams();
-  useEffect(() => {
+  const User = async () => {
     try {
-      let x = Autho();
-      console.log(x);
+      let user = await Autho();
+      console.log(user);
+      setX(user);
       getAPost(id).then((data) => {
         setProduct(data.data.result);
-        setUserdata(data.data.result.createdBy)
+        setUserdata(data.data.result.createdBy);
         console.log(data.data.result);
       });
       console.log(product);
     } catch (err) {
       console.log(err);
     }
+  };
+  useEffect(() => {
+    User();
   }, []);
 
   const UserData = (props) => {
+    console.log(props.user);
+    console.log(x);
     return (
-      <div className="nft__creator d-flex gap-3 align-items-center">
-        <div className="creator__img">
-          <img src={props.user.image} alt="" className="w-100" />
+      <>
+        <div className="nft__creator d-flex gap-3 align-items-center">
+          <div className="creator__img">
+            <img src={props.user.image} alt="" className="w-100" />
+          </div>
+          <div className="creator__detail">
+            <p>Created By</p>
+            {props.user._id === x._id ? (
+              <Link to={`/profile`}>
+                <h6>{props.user.name}</h6>
+              </Link>
+            ) : (
+              <Link to={`/otherUser/${props.user._id}`}>
+                <p>{props.user.name}</p>
+              </Link>
+            )}
+          </div>
         </div>
-        <div className="creator__detail">
-          <p>Created By</p>
-          <h6>{props.user.name}</h6>
-        </div>
-      </div>
+      </>
     );
   };
-  
+
   return (
     <>
       <CommonSection title={product.title} />

@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "../Pages/Home"
 import About from "../Pages/AboutUser"
-// import Signup from "../Pages/Signup";
-import Signup from "../Pages/Signup2";
+import Signup from "../Pages/Signup";
 import Login from "../Pages/Login";
+// import UpdateProfile from "../Pages/UpdateProfile";
 import UpdateProfile from "../Pages/UpdateProfile";
 import Logout from "../Pages/Logout";
 import Post from "../Pages/Post";
@@ -11,6 +11,7 @@ import AllProducts from "../Pages/AllProduct";
 import SinglePost from "../Pages/SinglePost";
 import MyCart from "../Pages/MyCart";
 import OtherUserProfile from "../Pages/OtherUserProfile"
+import UpdatePost from "../Pages/UpdatePost";
 
 function Routers() {
   return (
@@ -19,6 +20,7 @@ function Routers() {
       <Route path="/profile" element={<About />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
+      {/* <Route path="/update" element={<UpdateProfile />} /> */}
       <Route path="/update" element={<UpdateProfile />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/post" element={<Post />} />
@@ -26,6 +28,7 @@ function Routers() {
       <Route path="/aProduct/:id" element={<SinglePost />} />
       <Route path="/otherUser/:id" element={<OtherUserProfile />} />
       <Route path="/mycart" element={<MyCart />} />
+      <Route path="/updatePost/:id" element={<UpdatePost />} />
     </Routes>
   );
 }

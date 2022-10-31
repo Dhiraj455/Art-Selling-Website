@@ -1,6 +1,7 @@
 import React from "react";
 
-import "./modal.css";
+// import "./modal.css";
+import "../../Assets/css/modal.css";
 
 const Modal = ({ setShowModal }) => {
   return (

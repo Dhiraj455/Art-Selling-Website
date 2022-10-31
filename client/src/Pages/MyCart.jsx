@@ -6,6 +6,11 @@ import CommonSection from "../Components/Common-section/CommonSection";
 import CartCard from "../Components/Cards/CartCard";
 
 function MyCart() {
+  // const [buy, setBuy] = useState({
+  //   totals: 0,
+  //   postsDetails: [],
+  // });
+  const [postsDetails, setPostsDetails] = useState([]);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const [x, setX] = useState([]);
@@ -13,12 +18,19 @@ function MyCart() {
     try {
       let user = await Autho();
       setX(user);
-      console.log(user._id);
+      console.log(user);
       mycart(user._id)
         .then((data) => {
           console.log(data.data.result);
           setData(data.data.result);
+          for (let i = 0; i < data.data.result.length; i++) {
+            setPostsDetails((postsDetails) => [
+              ...postsDetails,
+              data.data.result[i].postBy,
+            ]);
+          }
           setTotal(data.data.total);
+          console.log(postsDetails);
         })
         .catch((err) => {
           console.log("Error" + err);
@@ -28,8 +40,10 @@ function MyCart() {
       console.log(err);
     }
   };
+
   const handleBuy = () => {
-    buyCart({ userId: x._id })
+    // console.log(buy);
+    buyCart({totals : total, postsDetails: postsDetails, userId : x._id})
       .then((data) => {
         console.log(data.data);
         alert(data.data.message);
@@ -40,6 +54,7 @@ function MyCart() {
         alert(err.message);
       });
   };
+
   useEffect(() => {
     User();
   }, []);
@@ -63,7 +78,9 @@ function MyCart() {
             <h1>Total {total}</h1>
             <button
               className="bid__btn align-items-center gap-1"
-              onClick={handleBuy}
+              onClick={() => {
+                handleBuy();
+              }}
             >
               Buy
             </button>

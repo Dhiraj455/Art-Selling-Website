@@ -1,12 +1,13 @@
 import React, { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import { deleteItem } from "../../Services/Buy";
+import UpdateCardPopUp from "../PopUps/UpdateCardPopUp";
 // import { deletePost } from "../Services/User";
 import "./card.css";
 // import Modal from "../Modal/Modal";
 
 const CartCard = (props) => {
-
+  const [showModal, setShowModal] = useState(false);
   const [deleteData, setDeleteData] = useState([]);
 
   useEffect(() => {
@@ -61,6 +62,10 @@ const CartCard = (props) => {
     console.log(deleteData);
   };
 
+  const handleUpdate = () => {
+    setShowModal(true)
+  }
+
   return (
     <div className="single__nft__card">
       <div className="nft__img">
@@ -102,11 +107,10 @@ const CartCard = (props) => {
             <i class="ri-shopping-bag-line"></i> Delete
           </button>
 
-          {/* {showModal && <Modal setShowModal={setShowModal} />} */}
-
+          {showModal && <UpdateCardPopUp setShowModal={setShowModal} product={props.product} counts={props.product.count}/>}
           <button
             className="bid__btn d-flex align-items-center gap-1"
-            // onClick={handleUpdate}
+            onClick={handleUpdate}
           >
             <i class="ri-shopping-bag-line"></i> Update
           </button>

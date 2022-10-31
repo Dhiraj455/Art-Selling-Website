@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import { addtocart } from "../../Services/Buy";
 import { deletePost } from "../../Services/User";
 import "./card.css";
 // import Modal from "../Modal/Modal";
 
 const MyProductCard = (props) => {
+  const navigate = useNavigate();
   // const [showModal, setShowModal] = useState(false);
   // const [addToCart, setAddToCart] = useState([]);
   const [deletePosts, setDeletePosts] = useState([]);
@@ -53,17 +54,9 @@ const MyProductCard = (props) => {
     }
   };
 
-  // const handleUpdate = () => {
-  //   try {
-  //     deletePost(deletePosts).then((data) => {
-  //       console.log(data.data);
-  //       alert(data.data.message);
-  //       window.location.href = `/about`;
-  //     });
-  //   } catch (err) {
-  //     console.log("Error" + err);
-  //   }
-  // };
+  const handleUpdate = () => {
+    navigate(`/updatePost/${props.product._id}`)
+  };
 
   return (
     <div className="single__nft__card">
@@ -110,7 +103,7 @@ const MyProductCard = (props) => {
 
           <button
             className="bid__btn d-flex align-items-center gap-1"
-            // onClick={handleUpdate}
+            onClick={handleUpdate}
           >
             <i class="ri-refresh-line"></i> Update
           </button>

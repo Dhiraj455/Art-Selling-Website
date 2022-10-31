@@ -6,10 +6,12 @@ import { Container, Row, Col } from "reactstrap";
 import MyProductCard from "../Components/Cards/MyProductCard";
 import CommonSection from "../Components/Common-section/CommonSection";
 // import { useParams } from "react-router-dom";
-import "../Assets/css/userprofile.css"
+import "../Assets/css/userprofile.css";
+import AddWalletPopUp from "../Components/PopUps/AddWalletPopUp";
 
 function About() {
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
   const [desc, setDesc] = useState("");
   const [products, setProducts] = useState([]);
@@ -42,19 +44,18 @@ function About() {
 
   const handleSort = (e) => {
     const filterValue = e.target.value;
-    if(filterValue === "My Posts"){
+    if (filterValue === "My Posts") {
       getMyPosts().then((data) => {
         setProducts(data.data.result);
         console.log(data.data.result);
       });
-    }
-    else if(filterValue === "Bought Posts"){
+    } else if (filterValue === "Bought Posts") {
       getBoughtItems().then((data) => {
         setProducts(data.data.result);
         console.log(data.data.result);
       });
     }
-  }
+  };
   useEffect(() => {
     callAbout();
   }, []);
@@ -95,15 +96,27 @@ function About() {
 
                 {/* <UserData user={userdata} /> */}
                 <p className="my-4">{desc}</p>
-                <button
-                  className="singleNft-btn d-flex align-items-center gap-2 w-100"
-                  onClick={() => {
-                    navigate("/update");
-                  }}
-                >
-                  <i class="ri-shopping-bag-line"></i>
-                  <Link to="/wallet">Edit</Link>
-                </button>
+                <div className=" mt-3 d-flex align-items-center justify-content-between gap-4">
+                  <button
+                    className="singleNft-btn d-flex align-items-center gap-2 w-100"
+                    onClick={() => {
+                      navigate("/update");
+                    }}
+                  >
+                    <i class="ri-shopping-bag-line"></i>
+                    <Link to="/update">Edit</Link>
+                  </button>
+                  <button
+                    className="singleNft-btn d-flex align-items-center gap-2 w-100"
+                    onClick={() => {
+                      setShowModal(true);
+                    }}
+                  >
+                    <i class="ri-shopping-bag-line"></i>
+                    <Link to="/profile"> Wallet</Link>
+                  </button>
+                </div>
+                {showModal && <AddWalletPopUp setShowModal={setShowModal} />}
               </div>
             </Col>
           </Row>

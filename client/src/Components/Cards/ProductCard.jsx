@@ -1,14 +1,14 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { addtocart } from "../../Services/Buy";
+// import { addtocart } from "../../Services/Buy";
 // import { deletePost } from "../Services/User";
 import "./card.css";
-import Modal from "../Modal/Modal";
+// import Modal from "../PopUps/Modal";
+import AddToCart from "../PopUps/AddToCart";
 
 const ProductCard = (props) => {
-
   const [showModal, setShowModal] = useState(false);
-  const [addToCart, setAddToCart] = useState([]);
+  // const [addToCart, setAddToCart] = useState([]);
   const [deletePosts, setDeletePosts] = useState([]);
 
   useEffect(() => {
@@ -18,28 +18,28 @@ const ProductCard = (props) => {
       id: props.product._id,
       userId: props.userId,
     });
-    setAddToCart({
-      ...addToCart,
-      id: props.product._id,
-      title: props.product.title,
-      userId: props.userId,
-      price: props.product.price,
-      count: 1,
-      postImage: props.product.post,
-    });
+    // setAddToCart({
+    //   ...addToCart,
+    //   id: props.product._id,
+    //   title: props.product.title,
+    //   userId: props.userId,
+    //   price: props.product.price,
+    //   count: 1,
+    //   postImage: props.product.post,
+    // });
   }, []);
 
-  console.log(addToCart);
+  // console.log(addToCart);
   const handleBtn = () => {
-    // setShowModal(true)
-    try {
-      addtocart(addToCart).then((data) => {
-        console.log(data.data);
-        alert(data.data.message);
-      });
-    } catch (err) {
-      console.log("Error" + err);
-    }
+    setShowModal(true)
+    // try {
+    //   addtocart(addToCart).then((data) => {
+    //     console.log(data.data);
+    //     alert(data.data.message);
+    //   });
+    // } catch (err) {
+    //   console.log("Error" + err);
+    // }
   };
   return (
     <div className="single__nft__card">
@@ -49,7 +49,9 @@ const ProductCard = (props) => {
 
       <div className="nft__content">
         <h5 className="nft__title">
-          <Link to={`/aProduct/${props.product._id}`}>{props.product.title}</Link>
+          <Link to={`/aProduct/${props.product._id}`}>
+            {props.product.title}
+          </Link>
         </h5>
 
         <div className="creator__info-wrapper d-flex gap-3">
@@ -60,7 +62,15 @@ const ProductCard = (props) => {
           <div className="creator__info w-100 d-flex align-items-center justify-content-between">
             <div>
               <h6>Created By</h6>
-              <Link to={`/otherUser/${props.product.createdBy._id}`}><p>{props.product.createdBy.name}</p></Link>
+              {props.product.createdBy._id === props.userId ? (
+                <Link to={`/profile`}>
+                  <p>{props.product.createdBy.name}</p>
+                </Link>
+              ) : (
+                <Link to={`/otherUser/${props.product.createdBy._id}`}>
+                  <p>{props.product.createdBy.name}</p>
+                </Link>
+              )}
             </div>
 
             <div>
@@ -70,7 +80,7 @@ const ProductCard = (props) => {
           </div>
         </div>
 
-        <div className=" mt-3 d-flex align-items-center justify-content-between">
+        <div className=" mt-3 d-flex align-items-center justify-content-between gap-2">
           <button
             className="bid__btn d-flex align-items-center gap-1"
             onClick={handleBtn}
@@ -78,11 +88,8 @@ const ProductCard = (props) => {
             <i class="ri-shopping-cart-line"></i> Add To Cart
           </button>
 
-          {showModal && <Modal setShowModal={setShowModal} />}
+          {showModal && <AddToCart setShowModal={setShowModal} product={props.product} userId={props.userId}/>}
 
-          <span className="history__link">
-            <Link to="#">View History</Link>
-          </span>
         </div>
       </div>
     </div>
