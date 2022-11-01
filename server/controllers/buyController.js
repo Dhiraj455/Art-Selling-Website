@@ -120,9 +120,11 @@ module.exports.buyCart = async (req, res) => {
   const { totals, userId } = req.body;
   let postDetail = [];
   for (let i = 0; i < req.body.postsDetails.length; i++) {
-    postDetail.push(
-      { postId: req.body.postsDetails[i]._id, boughtFrom: req.body.postsDetails[i].createdBy },
-    );
+    postDetail.push({
+      postId: req.body.postsDetails[i]._id,
+      boughtFrom: req.body.postsDetails[i].createdBy,
+      count: req.body.count[i],
+    });
   }
   console.log(postDetail);
   try {
@@ -211,7 +213,6 @@ module.exports.deleteItem = async (req, res) => {
 
 module.exports.getTrack = async (req, res) => {
   const userId = req.userid;
-  const filter = req.body.filter;
   let response = {
     success: false,
     result: "",
@@ -219,12 +220,11 @@ module.exports.getTrack = async (req, res) => {
     errMessage: "",
   };
   try {
-    if (filter === "Accepted") {
-      await Track.find({ createdBy: userId, isAccepted: true })
+    await Track.find({ createdBy: userId, isAccepted: false })
       .select("totals isAccepted isDelivered createdBy")
       .populate({
         path: "postsDetails",
-        select: "boughtFrom isDelivered",
+        select: "boughtFrom isDelivered count",
         populate: {
           path: "postId",
           model: "Post",
@@ -232,29 +232,150 @@ module.exports.getTrack = async (req, res) => {
         },
       })
       .then((data) => {
+        console.log(data);
         response.success = true;
         response.result = data;
         res.status(200).json(response);
       });
-    } else {
-      await Track.find({ createdBy: userId, isAccepted: false })
+  } catch (err) {
+    console.log("Error", err);
+    response.message = "Something went wrong!";
+    response.errMessage = err.message;
+    res.status(400).json(response);
+  }
+};
+
+module.exports.getDeliveredTrack = async (req, res) => {
+  const userId = req.userid;
+  console.log(userId);
+  let response = {
+    success: false,
+    result: "",
+    message: "",
+    errMessage: "",
+  };
+  try {
+    await Track.find({
+      postsDetails: { $elemMatch: { boughtFrom: userId, isDelivered: false } },
+      isDelivered: false,
+    })
       .select("totals isAccepted isDelivered createdBy")
       .populate({
         path: "postsDetails",
-        select: "boughtFrom isDelivered",
+        select: "boughtFrom isDelivered count",
         populate: {
           path: "postId",
           model: "Post",
-          select: "price post",
+          select: "price post title",
         },
       })
-      .then(
-        (data) => {
-          response.success = true;
-          response.result = data;
-          res.status(200).json(response);
+      .then((data) => {
+        console.log(data);
+        response.success = true;
+        response.result = data;
+        res.status(200).json(response);
+      });
+  } catch (err) {
+    console.log("Error", err);
+    response.message = "Something went wrong!";
+    response.errMessage = err.message;
+    res.status(400).json(response);
+  }
+};
+// await Cart.find({ createdBy: userId }, (err, item) => {
+//   console.log(err);
+//   const len = item.length;
+//   console.log(item);
+//   console.log(len);
+//   for (var i = 0; i < len; i++) {
+//     Post.findOne({ _id: item[i].postBy }).then((data) => {
+//       if (data.count < item[i].count) {
+//         response.message = "Out Of Stock";
+//         return res.status(400).json(response);
+//       } else {
+//         Post.findOneAndUpdate(
+//           { _id: item[i].postBy },
+//           { $inc: { count: -item[i].count }, $push: { boughtBy: userId } }
+//         )
+//           .then((data) => {
+//             console.log(data);
+//           })
+//           .catch((err) => {
+//             console.log(err);
+//             response.message = "Error In Buying";
+//             return res.status(400).json(response);
+//           });
+//       }
+//     });
+//   }
+//   for (var i = 0; i < len; i++) {
+//     Cart.findOneAndDelete({ createdBy: item[i].createdBy })
+//       .then((data) => {
+//         console.log(data);
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//         response.message = "Error In Buying 2";
+//         return res.status(400).json(response);
+//       });
+//   }
+//   response.success = true;
+//   response.message = "Cart Bought Successfully";
+//   res.status(200).json(response);
+// }).clone();
+
+module.exports.isDelivered = async (req, res) => {
+  const response = {
+    success: true,
+    message: "",
+    errMessage: "",
+  };
+  let count = 0;
+  const userId = req.userid;
+  const { id, postId } = req.body;
+  try {
+    const track = await Track.findOne({
+      _id: id,
+      postsDetails: { $elemMatch: { boughtFrom: userId } },
+    });
+    await Track.updateOne(
+      {
+        _id: id,
+        postsDetails: { $elemMatch: { boughtFrom: userId } },
+        "postsDetails._id": postId,
+      },
+      { $set: { "postsDetails.$.isDelivered": true } },
+      { new: true }
+    );
+    await Track.findOne({
+      _id: id,
+      postsDetails: { $elemMatch: { boughtFrom: userId } },
+    }).then((data) => {
+      console.log(data);
+      for (let i = 0; i < data.postsDetails.length; i++) {
+        if (data.postsDetails[i].isDelivered == true) {
+          count += 1;
+        } else {
+          count = count;
         }
+      }
+    });
+    console.log(count);
+    if (count === track.postsDetails.length) {
+      await Track.findOneAndUpdate(
+        {
+          _id: id,
+          postsDetails: { $elemMatch: { boughtFrom: userId } },
+        },
+        { $set: { isDelivered: true } }
       );
+      response.success = true;
+      response.message = "All Delivered";
+      res.status(200).json(response);
+    } else {
+      response.success = true;
+      response.message = "Delivered";
+      res.status(200).json(response);
     }
   } catch (err) {
     console.log("Error", err);
@@ -264,55 +385,44 @@ module.exports.getTrack = async (req, res) => {
   }
 };
 
-module.exports.isDelivered = async (req, res) => {
+module.exports.isAccepted = async (req, res) => {
+  console.log(req.userid);
   const response = {
     success: true,
     message: "",
     errMessage: "",
   };
-  const userId = req.body.userId;
+  const { id } = req.body;
+  const userId = req.userid;
   try {
-    await Cart.find({ createdBy: userId }, (err, item) => {
-      console.log(err);
-      const len = item.length;
-      console.log(item);
-      console.log(len);
-      for (var i = 0; i < len; i++) {
-        Post.findOne({ _id: item[i].postBy }).then((data) => {
-          if (data.count < item[i].count) {
-            response.message = "Out Of Stock";
-            return res.status(400).json(response);
-          } else {
-            Post.findOneAndUpdate(
-              { _id: item[i].postBy },
-              { $inc: { count: -item[i].count }, $push: { boughtBy: userId } }
-            )
-              .then((data) => {
-                console.log(data);
-              })
-              .catch((err) => {
-                console.log(err);
-                response.message = "Error In Buying";
-                return res.status(400).json(response);
-              });
-          }
+    const track = await Track.findOneAndUpdate(
+      { _id: id, createdBy: userId },
+      { $set: { isAccepted: true } },
+      { new: true }
+    );
+    const len = track.postsDetails.length;
+    console.log(track, len);
+    for (var i = 0; i < len; i++) {
+      Post.findOneAndUpdate(
+        { _id: track.postsDetails[i].postId },
+        {
+          $inc: { count: -track.postsDetails[i].count },
+          $push: { boughtBy: userId },
+        },
+        { new: true }
+      )
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err);
+          response.message = "Error In Buying";
+          res.status(400).json(response);
         });
-      }
-      for (var i = 0; i < len; i++) {
-        Cart.findOneAndDelete({ createdBy: item[i].createdBy })
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((err) => {
-            console.log(err);
-            response.message = "Error In Buying 2";
-            return res.status(400).json(response);
-          });
-      }
-      response.success = true;
-      response.message = "Cart Bought Successfully";
-      res.status(200).json(response);
-    }).clone();
+    }
+    response.success = true;
+    response.message = "Accepted";
+    res.status(200).json(response);
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";

@@ -178,7 +178,7 @@ const UpdatePost = () => {
                       placeholder="Enter Name"
                       value={update.title}
                       onChange={(e) =>
-                        setUpdate({ ...update, name: e.target.value })
+                        setUpdate({ ...update, title: e.target.value })
                       }
                     />
                   </div>

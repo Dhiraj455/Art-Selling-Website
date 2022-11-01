@@ -17,6 +17,9 @@ const TrackSchema = new mongoose.Schema({
       boughtFrom: {
         type: mongoose.Schema.Types.ObjectId,
       },
+      count:{
+        type: Number,
+      },
       isDelivered: {
         type: Boolean,
         default: false,

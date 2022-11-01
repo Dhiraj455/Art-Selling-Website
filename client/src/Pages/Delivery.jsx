@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Autho from "../Helpers/AuthHelp";
 // import { getPost } from "../Services/User";
-import { getTrack, isAccepted } from "../Services/Buy";
+import { getDeliveredTrack } from "../Services/Buy";
 // import ProductCard from "../Components/Cards/ProductCard";
 import CommonSection from "../Components/Common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
@@ -18,10 +18,10 @@ const ProfileContainer = styled.div`
   margin: 15px 5px;
 `;
 
-function Track() {
+function Delivery() {
   const [products, setProducts] = useState([]);
   const [postsDetails, setPostsDetails] = useState([]);
-  // const [show, setShow] = useState("true");
+  const [show, setShow] = useState("true");
   //   const [filter, setFilter] = useState("Delivered");
   const [x, setX] = useState([]);
 
@@ -36,9 +36,12 @@ function Track() {
   };
 
   useEffect(() => {
-    getTrack().then((data) => {
+    getDeliveredTrack().then((data) => {
       setProducts(data.data.result);
       console.log(data.data.result);
+      if (data.data.result.length === 0) {
+        setShow("false");
+      }
       for (let i = 0; i < data.data.result.length; i++) {
         setPostsDetails((current) => [
           ...current,
@@ -52,27 +55,24 @@ function Track() {
     Update();
   }, []);
 
-  const handleBtn = (id) => {
-    console.log(id);
-    isAccepted({id: id}).then((data) => {
-      alert(data.data.message);
-      window.location.reload();
-    })
-  };
+  const handleBtn = () => {};
 
   const TrackPage = (props) => {
     return (
       <>
         {props.products.map((product, key) => (
-          <TrackCard
-            key={key}
-            product={product}
-            userId={x._id}
-            id={props.id}
-            isdelivered={props.delivery}
-          />
+          <>
+            {x._id === product.boughtFrom ? (
+              <TrackCard
+                key={key}
+                product={product}
+                userId={x._id}
+                id={props.id}
+                isdelivered={props.delivery}
+              />
+            ) : null}
+          </>
         ))}
-        {/* <h3>{totals}</h3> */}
       </>
     );
   };
@@ -91,31 +91,33 @@ function Track() {
             </Col>
             {postsDetails.map((product, key) => (
               <>
-                <ProfileContainer>
-                  <Row lg="4" md="6" sm="6">
-                    <TrackPage
-                      products={product}
-                      id={products[key]._id}
-                      delivery={products[key].isDelivered}
-                    />
-                  </Row>
-                  {products[key].isDelivered ? (
-                    <div className=" mt-3 d-flex align-items-center justify-content-between gap-2">
-                      <button
-                        className="bid__btn d-flex align-items-center gap-1"
-                        onClick={() => {handleBtn(products[key]._id)}}
-                      >
-                        <i class="ri-check-line"></i> Accept
-                      </button>
+                {show ? (
+                  <ProfileContainer>
+                    <Row lg="4" md="6" sm="6">
+                      <TrackPage
+                        products={product}
+                        id={products[key]._id}
+                        delivery={products[key].isDelivered}
+                      />
+                    </Row>
+                    {products[key].isDelivered ? (
+                      <div className=" mt-3 d-flex align-items-center justify-content-between gap-2">
+                        <button
+                          className="bid__btn d-flex align-items-center gap-1"
+                          onClick={handleBtn}
+                        >
+                          <i class="ri-check-line"></i> Accept
+                        </button>
 
-                      {/* {showModal && <AddToCart setShowModal={setShowModal} product={props.product} userId={props.userId}/>} */}
-                    </div>
-                  ) : null}
-                  <br />
-                  <h3>
-                    Total : <span>Rs. {products[key].totals}</span>
-                  </h3>
-                </ProfileContainer>
+                        {/* {showModal && <AddToCart setShowModal={setShowModal} product={props.product} userId={props.userId}/>} */}
+                      </div>
+                    ) : null}
+                    <br />
+                    <h3>
+                      Total : <span>Rs. {products[key].totals}</span>
+                    </h3>
+                  </ProfileContainer>
+                ) : null}
               </>
             ))}
           </Row>
@@ -125,4 +127,4 @@ function Track() {
   );
 }
 
-export default Track;
+export default Delivery;

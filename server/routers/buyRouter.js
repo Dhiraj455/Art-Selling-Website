@@ -19,4 +19,22 @@ router.get(
     Controller.getTrack
 )
 
+router.post(
+    "/isAccepted",
+    authentication,
+    Controller.isAccepted
+)
+
+router.get(
+    "/getDeliveredTrack",
+    authentication,
+    Controller.getDeliveredTrack,
+)
+
+router.post(
+    "/isDelivered",
+    authentication,
+    Controller.isDelivered
+)
+
 module.exports = router;

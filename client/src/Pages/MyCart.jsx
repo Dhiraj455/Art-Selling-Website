@@ -11,9 +11,9 @@ function MyCart() {
   //   postsDetails: [],
   // });
   const [postsDetails, setPostsDetails] = useState([]);
-  // const [boughtFrom, setBoughtFrom] = useState([]);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
+  const [count, setCount] = useState([]);
   const [x, setX] = useState([]);
   const User = async () => {
     try {
@@ -29,6 +29,7 @@ function MyCart() {
               ...postsDetails,
               data.data.result[i].postBy,
             ]);
+            setCount((counts) => [...counts, data.data.result[i].count]);
             // setBoughtFrom((current) => [
             //   ...current,
             //   data.data.result[i].postBy.createdBy,
@@ -52,6 +53,7 @@ function MyCart() {
       totals: total,
       postsDetails: postsDetails,
       userId: x._id,
+      count: count,
       // boughtFrom: boughtFrom,
     })
       .then((data) => {
