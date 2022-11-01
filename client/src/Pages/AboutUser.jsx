@@ -16,7 +16,6 @@ function About() {
   const [desc, setDesc] = useState("");
   const [products, setProducts] = useState([]);
   const [x, setX] = useState([]);
-  const [filter, setFilter] = useState("");
   const callAbout = async () => {
     try {
       const data = await Autho();
@@ -46,13 +45,11 @@ function About() {
   const handleSort = (e) => {
     const filterValue = e.target.value;
     if (filterValue === "My Posts") {
-      setFilter("");
       getMyPosts().then((data) => {
         setProducts(data.data.result);
         console.log(data.data.result);
       });
     } else if (filterValue === "Bought Posts") {
-      setFilter(e.target.value);
       getBoughtItems().then((data) => {
         setProducts(data.data.result);
         console.log(data.data.result);
@@ -124,7 +121,7 @@ function About() {
                       navigate("/update");
                     }}
                   >
-                    <i class="ri-shopping-bag-line"></i>
+                    <i className="ri-pencil-line"></i>
                     <Link to="/update">Edit</Link>
                   </button>
                   <button
@@ -133,7 +130,7 @@ function About() {
                       setShowModal(true);
                     }}
                   >
-                    <i class="ri-shopping-bag-line"></i>
+                    <i className="ri-wallet-3-line"></i>
                     <Link to="/profile"> Wallet</Link>
                   </button>
                 </div>

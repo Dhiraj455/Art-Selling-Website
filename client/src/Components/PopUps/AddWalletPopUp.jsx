@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Autho from "../../Helpers/AuthHelp";
 import { addWallet } from "../../Services/User";
 import "../../Assets/css/modal.css";
-// import "./modal.css"
+import { toast } from "react-toastify";
 
 const AddWalletPopUp = ({ setShowModal }) => {
   const navigate = useNavigate();
@@ -39,7 +39,9 @@ const AddWalletPopUp = ({ setShowModal }) => {
           console.log(response);
           try {
             addWallet({ id: x._id, wallet: amount }).then((data) => {
-              alert(data.data.message);
+              toast.success(data.data.message, {
+                position: toast.POSITION.BOTTOM_RIGHT,
+              });
               navigate("/profile");
               setShowModal(false);
             });

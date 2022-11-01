@@ -1,56 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import { addtocart } from "../../Services/Buy";
 import { deletePost } from "../../Services/User";
 import "./card.css";
-// import Modal from "../Modal/Modal";
 
 const MyProductCard = (props) => {
   const navigate = useNavigate();
-  // const [showModal, setShowModal] = useState(false);
-  // const [addToCart, setAddToCart] = useState([]);
   const [deletePosts, setDeletePosts] = useState([]);
 
   useEffect(() => {
-    console.log(props.product);
     setDeletePosts({
       ...deletePosts,
       id: props.product._id,
       userId: props.userId,
     });
-    // setAddToCart({
-    //   ...addToCart,
-    //   id: props.product._id,
-    //   title: props.product.title,
-    //   userId: props.userId,
-    //   price: props.product.price,
-    //   count: 1,
-    //   postImage: props.product.post,
-    // });
   }, []);
-
-  // console.log(addToCart);
-  // const handleBtn = () => {
-  //   // setShowModal(true)
-  //   try {
-  //     addtocart(addToCart).then((data) => {
-  //       console.log(data.data);
-  //       alert(data.data.message);
-  //     });
-  //   } catch (err) {
-  //     console.log("Error" + err);
-  //   }
-  // };
 
   const handleDelete = () => {
     try {
       deletePost(deletePosts).then((data) => {
-        console.log(data.data);
         alert(data.data.message);
-        window.location.href = `/profile`;
+        navigate(`/profile`);
       });
     } catch (err) {
-      console.log("Error" + err);
+      alert(err.message)
     }
   };
 
@@ -79,7 +51,7 @@ const MyProductCard = (props) => {
           <div className="creator__info w-100 d-flex align-items-center justify-content-between">
             <div>
               <h6>Created By</h6>
-              <Link to={`/otherUser/${props.product.createdBy._id}`}>
+              <Link to={`/profile`}>
                 <p>{props.product.createdBy.name}</p>
               </Link>
             </div>
@@ -98,8 +70,6 @@ const MyProductCard = (props) => {
           >
             <i class="ri-delete-bin-6-line"></i> Delete
           </button>
-
-          {/* {showModal && <Modal setShowModal={setShowModal} />} */}
 
           <button
             className="bid__btn d-flex align-items-center gap-1"

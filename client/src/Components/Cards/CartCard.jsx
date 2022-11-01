@@ -2,9 +2,7 @@ import React, { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import { deleteItem } from "../../Services/Buy";
 import UpdateCardPopUp from "../PopUps/UpdateCardPopUp";
-// import { deletePost } from "../Services/User";
 import "./card.css";
-// import Modal from "../Modal/Modal";
 
 const CartCard = (props) => {
   const [showModal, setShowModal] = useState(false);
@@ -18,48 +16,15 @@ const CartCard = (props) => {
     });
   }, []);
 
-  // const handleAdd = () => {
-  //   updateCart({
-  //     id: props.product._id,
-  //     count: props.product.count + 1,
-  //   })
-  //     .then((data) => {
-  //       console.log(data.data);
-  //       alert(data.data.message);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       alert(err.message);
-  //     });
-  // };
-
-  // const handleSub = () => {
-  //   updateCart({
-  //     id: props.product._id,
-  //     count: props.product.count - 1,
-  //   })
-  //     .then((data) => {
-  //       console.log(data.data);
-  //       alert(data.data.message);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       alert(err.message);
-  //     });
-  // };
-
   const handleBtn = () => {
     deleteItem(deleteData)
       .then((data) => {
-        console.log(data.data);
         alert(data.data.message);
         window.location.reload();
       })
       .catch((err) => {
-        console.log(err);
         alert(err.message);
       });
-    console.log(deleteData);
   };
 
   const handleUpdate = () => {
@@ -80,17 +45,8 @@ const CartCard = (props) => {
         </h5>
 
         <div className="creator__info-wrapper d-flex gap-3">
-          {/* <div className="creator__img">
-            <img src={props.product.createdBy.image} alt="" className="w-100" />
-          </div> */}
 
           <div className="creator__info w-100 d-flex align-items-center justify-content-between">
-            {/* <div>
-              <h6>Created By</h6>
-              <Link to={`/otherUser/${props.product.createdBy._id}`}>
-                <p>{props.product.createdBy.name}</p>
-              </Link>
-            </div> */}
 
             <div>
               <h6>Price</h6>

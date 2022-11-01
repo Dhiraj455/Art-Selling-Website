@@ -2,6 +2,7 @@ import React from "react";
 import { login } from "../Services/User";
 import { Link } from "react-router-dom";
 import "../Assets/css/signuplogin.css";
+import { toast } from "react-toastify";
 
 function Login() {
   const [user, setUser] = React.useState({
@@ -25,14 +26,22 @@ function Login() {
     login(user).then((data) => {
       console.log(data.data);
       if (data.data.message === "Please fill all the fields") {
-        alert(data.data.message);
+        toast.warn(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       } else if (data.data.message === "Invalid Credentials") {
-        alert(data.data.message);
+        toast.warn(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       } else if (data.data.message === "User does not exist") {
         window.location.href = "/signup";
-        alert(data.data.message);
+        toast.warn(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       } else {
-        alert(data.data.message);
+        toast.success(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
         window.location.href = "/";
       }
       // console.log(user);

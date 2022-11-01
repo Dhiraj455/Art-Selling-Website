@@ -1,45 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-// import { addtocart } from "../../Services/Buy";
-// import { deletePost } from "../Services/User";
 import "./card.css";
-// import Modal from "../PopUps/Modal";
 import AddToCart from "../PopUps/AddToCart";
 
 const ProductCard = (props) => {
   const [showModal, setShowModal] = useState(false);
-  // const [addToCart, setAddToCart] = useState([]);
-  const [deletePosts, setDeletePosts] = useState([]);
-
-  useEffect(() => {
-    console.log(props.product);
-    setDeletePosts({
-      ...deletePosts,
-      id: props.product._id,
-      userId: props.userId,
-    });
-    // setAddToCart({
-    //   ...addToCart,
-    //   id: props.product._id,
-    //   title: props.product.title,
-    //   userId: props.userId,
-    //   price: props.product.price,
-    //   count: 1,
-    //   postImage: props.product.post,
-    // });
-  }, []);
-
-  // console.log(addToCart);
   const handleBtn = () => {
     setShowModal(true)
-    // try {
-    //   addtocart(addToCart).then((data) => {
-    //     console.log(data.data);
-    //     alert(data.data.message);
-    //   });
-    // } catch (err) {
-    //   console.log("Error" + err);
-    // }
   };
   return (
     <div className="single__nft__card">

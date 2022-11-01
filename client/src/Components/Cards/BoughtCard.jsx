@@ -1,10 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { addtocart } from "../../Services/Buy";
-// import { deletePost } from "../Services/User";
 import "./card.css";
-// import Modal from "../PopUps/Modal";
-// import AddToCart from "../PopUps/AddToCart";
 
 const BoughtCard = (props) => {
   return (

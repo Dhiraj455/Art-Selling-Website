@@ -3,11 +3,10 @@ import { useState } from "react";
 import Autho from "../../Helpers/AuthHelp";
 import { addtocart } from "../../Services/Buy";
 import "../../Assets/css/modal.css";
-// import "./modal.css"
+import { toast } from "react-toastify";
 
 const AddToCart = ({ setShowModal, product, userId }) => {
   const [addToCart, setAddToCart] = useState([]);
-  const [count, setCount] = useState(0);
 
   const callAbout = async () => {
     try {
@@ -28,22 +27,12 @@ const AddToCart = ({ setShowModal, product, userId }) => {
   useEffect(() => {
     callAbout();
   }, []);
-
-  const handleCount = (e) => {
-    e.preventDefault();
-    setCount(e.target.value);
-    if (e.target.value < 0) {
-      setCount(0);
-      alert("Value Cannot Be Less Than Zero");
-    } else if (e.target.value > count) {
-      alert("Count is more than available");
-      setCount(e.target.value - 1);
-    }
-  };
   const handleBtn = () => {
     try {
       addtocart(addToCart).then((data) => {
-        alert(data.data.message);
+        toast.success(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
         setShowModal(false);
       });
     } catch (err) {
