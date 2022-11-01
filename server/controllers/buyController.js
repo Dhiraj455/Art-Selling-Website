@@ -403,6 +403,15 @@ module.exports.isAccepted = async (req, res) => {
     const len = track.postsDetails.length;
     console.log(track, len);
     for (var i = 0; i < len; i++) {
+      User.findOneAndUpdate(
+        { _id: track.postsDetails[i].boughtFrom },
+        {
+          $inc: { wallet: track.postsDetails[i].price },
+        },
+        { new: true }
+      ).then((data) => {
+        console.log(data);
+      });
       Post.findOneAndUpdate(
         { _id: track.postsDetails[i].postId },
         {
