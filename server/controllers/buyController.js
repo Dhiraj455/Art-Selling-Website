@@ -124,6 +124,7 @@ module.exports.buyCart = async (req, res) => {
       postId: req.body.postsDetails[i]._id,
       boughtFrom: req.body.postsDetails[i].createdBy,
       count: req.body.count[i],
+      price: req.body.price[i],
     });
   }
   console.log(postDetail);
@@ -159,6 +160,21 @@ module.exports.buyCart = async (req, res) => {
               console.log(err);
               response.message = "Error In Buying 2";
               return res.status(400).json(response);
+            });
+          Post.findOneAndUpdate(
+            { _id: item[i].postBy },
+            {
+              $inc: { count: -item[i].count },
+            },
+            { new: true }
+          )
+            .then((data) => {
+              console.log(data);
+            })
+            .catch((err) => {
+              console.log(err);
+              response.message = "Error In Buying";
+              res.status(400).json(response);
             });
         }
         response.success = true;
@@ -282,47 +298,6 @@ module.exports.getDeliveredTrack = async (req, res) => {
     res.status(400).json(response);
   }
 };
-// await Cart.find({ createdBy: userId }, (err, item) => {
-//   console.log(err);
-//   const len = item.length;
-//   console.log(item);
-//   console.log(len);
-//   for (var i = 0; i < len; i++) {
-//     Post.findOne({ _id: item[i].postBy }).then((data) => {
-//       if (data.count < item[i].count) {
-//         response.message = "Out Of Stock";
-//         return res.status(400).json(response);
-//       } else {
-//         Post.findOneAndUpdate(
-//           { _id: item[i].postBy },
-//           { $inc: { count: -item[i].count }, $push: { boughtBy: userId } }
-//         )
-//           .then((data) => {
-//             console.log(data);
-//           })
-//           .catch((err) => {
-//             console.log(err);
-//             response.message = "Error In Buying";
-//             return res.status(400).json(response);
-//           });
-//       }
-//     });
-//   }
-//   for (var i = 0; i < len; i++) {
-//     Cart.findOneAndDelete({ createdBy: item[i].createdBy })
-//       .then((data) => {
-//         console.log(data);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//         response.message = "Error In Buying 2";
-//         return res.status(400).json(response);
-//       });
-//   }
-//   response.success = true;
-//   response.message = "Cart Bought Successfully";
-//   res.status(200).json(response);
-// }).clone();
 
 module.exports.isDelivered = async (req, res) => {
   const response = {

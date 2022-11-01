@@ -47,7 +47,7 @@ const MyProductCard = (props) => {
       deletePost(deletePosts).then((data) => {
         console.log(data.data);
         alert(data.data.message);
-        window.location.href = `/about`;
+        window.location.href = `/profile`;
       });
     } catch (err) {
       console.log("Error" + err);

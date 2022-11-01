@@ -7,7 +7,7 @@ import "./card.css";
 // import Modal from "../PopUps/Modal";
 // import AddToCart from "../PopUps/AddToCart";
 
-const TrackCard = (props) => {
+const DeliveryCard = (props) => {
   //   const [showModal, setShowModal] = useState(false);
   // const [addToCart, setAddToCart] = useState([]);
   //   const [deletePosts, setDeletePosts] = useState([]);
@@ -86,7 +86,7 @@ const TrackCard = (props) => {
           </div>
         </div> */}
 
-        {/* <div className=" mt-3 d-flex align-items-center justify-content-between gap-2">
+        <div className=" mt-3 d-flex align-items-center justify-content-between gap-2">
           <button
             className="bid__btn d-flex align-items-center gap-1"
             onClick={handleBtn}
@@ -98,11 +98,11 @@ const TrackCard = (props) => {
             )}
           </button>
 
-          {showModal && <AddToCart setShowModal={setShowModal} product={props.product} userId={props.userId}/>}
-        </div> */}
+          {/* {showModal && <AddToCart setShowModal={setShowModal} product={props.product} userId={props.userId}/>} */}
+        </div>
       </div>
     </div>
   );
 };
 
-export default TrackCard;
+export default DeliveryCard;

@@ -5,9 +5,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import MyProductCard from "../Components/Cards/MyProductCard";
 import CommonSection from "../Components/Common-section/CommonSection";
-// import { useParams } from "react-router-dom";
 import "../Assets/css/userprofile.css";
 import AddWalletPopUp from "../Components/PopUps/AddWalletPopUp";
+import BoughtCard from "../Components/Cards/BoughtCard";
 
 function About() {
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ function About() {
   const [desc, setDesc] = useState("");
   const [products, setProducts] = useState([]);
   const [x, setX] = useState([]);
+  const [filter, setFilter] = useState("");
   const callAbout = async () => {
     try {
       const data = await Autho();
@@ -45,11 +46,13 @@ function About() {
   const handleSort = (e) => {
     const filterValue = e.target.value;
     if (filterValue === "My Posts") {
+      setFilter("");
       getMyPosts().then((data) => {
         setProducts(data.data.result);
         console.log(data.data.result);
       });
     } else if (filterValue === "Bought Posts") {
+      setFilter(e.target.value);
       getBoughtItems().then((data) => {
         setProducts(data.data.result);
         console.log(data.data.result);
@@ -93,12 +96,21 @@ function About() {
                     </span>
                   </div>
                 </div>
+                <p className="my-4">Email : {data.email}</p>
                 {/* <UserData user={userdata} /> */}
                 <p className="my-4">{desc}</p>
                 <div className="nft__creator d-flex gap-3 align-items-center">
                   <div className="creator__img">
                     {/* <img src="../Assets/images/wallet-line.png" alt="" className="w-100" /> */}
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32"><path fill="none" d="M0 0h24v24H0z"/><path d="M22 7h1v10h-1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v3zm-2 10h-6a5 5 0 0 1 0-10h6V5H4v14h16v-2zm1-2V9h-7a3 3 0 0 0 0 6h7zm-7-4h3v2h-3v-2z"/></svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="32"
+                      height="32"
+                    >
+                      <path fill="none" d="M0 0h24v24H0z" />
+                      <path d="M22 7h1v10h-1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v3zm-2 10h-6a5 5 0 0 1 0-10h6V5H4v14h16v-2zm1-2V9h-7a3 3 0 0 0 0 6h7zm-7-4h3v2h-3v-2z" />
+                    </svg>
                   </div>
                   <div className="creator__detail">
                     <h5>Wallet</h5>
@@ -152,11 +164,15 @@ function About() {
             </Col>
             {products.map((product, key) => (
               <Col lg="3" md="4" sm="6" className="mb-4">
-                <MyProductCard
-                  key={product._id}
-                  product={product}
-                  userId={x._id}
-                />
+                {product.createdBy._id === x._id ? (
+                  <MyProductCard
+                    key={product._id}
+                    product={product}
+                    userId={x._id}
+                  />
+                ) : (
+                  <BoughtCard key={product._id} product={product} />
+                )}
               </Col>
             ))}
           </Row>

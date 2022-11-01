@@ -7,6 +7,8 @@ import "../../Assets/css/modal.css";
 
 const AddToCart = ({ setShowModal, product, userId }) => {
   const [addToCart, setAddToCart] = useState([]);
+  const [count, setCount] = useState(0);
+
   const callAbout = async () => {
     try {
       await Autho();
@@ -27,6 +29,17 @@ const AddToCart = ({ setShowModal, product, userId }) => {
     callAbout();
   }, []);
 
+  const handleCount = (e) => {
+    e.preventDefault();
+    setCount(e.target.value);
+    if (e.target.value < 0) {
+      setCount(0);
+      alert("Value Cannot Be Less Than Zero");
+    } else if (e.target.value > count) {
+      alert("Count is more than available");
+      setCount(e.target.value - 1);
+    }
+  };
   const handleBtn = () => {
     try {
       addtocart(addToCart).then((data) => {
@@ -50,19 +63,23 @@ const AddToCart = ({ setShowModal, product, userId }) => {
           <input
             type="number"
             placeholder="Enter quantity"
+            value={addToCart.count}
             onChange={(e) => {
-              setAddToCart({ ...addToCart, count: e.target.value });
+              if (e.target.value <= 0) {
+                setAddToCart({ ...addToCart, count: 1 });
+                alert("Value Cannot Be Less Than Zero");
+              } else if (e.target.value > product.count) {
+                setAddToCart({ ...addToCart, count: product.count });
+                alert("Count is more than available");
+              } else if (
+                !(e.target.value > product.count) &&
+                !(e.target.value < 0)
+              ) {
+                setAddToCart({ ...addToCart, count: e.target.value });
+              }
             }}
           />
         </div>
-
-        {/* <div className="input__item mb-4">
-          <input type="number" placeholder="Enter Count" />
-        </div> */}
-
-        {/* <div className="input__item mb-4">
-          <input type="number" placeholder="Enter Amount" />
-        </div> */}
 
         <button className="place__bid-btn" onClick={handleBtn}>
           Add

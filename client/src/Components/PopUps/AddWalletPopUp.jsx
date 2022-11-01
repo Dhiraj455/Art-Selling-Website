@@ -18,19 +18,49 @@ const AddWalletPopUp = ({ setShowModal }) => {
       console.log(err);
     }
   };
+
   useEffect(() => {
     callAbout();
   }, []);
 
-  const handleBtn = () => {
-    try {
-      addWallet({ id: x._id, wallet: amount }).then((data) => {
-        alert(data.data.message);
-        navigate("/profile");
-        setShowModal(false)
-      });
-    } catch (err) {
-      console.log(err);
+  const handleBtn = (e) => {
+    e.preventDefault();
+    if (amount === 0) {
+      alert("please enter amount");
+    } else {
+      var options = {
+        key: "rzp_test_tupa66FxDzP1Ys",
+        key_secret: "9ieux6YxadTdX3qRIHnY4F2U",
+        amount: amount * 100,
+        currency: "INR",
+        name: "METART",
+        description: "for testing purpose",
+        handler: function (response) {
+          console.log(response);
+          try {
+            addWallet({ id: x._id, wallet: amount }).then((data) => {
+              alert(data.data.message);
+              navigate("/profile");
+              setShowModal(false);
+            });
+          } catch (err) {
+            console.log(err);
+          }
+        },
+        prefill: {
+          name: "Dhiraj Shelke",
+          email: "dhirajshelke16@gmail.com",
+          contact: "93263731930",
+        },
+        notes: {
+          address: "Razorpay Corporate office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+      var pay = new window.Razorpay(options);
+      pay.open();
     }
   };
   return (

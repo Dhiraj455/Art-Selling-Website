@@ -7,7 +7,7 @@ import CommonSection from "../Components/Common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import "../Assets/css/allProduct.css";
 import styled from "styled-components";
-import TrackCard from "../Components/Cards/TrackCard";
+import DeliveryCard from "../Components/Cards/DeliveryCard";
 // import MyProductCard from "../Components/Cards/MyProductCard";
 
 const ProfileContainer = styled.div`
@@ -63,7 +63,7 @@ function Delivery() {
         {props.products.map((product, key) => (
           <>
             {x._id === product.boughtFrom ? (
-              <TrackCard
+              <DeliveryCard
                 key={key}
                 product={product}
                 userId={x._id}

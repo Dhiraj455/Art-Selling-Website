@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Autho from "../Helpers/AuthHelp";
-import { getAPost } from "../Services/User";
+import { deletePost, getAPost } from "../Services/User";
 import { Link } from "react-router-dom";
 import CommonSection from "../Components/Common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import "../Assets/css/singlepost.css";
 
 function SinglePost() {
+  const navigate = useNavigate();
   const [product, setProduct] = useState([]);
   const [userdata, setUserdata] = useState([]);
+  const [deletePosts, setDeletePosts] = useState([]);
   const [x, setX] = useState([]);
   const { id } = useParams();
   const User = async () => {
@@ -20,12 +22,32 @@ function SinglePost() {
       getAPost(id).then((data) => {
         setProduct(data.data.result);
         setUserdata(data.data.result.createdBy);
+        setDeletePosts({
+          ...deletePosts,
+          id: data.data.result._id,
+          userId: user._id,
+        });
         console.log(data.data.result);
       });
       console.log(product);
     } catch (err) {
       console.log(err);
     }
+  };
+  const handleDelete = () => {
+    try {
+      deletePost(deletePosts).then((data) => {
+        console.log(data.data);
+        alert(data.data.message);
+        navigate("/profile");
+      });
+    } catch (err) {
+      console.log("Error" + err);
+    }
+  };
+
+  const handleUpdate = () => {
+    navigate(`/updatePost/${product._id}`);
   };
   useEffect(() => {
     User();
@@ -98,10 +120,32 @@ function SinglePost() {
 
                 <UserData user={userdata} />
                 <p className="my-4">{product.description}</p>
-                <button className="singleNft-btn d-flex align-items-center gap-2 w-100">
-                  <i class="ri-shopping-bag-line"></i>
-                  <Link to="/wallet">Add To Cart</Link>
-                </button>
+                {userdata._id !== x._id ? (
+                  <button className="singleNft-btn d-flex align-items-center gap-2 w-100">
+                    <i class="ri-shopping-bag-line"></i>
+                    <Link to="/">Add To Cart</Link>
+                  </button>
+                ) : (
+                  <>
+                    <div className=" mt-3 d-flex align-items-center gap-3">
+                      <button
+                        className="bid__btn d-flex align-items-center gap-1"
+                        onClick={handleDelete}
+                      >
+                        <i class="ri-delete-bin-6-line"></i> Delete
+                      </button>
+
+                      {/* {showModal && <Modal setShowModal={setShowModal} />} */}
+
+                      <button
+                        className="bid__btn d-flex align-items-center gap-1"
+                        onClick={handleUpdate}
+                      >
+                        <i class="ri-refresh-line"></i> Update
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </Col>
           </Row>

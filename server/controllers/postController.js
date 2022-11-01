@@ -1,6 +1,8 @@
 const Post = require("../models/post");
 const fs = require("fs");
 const path = require("path");
+const Track = require("../models/track");
+const Cart = require("../models/cart");
 
 module.exports.postArt = async (req, res) => {
   let response = {
@@ -120,12 +122,36 @@ module.exports.deletePost = async (req, res) => {
         path.join(__dirname, "../public/images/Posts/") +
         imageName[imageName.length - 1];
       fs.unlinkSync(imagepath);
+      Cart.findOneAndDelete({ postBy: id, createdBy: userId })
+        .then((data) => {
+          console.log(data);
+          console.log("Cart Deleted");
+        })
+        .catch((err) => {
+          console.log("Error Cart Deleting");
+        });
+
+      await Track.updateOne(
+        {
+          "postsDetails.postId": id,
+          createdBy: userId,
+        },
+        { $pull: { "postsDetails.$.postId": id } },
+        { new: true }
+      )
+        .then((data) => {
+          console.log(data);
+          console.log("Trac Deleted");
+        })
+        .catch((err) => {
+          console.log("Error trac Deleting");
+        });
       response.success = true;
       response.message = "Post Deleted Successfully";
       res.status(200).json(response);
     } else {
       response.message = "No Post Found";
-      res.status(400).json(response);
+      res.status(200).json(response);
     }
   } catch (err) {
     console.log("Error", err);
@@ -306,26 +332,25 @@ module.exports.getUsersPosts = async (req, res) => {
     errMessage: "",
     result: "",
   };
-  const id = req.params.id
-  try{
+  const id = req.params.id;
+  try {
     await Post.find({ createdBy: id })
-    .select("title description price post count")
-    .populate({
-      path: "createdBy",
-      model: "User",
-      select: "name image",
-    })
-    .then((data) => {
-      response.success = true;
-      response.result = data;
-      console.log(data);
-      res.status(200).json(response);
-    });
-  }
-  catch(err){
+      .select("title description price post count")
+      .populate({
+        path: "createdBy",
+        model: "User",
+        select: "name image",
+      })
+      .then((data) => {
+        response.success = true;
+        response.result = data;
+        console.log(data);
+        res.status(200).json(response);
+      });
+  } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
     res.status(400).json(response);
   }
-}
+};
