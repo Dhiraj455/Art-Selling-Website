@@ -44,3 +44,10 @@ export const buyCart = async (form) => {
     headers: { "Content-Type": "application/json" },
   })
 }
+
+export const getTrack = async (id) => {
+  return await axios({
+    method: "get",
+    url: `/getTrack`,
+  });
+};

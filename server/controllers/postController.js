@@ -148,8 +148,8 @@ module.exports.updatePost = async (req, res) => {
       temp = req.file.filename.split(".");
       fileType = temp[temp.length - 1];
       post = process.env.URL + "/images/Posts/" + req.file.filename;
-    } else if (oldImage) {
-      post = oldImage;
+    } else if (oldPost) {
+      post = oldPost;
     }
     let post1;
     if (count > 0) {

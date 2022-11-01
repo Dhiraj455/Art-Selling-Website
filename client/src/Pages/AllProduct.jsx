@@ -5,6 +5,7 @@ import ProductCard from "../Components/Cards/ProductCard";
 import CommonSection from "../Components/Common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import "../Assets/css/allProduct.css";
+import MyProductCard from "../Components/Cards/MyProductCard";
 
 function AllProducts() {
   const [products, setProducts] = useState([]);
@@ -44,7 +45,11 @@ function AllProducts() {
 
             {products.map((product, key) => (
               <Col lg="3" md="4" sm="6" className="mb-4">
-                <ProductCard key={key} product={product} userId={x._id} />
+                {product.createdBy._id === x._id ? (
+                  <MyProductCard key={key} product={product} userId={x._id} />
+                ) : (
+                  <ProductCard key={key} product={product} userId={x._id} />
+                )}
               </Col>
             ))}
           </Row>

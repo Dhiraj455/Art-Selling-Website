@@ -12,6 +12,7 @@ import SinglePost from "../Pages/SinglePost";
 import MyCart from "../Pages/MyCart";
 import OtherUserProfile from "../Pages/OtherUserProfile"
 import UpdatePost from "../Pages/UpdatePost";
+import Track from "../Pages/Track";
 
 function Routers() {
   return (
@@ -20,7 +21,7 @@ function Routers() {
       <Route path="/profile" element={<About />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
-      {/* <Route path="/update" element={<UpdateProfile />} /> */}
+      <Route path="/track" element={<Track />} />
       <Route path="/update" element={<UpdateProfile />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/post" element={<Post />} />

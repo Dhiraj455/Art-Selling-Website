@@ -66,8 +66,8 @@ function About() {
       <section>
         <Container>
           <Row>
-            <Col lg="6" md="6" sm="6">
-              <img src={data.image} alt="" className="w-100 single__nft-img" />
+            <Col lg="5" md="6" sm="6">
+              <img src={data.image} alt="" className="w-60 single__nft-img" />
             </Col>
 
             <Col lg="6" md="6" sm="6">
@@ -93,9 +93,18 @@ function About() {
                     </span>
                   </div>
                 </div>
-
                 {/* <UserData user={userdata} /> */}
                 <p className="my-4">{desc}</p>
+                <div className="nft__creator d-flex gap-3 align-items-center">
+                  <div className="creator__img">
+                    {/* <img src="../Assets/images/wallet-line.png" alt="" className="w-100" /> */}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32"><path fill="none" d="M0 0h24v24H0z"/><path d="M22 7h1v10h-1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v3zm-2 10h-6a5 5 0 0 1 0-10h6V5H4v14h16v-2zm1-2V9h-7a3 3 0 0 0 0 6h7zm-7-4h3v2h-3v-2z"/></svg>
+                  </div>
+                  <div className="creator__detail">
+                    <h5>Wallet</h5>
+                    <h6>{data.wallet}</h6>
+                  </div>
+                </div>
                 <div className=" mt-3 d-flex align-items-center justify-content-between gap-4">
                   <button
                     className="singleNft-btn d-flex align-items-center gap-2 w-100"

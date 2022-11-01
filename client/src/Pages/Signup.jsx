@@ -114,7 +114,7 @@ function Signup() {
           </div>
 
           <div>
-          <input
+            <input
               className="input"
               type="password"
               placeholder="Confirm Password"
@@ -132,7 +132,7 @@ function Signup() {
           <p className="aha">
             Already have an account?{" "}
             <span>
-              <a href="/user/login"> Sign In</a>
+              <a href="/login"> Sign In</a>
             </span>
           </p>
         </div>

@@ -50,7 +50,7 @@ module.exports.getMyCart = async (req, res) => {
       .populate({
         path: "postBy",
         model: "Post",
-        select: "count",
+        select: "count createdBy",
       })
       .then((result) => {
         if (result) {
@@ -120,7 +120,9 @@ module.exports.buyCart = async (req, res) => {
   const { totals, userId } = req.body;
   let postDetail = [];
   for (let i = 0; i < req.body.postsDetails.length; i++) {
-    postDetail.push({ postId: req.body.postsDetails[i] });
+    postDetail.push(
+      { postId: req.body.postsDetails[i]._id, boughtFrom: req.body.postsDetails[i].createdBy },
+    );
   }
   console.log(postDetail);
   try {
@@ -198,6 +200,61 @@ module.exports.deleteItem = async (req, res) => {
     } else {
       response.message = "Item Not Found";
       res.status(200).json(response);
+    }
+  } catch (err) {
+    console.log("Error", err);
+    response.message = "Something went wrong!";
+    response.errMessage = err.message;
+    res.status(400).json(response);
+  }
+};
+
+module.exports.getTrack = async (req, res) => {
+  const userId = req.userid;
+  const filter = req.body.filter;
+  let response = {
+    success: false,
+    result: "",
+    message: "",
+    errMessage: "",
+  };
+  try {
+    if (filter === "Accepted") {
+      await Track.find({ createdBy: userId, isAccepted: true })
+      .select("totals isAccepted isDelivered createdBy")
+      .populate({
+        path: "postsDetails",
+        select: "boughtFrom isDelivered",
+        populate: {
+          path: "postId",
+          model: "Post",
+          select: "price post title",
+        },
+      })
+      .then((data) => {
+        response.success = true;
+        response.result = data;
+        res.status(200).json(response);
+      });
+    } else {
+      await Track.find({ createdBy: userId, isAccepted: false })
+      .select("totals isAccepted isDelivered createdBy")
+      .populate({
+        path: "postsDetails",
+        select: "boughtFrom isDelivered",
+        populate: {
+          path: "postId",
+          model: "Post",
+          select: "price post",
+        },
+      })
+      .then(
+        (data) => {
+          response.success = true;
+          response.result = data;
+          res.status(200).json(response);
+        }
+      );
     }
   } catch (err) {
     console.log("Error", err);

@@ -11,6 +11,7 @@ function MyCart() {
   //   postsDetails: [],
   // });
   const [postsDetails, setPostsDetails] = useState([]);
+  // const [boughtFrom, setBoughtFrom] = useState([]);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const [x, setX] = useState([]);
@@ -28,6 +29,10 @@ function MyCart() {
               ...postsDetails,
               data.data.result[i].postBy,
             ]);
+            // setBoughtFrom((current) => [
+            //   ...current,
+            //   data.data.result[i].postBy.createdBy,
+            // ]);
           }
           setTotal(data.data.total);
           console.log(postsDetails);
@@ -42,8 +47,13 @@ function MyCart() {
   };
 
   const handleBuy = () => {
-    // console.log(buy);
-    buyCart({totals : total, postsDetails: postsDetails, userId : x._id})
+    // console.log(boughtFrom);
+    buyCart({
+      totals: total,
+      postsDetails: postsDetails,
+      userId: x._id,
+      // boughtFrom: boughtFrom,
+    })
       .then((data) => {
         console.log(data.data);
         alert(data.data.message);

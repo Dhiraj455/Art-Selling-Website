@@ -1,10 +1,11 @@
-import React, {useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Autho from "../Helpers/AuthHelp";
 import HeroSection from "../Components/HeroSection/HeroSection";
 import { Container, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import ProductCard from "../Components/Cards/ProductCard";
 import { getSomePosts } from "../Services/User";
+import MyProductCard from "../Components/Cards/MyProductCard";
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -41,9 +42,13 @@ function Home() {
               </div>
             </Col>
 
-            {products.map((product,key) => (
+            {products.map((product, key) => (
               <Col lg="3" md="4" sm="6" className="mb-4">
-                <ProductCard key={key} product={product} userId={x._id} />
+                {product.createdBy._id === x._id ? (
+                  <MyProductCard key={key} product={product} userId={x._id} />
+                ) : (
+                  <ProductCard key={key} product={product} userId={x._id} />
+                )}
               </Col>
             ))}
           </Row>

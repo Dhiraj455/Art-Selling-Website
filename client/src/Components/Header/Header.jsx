@@ -19,6 +19,10 @@ const NAV__LINKS = [
     url: "/post",
   },
   {
+    display: "Track",
+    url: "/track",
+  },
+  {
     display: "Logout",
     url: "/logout",
   },

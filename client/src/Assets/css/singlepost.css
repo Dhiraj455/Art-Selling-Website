@@ -2,6 +2,10 @@
   border-radius: 8px;
 }
 
+h5 {
+  color: #fff;
+}
+
 .single__nft-seen span i {
   color: #fff;
   padding: 5px;

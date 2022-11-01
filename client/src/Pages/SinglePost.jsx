@@ -41,14 +41,14 @@ function SinglePost() {
             <img src={props.user.image} alt="" className="w-100" />
           </div>
           <div className="creator__detail">
-            <p>Created By</p>
+            <h5>Created By</h5>
             {props.user._id === x._id ? (
               <Link to={`/profile`}>
                 <h6>{props.user.name}</h6>
               </Link>
             ) : (
               <Link to={`/otherUser/${props.user._id}`}>
-                <p>{props.user.name}</p>
+                <h6>{props.user.name}</h6>
               </Link>
             )}
           </div>

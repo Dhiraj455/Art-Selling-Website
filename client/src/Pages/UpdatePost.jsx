@@ -49,7 +49,7 @@ const PseudoProfile = styled.div`
   padding-top: 40px;
 `;
 
-const UpdateProfile = () => {
+const UpdatePost = () => {
   const fileRef = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams();
@@ -266,4 +266,4 @@ const UpdateProfile = () => {
   );
 };
 
-export default UpdateProfile;
+export default UpdatePost;
