@@ -29,12 +29,19 @@ const AddToCart = ({ setShowModal, product, userId }) => {
   }, []);
   const handleBtn = () => {
     try {
-      addtocart(addToCart).then((data) => {
-        toast.success(data.data.message, {
-          position: toast.POSITION.BOTTOM_RIGHT,
+      addtocart(addToCart)
+        .then((data) => {
+          toast.success(data.data.message, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+          });
+          setShowModal(false);
+        })
+        .catch((err) => {
+          toast.warn(err.response.data.message, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+          });
+          setShowModal(false);
         });
-        setShowModal(false);
-      });
     } catch (err) {
       console.log(err);
     }

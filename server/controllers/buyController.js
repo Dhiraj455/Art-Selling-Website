@@ -11,21 +11,47 @@ module.exports.addToCart = async (req, res) => {
   };
   try {
     const { userId, count, price, postImage, title } = req.body;
+    console.log(req.body.id);
     console.log(req.body);
-    let cart = new Cart({
-      createdBy: userId,
-      count,
-      price,
-      postImage,
-      postBy: req.body.id,
-      title,
-    });
-    await cart.save().then((data) => {
-      console.log(data);
-      response.success = true;
-      response.message = "Added To Cart";
-      res.status(200).json(response);
-    });
+    const carts = await Cart.findOne({ postBy: req.body.id });
+    console.log(carts);
+    if (carts) {
+      const post = await Post.findOne({ _id: req.body.id });
+      if (post.count < carts.count + count) {
+        response.success = true;
+        response.message = "Count Is Out Of Stock";
+        return res.status(400).json(response);
+      }
+      await Cart.findOneAndUpdate(
+        { postBy: req.body.id },
+        { $inc: { count: count } },
+        { new: true }
+      )
+        .then((data) => {
+          console.log("Updated cart", data);
+          response.success = true;
+          response.message = "Added To Cart";
+          return res.status(200).json(response);
+        })
+        .catch((err) => {
+          console.error("Error 5", err);
+        });
+    } else {
+      let cart = new Cart({
+        createdBy: userId,
+        count,
+        price,
+        postImage,
+        postBy: req.body.id,
+        title,
+      });
+      await cart.save().then((data) => {
+        console.log(data);
+        response.success = true;
+        response.message = "Added To Cart";
+        res.status(200).json(response);
+      });
+    }
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
@@ -168,8 +194,20 @@ module.exports.buyCart = async (req, res) => {
             },
             { new: true }
           )
-            .then((data) => {
-              console.log(data);
+            .then(async (data) => {
+              console.log("Data By Me", data._id);
+              if (
+                data.count <= 0 ||
+                (data.count == 0 && data.isSold == false)
+              ) {
+                await Post.findOneAndUpdate(
+                  { _id: data._id },
+                  { $set: { isSold: true } },
+                  { new: true }
+                );
+              } else {
+                console.log("Else mai hai tu");
+              }
             })
             .catch((err) => {
               console.log(err);
@@ -390,7 +428,7 @@ module.exports.isAccepted = async (req, res) => {
       Post.findOneAndUpdate(
         { _id: track.postsDetails[i].postId },
         {
-          $inc: { count: -track.postsDetails[i].count },
+          // $inc: { count: -track.postsDetails[i].count },
           $push: { boughtBy: userId },
         },
         { new: true }

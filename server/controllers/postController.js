@@ -16,6 +16,9 @@ module.exports.postArt = async (req, res) => {
   let post;
   if (req.file) {
     post = process.env.URL + "/images/Posts/" + req.file.filename;
+  } else {
+    response.message = "Set Post Image";
+    return res.status(200).json(response);
   }
   try {
     const postArt = new Post({
@@ -114,36 +117,62 @@ module.exports.deletePost = async (req, res) => {
     errMessage: "",
   };
   try {
-    const posts = await Post.findOneAndDelete({ _id: id, createdBy: userId });
+    const posts = await Post.findOne({ _id: id, createdBy: userId });
     if (posts) {
       console.log(posts);
-      imageName = posts.post.split("/");
-      let imagepath =
-        path.join(__dirname, "../public/images/Posts/") +
-        imageName[imageName.length - 1];
-      fs.unlinkSync(imagepath);
-      Cart.findOneAndDelete({ postBy: id, createdBy: userId })
-        .then((data) => {
-          console.log(data);
-          console.log("Cart Deleted");
-        })
-        .catch((err) => {
-          console.log("Error Cart Deleting");
-        });
+      // imageName = posts.post.split("/");
+      // let imagepath =
+      //   path.join(__dirname, "../public/images/Posts/") +
+      //   imageName[imageName.length - 1];
+      // fs.unlinkSync(imagepath);
+      Cart.deleteMany({ postBy: id });
 
-      await Track.updateOne(
-        {
-          "postsDetails.postId": id,
-          createdBy: userId,
-        },
-        { $pull: { "postsDetails.$.postId": id } },
-        { new: true }
-      )
-        .then((data) => {
+      await Track.find({
+        postsDetails: { $elemMatch: { postId: id } },
+      })
+        .then(async (data) => {
+          console.log(data.length);
           console.log(data);
-          console.log("Trac Deleted");
+          await Track.updateMany(
+            {
+              postsDetails: { $elemMatch: { postId: id } },
+            },
+            { $pull: { postsDetails: { postId: id } } },
+            { new: true }
+          )
+            .then(async () => {
+              for (let i = 0; i < data.length; i++) {
+                await Track.findOne({ _id: data[i]._id }).then(async (data) => {
+                  console.log(data.postsDetails.length);
+                  if (
+                    data.postsDetails.length <= 0 ||
+                    data.postsDetails == []
+                  ) {
+                    await Track.findOneAndDelete({
+                      _id: data._id,
+                    })
+                      .then((data) => {
+                        console.log("Track", data);
+                      })
+                      .catch((err) => {
+                        console.log("Track", err);
+                      });
+                  } else {
+                    console.log("Track not found");
+                  }
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          // }
+          console.log(data);
+          console.log("Track Deleted");
         })
         .catch((err) => {
+          console.log(err);
           console.log("Error trac Deleting");
         });
       response.success = true;
