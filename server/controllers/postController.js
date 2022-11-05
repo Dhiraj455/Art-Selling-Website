@@ -58,7 +58,8 @@ module.exports.getPosts = async (req, res) => {
     result: "",
   };
   try {
-    await Post.find({ isSold: false })
+    await Post.find({ isSold: false, userSuspended : false  })
+      .sort({ createdAt: -1 })
       .select("title description price post count")
       .populate({
         path: "createdBy",
@@ -87,14 +88,15 @@ module.exports.getSomePosts = async (req, res) => {
     result: "",
   };
   try {
-    await Post.find({ isSold: false })
+    await Post.find({ isSold: false , userSuspended : false })
+      .sort({ createdAt: -1 })
       .select("title description price post count")
       .populate({
         path: "createdBy",
         model: "User",
         select: "name image",
       })
-      .limit(20)
+      .limit(8)
       .then((data) => {
         response.success = true;
         response.result = data;
@@ -117,14 +119,14 @@ module.exports.deletePost = async (req, res) => {
     errMessage: "",
   };
   try {
-    const posts = await Post.findOne({ _id: id, createdBy: userId });
+    const posts = await Post.findOneAndDelete({ _id: id, createdBy: userId });
     if (posts) {
       console.log(posts);
-      // imageName = posts.post.split("/");
-      // let imagepath =
-      //   path.join(__dirname, "../public/images/Posts/") +
-      //   imageName[imageName.length - 1];
-      // fs.unlinkSync(imagepath);
+      imageName = posts.post.split("/");
+      let imagepath =
+        path.join(__dirname, "../public/images/Posts/") +
+        imageName[imageName.length - 1];
+      fs.unlinkSync(imagepath);
       Cart.deleteMany({ postBy: id });
 
       await Track.find({
@@ -273,7 +275,7 @@ module.exports.getAPost = async (req, res) => {
   };
   try {
     const { id } = req.params;
-    Post.findOne({ _id: id })
+    Post.findOne({ _id: id, userSuspended : false  })
       .select("title description price post count")
       .populate({
         path: "createdBy",
@@ -303,7 +305,8 @@ module.exports.getMyPosts = async (req, res) => {
     result: "",
   };
   try {
-    await Post.find({ createdBy: userId })
+    await Post.find({ createdBy: userId, userSuspended : false })
+      .sort({ createdAt: -1 })
       .select("title description price post count")
       .populate({
         path: "createdBy",
@@ -333,7 +336,8 @@ module.exports.getBoughtItems = async (req, res) => {
     result: "",
   };
   try {
-    await Post.find({ boughtBy: userId })
+    await Post.find({ boughtBy: userId, userSuspended : false  })
+      .sort({ createdAt: -1 })
       .select("title description price post count")
       .populate({
         path: "createdBy",
@@ -363,7 +367,8 @@ module.exports.getUsersPosts = async (req, res) => {
   };
   const id = req.params.id;
   try {
-    await Post.find({ createdBy: id })
+    await Post.find({ createdBy: id, userSuspended : false  })
+      .sort({ createdAt: -1 })
       .select("title description price post count")
       .populate({
         path: "createdBy",

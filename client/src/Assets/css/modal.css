@@ -8,12 +8,17 @@
   z-index: 4444444;
 }
 
+img {
+  width: 400px;
+}
+
 .single__modal {
+  align-items: center;
   position: relative;
   top: 50%;
   left: 50%;
   width: 500px;
-  height: 500px;
+  /* height: 500px; */
   transform: translate(-50%, -50%);
   background: #343444 !important;
   border-radius: 5px;
@@ -87,6 +92,7 @@
   .single__modal h6 {
     font-size: 0.9rem;
   }
+
   .single__modal p {
     font-size: 0.8rem;
     margin-bottom: 0;

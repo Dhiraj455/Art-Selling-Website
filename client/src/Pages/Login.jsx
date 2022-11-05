@@ -1,6 +1,6 @@
 import React from "react";
 import { login, googleLogin } from "../Services/User";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../Assets/css/signuplogin.css";
 import { toast } from "react-toastify";
 import GoogleLogin from "react-google-login";
@@ -33,6 +33,7 @@ const ButtonText = styled.p`
 `;
 
 function Login() {
+  const navigate = useNavigate();
   const [user, setUser] = React.useState({
     email: "",
     password: "",
@@ -80,6 +81,9 @@ function Login() {
     googleLogin(googleData)
       .then((result) => {
         console.log(result);
+        if(result.data.result){
+          navigate("/")
+        }
       })
       .catch((err) => {
         // console.log("google catch",err)
@@ -139,7 +143,7 @@ function Login() {
             </button>
           </div>
           <GoogleLogin
-            clientId="39547733731-pbobe61ha6dqjhb7cpiudkm54ps70jgn.apps.googleusercontent.com"
+            clientId="762768919343-nupuvkq6iqso8gh92esvpa1dl6rgjmd4.apps.googleusercontent.com"
             onSuccess={handleGoogleLogin}
             onFailure={handleFailure}
             cookiePolicy="single_host_origin"

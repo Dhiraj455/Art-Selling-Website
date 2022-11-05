@@ -66,7 +66,7 @@ function About() {
       <section>
         <Container>
           <Row>
-            <Col lg="5" md="6" sm="6">
+            <Col lg="5" md="8" sm="8">
               <img src={data.image} alt="" className="w-60 single__nft-img" />
             </Col>
 
@@ -94,11 +94,9 @@ function About() {
                   </div>
                 </div>
                 <p className="my-4">Email : {data.email}</p>
-                {/* <UserData user={userdata} /> */}
                 <p className="my-4">{desc}</p>
                 <div className="nft__creator d-flex gap-3 align-items-center">
                   <div className="creator__img">
-                    {/* <img src="../Assets/images/wallet-line.png" alt="" className="w-100" /> */}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"

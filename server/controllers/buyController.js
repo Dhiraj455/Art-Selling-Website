@@ -46,6 +46,11 @@ module.exports.addToCart = async (req, res) => {
           console.error("Error 5", err);
         });
     } else {
+      await Post.findOneAndUpdate(
+        { _id: req.body.id },
+        { $inc: { count: -count } },
+        { new: true }
+      );
       let cart = new Cart({
         createdBy: userId,
         count,
@@ -81,6 +86,7 @@ module.exports.getMyCart = async (req, res) => {
   try {
     let total = 0;
     Cart.find({ createdBy: id })
+      .sort({ createdAt: -1 })
       .select("count price postImage title postBy createdBy")
       .populate({
         path: "postBy",
@@ -255,8 +261,13 @@ module.exports.deleteItem = async (req, res) => {
     const item = await Cart.findOne({ _id: id });
     if (item) {
       await Cart.findOneAndDelete({ _id: id, createdBy: userId }).then(
-        (data) => {
+        async (data) => {
           console.log(data);
+          await Post.findOneAndUpdate(
+            { _id: data.postBy._id },
+            { $inc: { count: data.count } },
+            { new: true }
+          );
           response.success = true;
           response.message = "Cart Item Deleted Successfully";
           res.status(200).json(response);
@@ -284,6 +295,7 @@ module.exports.getTrack = async (req, res) => {
   };
   try {
     await Track.find({ createdBy: userId, isAccepted: false })
+      .sort({ createdAt: -1 })
       .select("totals isAccepted isDelivered createdBy")
       .populate({
         path: "postsDetails",
@@ -322,6 +334,7 @@ module.exports.getDeliveredTrack = async (req, res) => {
       postsDetails: { $elemMatch: { boughtFrom: userId, isDelivered: false } },
       isDelivered: false,
     })
+      .sort({ createdAt: -1 })
       .select("totals isAccepted isDelivered createdBy")
       .populate({
         path: "postsDetails",
@@ -475,7 +488,7 @@ module.exports.isNotDelivered = async (req, res) => {
     const track = await Track.findOne({
       _id: id,
       // postsDetails: { $elemMatch: { boughtFrom: userId } },
-      createdBy : userId,
+      createdBy: userId,
     });
     await Track.updateOne(
       {
@@ -490,7 +503,7 @@ module.exports.isNotDelivered = async (req, res) => {
     await Track.findOne({
       _id: id,
       // postsDetails: { $elemMatch: { boughtFrom: userId } },
-      createdBy : userId,
+      createdBy: userId,
     }).then((data) => {
       console.log(data);
       for (let i = 0; i < data.postsDetails.length; i++) {
@@ -514,13 +527,12 @@ module.exports.isNotDelivered = async (req, res) => {
       response.success = true;
       response.message = "Successfully Declined 2";
       res.status(200).json(response);
-    } 
-    else {
+    } else {
       await Track.findOneAndUpdate(
         {
           _id: id,
           // postsDetails: { $elemMatch: { boughtFrom: userId } },
-          createdBy : userId,
+          createdBy: userId,
         },
         { $set: { isDelivered: false } }
       );

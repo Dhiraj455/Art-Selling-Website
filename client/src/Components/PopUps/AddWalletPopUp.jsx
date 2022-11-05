@@ -5,6 +5,7 @@ import Autho from "../../Helpers/AuthHelp";
 import { addWallet } from "../../Services/User";
 import "../../Assets/css/modal.css";
 import { toast } from "react-toastify";
+import payment from "../../Assets/images/image3.png"
 
 const AddWalletPopUp = ({ setShowModal }) => {
   const navigate = useNavigate();
@@ -68,6 +69,7 @@ const AddWalletPopUp = ({ setShowModal }) => {
   return (
     <div className="modal__wrapper">
       <div className="single__modal">
+        <img src={payment} alt="" />
         <span className="close__modal">
           <i class="ri-close-line" onClick={() => setShowModal(false)}></i>
         </span>

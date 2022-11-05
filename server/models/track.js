@@ -37,6 +37,11 @@ const TrackSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  createdAt: {
+    type :Date,
+    default: Date.now,
+    required: true
+  }
 });
 
 const Track = mongoose.model("Track", TrackSchema);

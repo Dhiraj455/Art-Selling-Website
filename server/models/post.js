@@ -31,6 +31,10 @@ const PostSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
+  userSuspended: {
+    type: Boolean,
+    default: false,
+  },
   upVotes: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -46,6 +50,11 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
+  createdAt : {
+    type: Date,
+    default: Date.now,
+    required: true,
+  }
 });
 
 const Post = mongoose.model("Post", PostSchema);

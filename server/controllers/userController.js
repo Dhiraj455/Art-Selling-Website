@@ -107,11 +107,13 @@ module.exports.getMyPost = async (req, res) => {
   };
   let { id } = req.params;
   try {
-    Post.find({ createdBy: id }).then((result) => {
-      response.result = result;
-      response.success = true;
-      res.status(200).json(response);
-    });
+    Post.find({ createdBy: id })
+      .sort({ createdAt: -1 })
+      .then((result) => {
+        response.result = result;
+        response.success = true;
+        res.status(200).json(response);
+      });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";

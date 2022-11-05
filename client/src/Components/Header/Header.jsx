@@ -1,10 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useRef, useEffect, useState } from "react";
 import "./header.css";
-import {
-  Container,
-  DropdownItem,
-} from "reactstrap";
+import { Container, DropdownItem } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import user_icon1 from "../../Assets/images/ava-01.png";
@@ -117,45 +114,59 @@ const Header = () => {
                   ref={profileActionRef}
                   onClick={toggleProfileActions}
                 >
-                  {x ? (
+                  {!x.isAdmin ? (
                     <>
-                    <span
-                      onClick={() => {
-                        navigate("/profile");
-                      }}
-                    >
-                      Profile
-                    </span>
-                    <DropdownItem divider />
-                    <span
-                      onClick={() => {
-                        navigate("/track");
-                      }}
-                    >
-                      Track
-                    </span>
-                    <DropdownItem divider />
-                    <span
-                      onClick={() => {
-                        navigate("/delivery");
-                      }}
-                    >
-                      Delivery
-                    </span>
-                    <DropdownItem divider />
-                    <span
-                      onClick={() => {
-                        navigate("/logout");
-                      }}
-                    >
-                      Logout
-                    </span>
+                      <span
+                        onClick={() => {
+                          navigate("/profile");
+                        }}
+                      >
+                        Profile
+                      </span>
+                      <DropdownItem divider />
+                      <span
+                        onClick={() => {
+                          navigate("/track");
+                        }}
+                      >
+                        Track
+                      </span>
+                      <DropdownItem divider />
+                      <span
+                        onClick={() => {
+                          navigate("/delivery");
+                        }}
+                      >
+                        Delivery
+                      </span>
+                      <DropdownItem divider />
+                      <span
+                        onClick={() => {
+                          navigate("/logout");
+                        }}
+                      >
+                        Logout
+                      </span>
                     </>
                   ) : (
-                    <div className="fs-5">
-                      <Link to="/signup">Signup </Link>
-                      <Link to="/login">Login </Link>
-                    </div>
+                    <>
+                      <span
+                        onClick={() => {
+                          navigate("/profile");
+                        }}
+                      >
+                        Profile
+                      </span>
+                      <DropdownItem divider />
+                      <span
+                        onClick={() => {
+                          navigate("/admin");
+                        }}
+                      >
+                        All Users
+                      </span>
+                      <DropdownItem divider />
+                    </>
                   )}
                 </div>
               </div>

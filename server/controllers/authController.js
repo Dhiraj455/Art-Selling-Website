@@ -5,6 +5,8 @@ const {
   createAccessToken,
   createRefreshToken,
 } = require("../middleware/jwtToken");
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client();
 
 module.exports.register = async (req, res) => {
   // console.log(req.file.filename);
@@ -78,6 +80,7 @@ module.exports.login = async (req, res) => {
 module.exports.google = async (req, res) => {
   console.log("hello Login");
   const { token } = req.body;
+  let tokens = "";
   let response = {
     success: false,
     message: "",
@@ -92,21 +95,22 @@ module.exports.google = async (req, res) => {
     audience = process.env.OAUTH_ID;
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: [audience, process.env.OAUTH_ID],
+      // audience: [audience, process.env.OAUTH_APP_ID],
     });
 
     const { email } = ticket.getPayload();
     let user = await User.findOne({ email: email });
 
+    tokens = await user.generateAuthToken();
     if (user) {
       response.success = true;
       response.result = user;
       response.accessToken = createAccessToken(user);
       response.refreshToken = createRefreshToken(user);
-      res.cookie("jwt", response.refreshToken, {
+      res.cookie("jwttoken", tokens, response.refreshToken, {
         maxAge: 1000 * 60 * 60 * 24 * 30,
         httpOnly: true,
-        signed: true,
+        // signed: true,
         secure: true,
         path: "/refreshToken",
       });
@@ -117,6 +121,7 @@ module.exports.google = async (req, res) => {
       return res.status(400).json(response);
     }
   } catch (err) {
+    console.log(err);
     response.errorMessage = err.message;
     // console.log(err, "error");
     response.message = "Failed to sign in , please try again";
@@ -149,7 +154,7 @@ module.exports.refreshToken = async (req, res) => {
     }
     response.data = user;
     response.refreshToken = createRefreshToken(user);
-    res.cookie("jwt", response.refreshToken, {
+    res.cookie("jwttoken", response.refreshToken, {
       maxAge: 1000 * 60 * 60 * 24 * 30,
       httpOnly: true,
       signed: true,
