@@ -13,6 +13,10 @@ router.post(
 
 router.post("/login", authcontrol.login);
 
+router.post("/googleLogin", authcontrol.google);
+
+router.post("/refreshToken", authcontrol.refreshToken);
+
 router.get("/auth", authentication, (req, res) => {
   console.log("Authorization");
   res.send(req.user);
@@ -20,7 +24,7 @@ router.get("/auth", authentication, (req, res) => {
 
 router.get("/logout", (req, res) => {
   console.log("Logout");
-  res.clearCookie("jwttoken", { path: "/" });
+  res.clearCookie("jwttoken", { path: "/refreshToken" });
   res.send("Logout Successful");
 });
 

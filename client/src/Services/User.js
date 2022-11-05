@@ -18,6 +18,24 @@ export const login = async (form) => {
   });
 };
 
+export const googleLogin = (googleData) => {
+  return axios({
+    method: "POST",
+    url: "/googleLogin",
+    data: { token: googleData.tokenId },
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export const refreshRoute = () => {
+  return axios({
+    method: "post",
+    url: "/refreshToken",
+  });
+};
+
 export const update = async (form) => {
   return await axios({
     method: "post",

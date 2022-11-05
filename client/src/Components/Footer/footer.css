@@ -38,9 +38,9 @@
   background: #343444;
 }
 
-::placeholder {
+/* ::placeholder {
   color: rgba(255, 255, 255, 0.772);
-}
+} */
 
 .social__links span a {
   text-decoration: none;

@@ -37,4 +37,10 @@ router.post(
     Controller.isDelivered
 )
 
+router.post(
+    "/isNotDelivered",
+    authentication,
+    Controller.isNotDelivered
+)
+
 module.exports = router;

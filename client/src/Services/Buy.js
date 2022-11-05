@@ -75,6 +75,15 @@ export const isDelivered = async (form) => {
   });
 };
 
+export const isNotDelivered = async (form) => {
+  return await axios({
+    method: "post",
+    url: `/isNotDelivered`,
+    data: form,
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
 export const isAccepted = async (form) => {
   return await axios({
     method: "post",

@@ -1,8 +1,36 @@
 import React from "react";
-import { login } from "../Services/User";
+import { login, googleLogin } from "../Services/User";
 import { Link } from "react-router-dom";
 import "../Assets/css/signuplogin.css";
 import { toast } from "react-toastify";
+import GoogleLogin from "react-google-login";
+import GoogleLogo from "../Assets/images/Google.svg";
+import styled from "styled-components";
+
+const LoginDiv = styled.button`
+  margin-left: 39%;
+  cursor: pointer;
+  text-align: center;
+  padding: 10px 20px;
+  background: #022a40;
+  border: 1px solid #4098ff;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ButtonIcon = styled.img`
+  height: 18px;
+  width: 18px;
+`;
+
+const ButtonText = styled.p`
+  margin: 0 0 0 10px;
+  color: #bde7ff;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+`;
 
 function Login() {
   const [user, setUser] = React.useState({
@@ -48,6 +76,29 @@ function Login() {
     });
   };
 
+  const handleGoogleLogin = async (googleData) => {
+    googleLogin(googleData)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        // console.log("google catch",err)
+        if (err.response.data.message) toast.warn(err.response.data.message);
+        else toast.warn("Login failed , please try again");
+      });
+  }; 
+  const handleFailure = (err) => {
+    console.log("google", err);
+    if (
+      err.error === "popup_closed_by_user" ||
+      err.error === "idpiframe_initialization_failed"
+    ) {
+      toast.warn("Allow pop-ups and turn on third party cookies to sign in.");
+    } else {
+      toast.warn("Login failed, please try again");
+    }
+  };
+
   return (
     <>
       <div class="form">
@@ -87,6 +138,22 @@ function Login() {
               SIGN IN
             </button>
           </div>
+          <GoogleLogin
+            clientId="39547733731-pbobe61ha6dqjhb7cpiudkm54ps70jgn.apps.googleusercontent.com"
+            onSuccess={handleGoogleLogin}
+            onFailure={handleFailure}
+            cookiePolicy="single_host_origin"
+            render={(counter) => (
+              <LoginDiv
+                onClick={counter.onClick}
+                disabled={counter.disabled}
+                type="button"
+              >
+                <ButtonIcon src={GoogleLogo} alt="Google Logo" />
+                <ButtonText>Sign in</ButtonText>
+              </LoginDiv>
+            )}
+          />
           <p class="aha">
             Don't have an account?{" "}
             <span>

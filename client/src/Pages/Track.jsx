@@ -7,7 +7,7 @@ import CommonSection from "../Components/Common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import "../Assets/css/allProduct.css";
 import styled from "styled-components";
-import TrackCard from "../Components/Cards/TrackCard";
+import TrackBox from "../Components/TrackBox/TrackBox";
 // import MyProductCard from "../Components/Cards/MyProductCard";
 
 const ProfileContainer = styled.div`
@@ -60,23 +60,23 @@ function Track() {
     })
   };
 
-  const TrackPage = (props) => {
-    return (
-      <>
-        {props.products.map((product, key) => (
-          <TrackCard
-            key={key}
-            product={product}
-            userId={x._id}
-            id={props.id}
-            isdelivered={props.delivery}
-          />
-        ))}
-        {/* <h3>{totals}</h3> */}
-      </>
-    );
-  };
-  console.log(products.length);
+  // const TrackPage = (props) => {
+  //   return (
+  //     <>
+  //       {props.products.map((product, key) => (
+  //         <TrackCard
+  //           key={key}
+  //           product={product}
+  //           userId={x._id}
+  //           id={props.id}
+  //           isdelivered={props.delivery}
+  //         />
+  //       ))}
+  //       {/* <h3>{totals}</h3> */}
+  //     </>
+  //   );
+  // };
+  // console.log(products.length);
 
   return (
     <>
@@ -93,10 +93,12 @@ function Track() {
               <>
                 <ProfileContainer>
                   <Row lg="4" md="6" sm="6">
-                    <TrackPage
+                    <TrackBox
                       products={product}
                       id={products[key]._id}
                       delivery={products[key].isDelivered}
+                      userId={x._id}
+                      postsDetails={postsDetails[key]}
                     />
                   </Row>
                   {products[key].isDelivered ? (

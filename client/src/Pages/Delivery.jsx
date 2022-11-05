@@ -80,13 +80,13 @@ function Delivery() {
 
   return (
     <>
-      <CommonSection title="Tracking" />
+      <CommonSection title="Deliveries" />
       <section>
         <Container>
           <Row>
             <Col lg="12" className="mb-5">
               <div className="live__auction__top d-flex align-items-center justify-content-between ">
-                <h3>Track</h3>
+                <h3>Delivery</h3>
               </div>
             </Col>
             {postsDetails.map((product, key) => (

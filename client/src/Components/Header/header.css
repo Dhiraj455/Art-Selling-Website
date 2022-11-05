@@ -19,6 +19,41 @@
   justify-content: space-between;
 }
 
+.nav__icons .profile img{
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.nav__icons .profile{
+  position: relative;
+  z-index: 9;
+}
+
+.nav__icons .profile span{
+  color: #fff;
+}
+.nav__icons .profile .profile__actions{
+  position: absolute;
+  top: 98%;
+  left: 0;
+  width: 150px;
+  z-index: 10;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: #292e33;
+  line-height: 30px;
+  display: none;
+  cursor: pointer;
+}
+
+.show__profileActions {
+  display: block !important;
+}
+
 .nav__list {
   display: flex;
   align-items: center;
@@ -52,6 +87,7 @@
   padding: 7px 25px;
   border: 1px solid #5142fc;
   border-radius: 50px;
+  color: white;
 }
 
 .nav__right .btn a {
@@ -65,6 +101,10 @@
 }
 
 .nav__right .btn a:hover {
+  color: #fff;
+}
+
+.nav__right .btn:hover {
   color: #fff;
 }
 

@@ -1,6 +1,6 @@
 import "./App.css";
 import Layout from "./Components/Layout/Layout";
-import "boxicons";
+// import "boxicons";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

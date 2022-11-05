@@ -13,7 +13,10 @@ module.exports.addToCart = async (req, res) => {
     const { userId, count, price, postImage, title } = req.body;
     console.log(req.body.id);
     console.log(req.body);
-    const carts = await Cart.findOne({ postBy: req.body.id });
+    const carts = await Cart.findOne({
+      postBy: req.body.id,
+      createdBy: userId,
+    });
     console.log(carts);
     if (carts) {
       const post = await Post.findOne({ _id: req.body.id });
@@ -21,9 +24,15 @@ module.exports.addToCart = async (req, res) => {
         response.success = true;
         response.message = "Count Is Out Of Stock";
         return res.status(400).json(response);
+      } else {
+        await Post.findOneAndUpdate(
+          { _id: req.body.id },
+          { $inc: { count: -count } },
+          { new: true }
+        );
       }
       await Cart.findOneAndUpdate(
-        { postBy: req.body.id },
+        { postBy: req.body.id, createdBy: userId },
         { $inc: { count: count } },
         { new: true }
       )
@@ -445,6 +454,80 @@ module.exports.isAccepted = async (req, res) => {
     response.success = true;
     response.message = "Accepted";
     res.status(200).json(response);
+  } catch (err) {
+    console.log("Error", err);
+    response.message = "Something went wrong!";
+    response.errMessage = err.message;
+    res.status(400).json(response);
+  }
+};
+
+module.exports.isNotDelivered = async (req, res) => {
+  const response = {
+    success: true,
+    message: "",
+    errMessage: "",
+  };
+  let count = 0;
+  const userId = req.userid;
+  const { id, postId } = req.body;
+  try {
+    const track = await Track.findOne({
+      _id: id,
+      // postsDetails: { $elemMatch: { boughtFrom: userId } },
+      createdBy : userId,
+    });
+    await Track.updateOne(
+      {
+        _id: id,
+        // postsDetails: { $elemMatch: { boughtFrom: userId } },
+        createdBy: userId,
+        "postsDetails._id": postId,
+      },
+      { $set: { "postsDetails.$.isDelivered": false } },
+      { new: true }
+    );
+    await Track.findOne({
+      _id: id,
+      // postsDetails: { $elemMatch: { boughtFrom: userId } },
+      createdBy : userId,
+    }).then((data) => {
+      console.log(data);
+      for (let i = 0; i < data.postsDetails.length; i++) {
+        if (data.postsDetails[i].isDelivered == true) {
+          count += 1;
+        } else {
+          count = count;
+        }
+      }
+    });
+    console.log(count);
+    if (count === track.postsDetails.length) {
+      await Track.findOneAndUpdate(
+        {
+          _id: id,
+          // postsDetails: { $elemMatch: { boughtFrom: userId } },
+          createdBy: userId,
+        },
+        { $set: { isDelivered: true } }
+      );
+      response.success = true;
+      response.message = "Successfully Declined 2";
+      res.status(200).json(response);
+    } 
+    else {
+      await Track.findOneAndUpdate(
+        {
+          _id: id,
+          // postsDetails: { $elemMatch: { boughtFrom: userId } },
+          createdBy : userId,
+        },
+        { $set: { isDelivered: false } }
+      );
+      response.success = true;
+      response.message = "Successfully Declined";
+      res.status(200).json(response);
+    }
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
