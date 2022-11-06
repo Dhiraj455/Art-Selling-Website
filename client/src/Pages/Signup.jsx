@@ -38,12 +38,10 @@ function Signup() {
     email: "",
     password: "",
     cpassword: "",
-    // pic: "",
   });
 
   const handleChange = (e) => {
     e.preventDefault();
-    console.log(user);
     var name = e.target.name;
     var value = e.target.value;
     setUser({
@@ -52,86 +50,65 @@ function Signup() {
     });
   };
 
-  // const handlePic = (e) => {
-  //   e.preventDefault();
-  //   console.log(user);
-  //   var pic = e.target.files[0];
-  //   console.log(pic);
-  //   setUser({
-  //     ...user,
-  //     pic: pic,
-  //   });
-  //   console.log(pic.name);
-  // };
-
-  // const form = new FormData();
-  // form.append("pic", user.pic || user.pic.name);
-  // form.set("pic", user.pic);
-  // form.set("name", user.name);
-  // form.set("email", user.email);
-  // form.set("password", user.password);
-  // form.set("cpassword", user.cpassword);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     const { password, cpassword } = user;
 
     register(user).then((data) => {
-      console.log(data.data);
-      if (data.data.message === "Please fill all the fields") {
-        console.log("if");
-        alert(data.data.message);
-      } else if (data.data.message === "User already exists") {
-        console.log("else if");
-        alert(data.data.message);
+      if (data.data.message !== "User created successfully") {
+        toast.warn(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       } else if (password !== cpassword) {
-        alert("Password does not match");
+        toast.warn("Password Does Not Match", {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
         return;
       } else {
-        console.log("else");
-        alert(data.data.message);
-        window.location.href = "/login";
+        toast.success(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
+        navigate("/login");
       }
     });
   };
 
-   const handleGoogleLogin = async (googleData) => {
-         register({
-           name: googleData.profileObj.name,
-           email: googleData.profileObj.email,
-           password: "User",
-           cpassword: "User",
-         })
-           .then((data) => {
-             toast.success("Sign up Succesfully", {
-               position: toast.POSITION.BOTTOM_RIGHT,
-             });
-             googleLogin(googleData)
-               .then((result) => {
-                 console.log(result);
-                 if (result.data.result) {
-                   navigate("/");
-                }
-               })
-               .catch((err) => {
-                 // console.log("google catch",err)
-                 if (err.response.data.message)
-                   toast.warn(err.response.data.message, {
-                     position: toast.POSITION.BOTTOM_RIGHT,
-                   });
-                 else
-                   toast.warn("Login failed , please try again", {
-                     position: toast.POSITION.BOTTOM_RIGHT,
-                   });
-               });
-           })
-           .catch((err) => {
-             console.log("google catch",err)
-               toast.warn("Login failed , please try again", {
-                 position: toast.POSITION.BOTTOM_RIGHT,
-               });
+  const handleGoogleLogin = async (googleData) => {
+    register({
+      name: googleData.profileObj.name,
+      email: googleData.profileObj.email,
+      password: "User",
+      cpassword: "User",
+    })
+      .then((data) => {
+        toast.success("Sign up Succesfully", {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
+        googleLogin(googleData)
+          .then((result) => {
+            console.log(result);
+            if (result.data.result) {
+              navigate("/");
+            }
+          })
+          .catch((err) => {
+            if (err.response.data.message)
+              toast.warn(err.response.data.message, {
+                position: toast.POSITION.BOTTOM_RIGHT,
+              });
+            else
+              toast.warn("Login failed , please try again", {
+                position: toast.POSITION.BOTTOM_RIGHT,
+              });
           });
-      };
+      })
+      .catch((err) => {
+        console.log("google catch", err);
+        toast.warn("Login failed , please try again", {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
+      });
+  };
 
   const handleFailure = (err) => {
     console.log("google", err);
@@ -139,9 +116,13 @@ function Signup() {
       err.error === "popup_closed_by_user" ||
       err.error === "idpiframe_initialization_failed"
     ) {
-      toast.warn("Allow pop-ups and turn on third party cookies to sign in.");
+      toast.warn("Allow pop-ups and turn on third party cookies to sign in.", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
     } else {
-      toast.warn("Login failed, please try again");
+      toast.warn("Login failed, please try again", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
     }
   };
 
@@ -163,7 +144,6 @@ function Signup() {
         <div className="content">
           <div>
             <input
-              //   className="input"
               type="text"
               placeholder="Full Name"
               id="name"
@@ -222,7 +202,7 @@ function Signup() {
                 type="button"
               >
                 <ButtonIcon src={GoogleLogo} alt="Google Logo" />
-                <ButtonText>Sign in</ButtonText>
+                <ButtonText>Sign Up</ButtonText>
               </LoginDiv>
             )}
           />
@@ -234,75 +214,6 @@ function Signup() {
           </p>
         </div>
       </div>
-      {/* <div className="App">
-        <h3>Signup</h3>
-        <form method="POST" onSubmit={handleLogin}>
-          <div className="mb-3">
-            <label htmlFor="name" className="form-label">
-              Name
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="name"
-              aria-describedby="emailHelp"
-              name="name"
-              value={user.name}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email address
-            </label>
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              aria-describedby="emailHelp"
-              onChange={handleChange}
-              name="email"
-              value={user.email}
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              onChange={handleChange}
-              name="password"
-              value={user.password}
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="cpassword" className="form-label">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              id="cpassword"
-              onChange={handleChange}
-              name="cpassword"
-              value={user.cpassword}
-            />
-            {/* <input
-              type="file"
-              p="1.5"
-              accept="image/*"
-              name="pic"
-              onChange={handlePic}
-            /> */}
-      {/* </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </form>
-      </div> */}
     </>
   );
 }

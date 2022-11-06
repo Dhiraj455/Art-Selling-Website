@@ -1,6 +1,4 @@
 const Post = require("../models/post");
-const fs = require("fs");
-const path = require("path");
 const Track = require("../models/track");
 const Cart = require("../models/cart");
 const User = require("../models/user");
@@ -11,12 +9,27 @@ module.exports.getAllUsers = async (req, res) => {
     message: "",
     errMessage: "",
     result: "",
+    totalPage: "",
   };
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 12;
+  const startIndex = (page - 1) * limit;
   try {
-    const user = await User.find({}).sort({ "report.length": -1 });
-    response.success = true;
-    response.result = user;
-    res.status(200).json(response);
+    const result = await User.find({}).sort({ "report.length": -1 });
+    if (result.length > 0) {
+      totalPage = Math.ceil(result.length / limit);
+      let results = result.slice(startIndex, page * limit);
+      response.success = true;
+      response.errMessage = undefined;
+      response.message = undefined;
+      response.result = results;
+      response.totalPage = totalPage;
+    } else {
+      response.errMessage = undefined;
+      response.totalPage = 1;
+      response.message = "No results found";
+    }
+    return res.status(200).json(response);
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
@@ -33,7 +46,7 @@ module.exports.getSomeUsers = async (req, res) => {
     result: "",
   };
   try {
-    const user = await User.find({}).limit(10);
+    const user = await User.find({}).limit(8);
     response.success = true;
     response.result = user;
     res.status(200).json(response);

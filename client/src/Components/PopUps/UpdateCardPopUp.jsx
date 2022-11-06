@@ -1,29 +1,23 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import Autho from "../../Helpers/AuthHelp";
 import { updateCart } from "../../Services/Buy";
 import "../../Assets/css/modal.css";
-// import "./modal.css"
+import { toast } from "react-toastify";
 
 const UpdateCardPopUp = ({ setShowModal, product, counts }) => {
   const [count, setCount] = useState(0);
-  const callAbout = async () => {
-    try {
-      await Autho();
-      setCount(counts);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+
   useEffect(() => {
-    callAbout();
+    setCount(counts);
   }, []);
 
   const handleBtn = () => {
     console.log(count);
     try {
       updateCart({ id: product._id, count: count }).then((data) => {
-        alert(data.data.message);
+        toast.success(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
         setShowModal(false);
         window.location.reload();
       });
@@ -35,7 +29,7 @@ const UpdateCardPopUp = ({ setShowModal, product, counts }) => {
     <div className="modal__wrapper">
       <div className="single__modal">
         <span className="close__modal">
-          <i class="ri-close-line" onClick={() => setShowModal(false)}></i>
+          <i className="ri-close-line" onClick={() => setShowModal(false)}></i>
         </span>
         <h6 className="text-center text-light">Update Cart</h6>
 
@@ -50,14 +44,6 @@ const UpdateCardPopUp = ({ setShowModal, product, counts }) => {
             }}
           />
         </div>
-
-        {/* <div className="input__item mb-4">
-          <input type="number" placeholder="Enter Count" />
-        </div> */}
-
-        {/* <div className="input__item mb-4">
-          <input type="number" placeholder="Enter Amount" />
-        </div> */}
 
         <button className="place__bid-btn" onClick={handleBtn}>
           Update

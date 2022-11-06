@@ -5,31 +5,33 @@ import { Container, Row, Col } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { getPost } from "../Services/User";
 import AdminProductCard from "../Components/Cards/AdminProductCard";
+import Pagination from "../Components/Pagination/Pagination";
 
 function AdminProduct() {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
-  const [x, setX] = useState([]);
-  const Update = async () => {
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  let limit = 4;
+  const pageChange = (pageNo) => {
+    setPage(pageNo);
+  };
+
+  useEffect(() => {
     try {
-      let user = await Autho();
-      setX(user);
-      console.log(user._id);
-      if(!user.isAdmin){
-        navigate("/")
-      }
-      getPost().then((data) => {
+      Autho().then((user) => {
+        if (!user.isAdmin) {
+          navigate("/");
+        }
+      });
+      getPost(page,limit).then((data) => {
         setPosts(data.data.result);
-        console.log(data.data.result);
+        setTotalPages(data.data.totalPage);
       });
     } catch (err) {
       console.log(err);
     }
-  };
-  console.log(x);
-  useEffect(() => {
-    Update();
-  }, []);
+  }, [page, limit]);
 
   return (
     <>
@@ -40,17 +42,21 @@ function AdminProduct() {
             <Col lg="12" className="mb-5">
               <div className="live__auction__top d-flex align-items-center justify-content-between ">
                 <h3>Users Posts</h3>
-                {/* <span>
-                <Link to="/market">Explore more</Link>
-              </span> */}
               </div>
             </Col>
 
             {posts.map((post, key) => (
-              <Col lg="3" md="4" sm="6" className="mb-4">
+              <Col lg="3" md="4" sm="6" className="mb-4" key={key}>
                 <AdminProductCard posts={post} key={post._id} />
               </Col>
             ))}
+            <div>
+              <Pagination
+                pageChange={pageChange}
+                totalPages={totalPages}
+                page={page}
+              />
+            </div>
           </Row>
         </Container>
       </section>

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import CommonSection from "../Components/Common-section/CommonSection";
 import styled from "styled-components";
 import "../Assets/css/create-item.css";
+import { toast } from "react-toastify";
 
 const ProfilePic = styled.div`
   display: flex;
@@ -30,17 +31,6 @@ const ProfileImage = styled.img`
   border: 3px solid #001825;
   background: #001825;
   margin-bottom: 10px;
-`;
-
-const ProfileContainer = styled.div`
-  background: #001825;
-  border-radius: 20px;
-  border: 1px solid #083f5f;
-  padding: 15px;
-  margin: 30px 5px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
 `;
 
 const PseudoProfile = styled.div`
@@ -70,34 +60,29 @@ const UpdateProfile = () => {
     oldImage: "",
     pic: "",
   });
-  console.log(user);
-  const Update = async () => {
+
+  useEffect(() => {
     try {
-      const x = await Autho();
-      console.log(x);
-      const { name, description, email, image } = x;
-      setUser({
-        ...user,
-        name: name,
-        description: description,
-        email: email,
-        oldImage: image,
+      Autho().then((data) => {
+        const { name, description, email, image } = data;
+        setUser({
+          ...user,
+          name: name,
+          description: description,
+          email: email,
+          oldImage: image,
+        });
+        setImages(image);
       });
-      setImages(image);
     } catch (err) {
       console.log(err);
     }
-  };
-
-  useEffect(() => {
-    Update();
   }, []);
 
   const handlePic = (e) => {
     const fileReader = new FileReader();
     e.preventDefault();
     var pic = e.target.files[0];
-    console.log(pic);
     fileReader.onload = function (e) {
       setImages(e.target.result);
       setUser({ ...user, pic: pic });
@@ -115,7 +100,9 @@ const UpdateProfile = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     update(form2).then((data) => {
-      alert(data.data.message);
+      toast.success(data.data.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
       navigate("/profile");
     });
   };
@@ -128,7 +115,6 @@ const UpdateProfile = () => {
           <Row>
             <Col lg="3" md="4" sm="6">
               <h5 className="mb-4 text-light">Preview Item</h5>
-              {/* <NftCard item={item} /> */}
               <ProfilePic>
                 <Profile>
                   {images === "" || images === undefined || images === null ? (
@@ -156,7 +142,7 @@ const UpdateProfile = () => {
                       fileRef.current.click();
                     }}
                   >
-                    <i class="ri-refresh-line"></i> Change
+                    <i className="ri-refresh-line"></i> Change
                   </button>
                 </Profile>
               </ProfilePic>
@@ -165,10 +151,6 @@ const UpdateProfile = () => {
             <Col lg="9" md="8" sm="6">
               <div className="create__item">
                 <form>
-                  {/* <div className="form__input">
-                    <label htmlFor="">Upload File</label>
-                    <input type="file" className="upload__input" />
-                  </div> */}
 
                   <div className="form__input">
                     <label htmlFor="">Name</label>
@@ -182,35 +164,6 @@ const UpdateProfile = () => {
                       }
                     />
                   </div>
-
-                  {/* <div className="form__input">
-                    <label htmlFor="">Description</label>
-                    <input
-                      type="number"
-                      placeholder="Enter Description"
-                      value={user.description}
-                      onChange={(e) =>
-                        setUser({ ...user, description: e.target.value })
-                      }
-                    />
-                  </div>
-
-                  <div className=" d-flex align-items-center gap-4">
-                    <div className="form__input w-50">
-                      <label htmlFor="">Starting Date</label>
-                      <input type="date" />
-                    </div>
-
-                    <div className="form__input w-50">
-                      <label htmlFor="">Expiration Date</label>
-                      <input type="date" />
-                    </div>
-                  </div>
-
-                  <div className="form__input">
-                    <label htmlFor="">Title</label>
-                    <input type="text" placeholder="Enter title" />
-                  </div> */}
 
                   <div className="form__input">
                     <label htmlFor="">Description</label>
@@ -230,7 +183,7 @@ const UpdateProfile = () => {
                     className="bid__btn d-flex align-items-center gap-5 pad"
                     onClick={handleUpdate}
                   >
-                    <i class="ri-pencil-fill"></i> Update
+                    <i className="ri-pencil-fill"></i> Update
                   </button>
                 </form>
               </div>

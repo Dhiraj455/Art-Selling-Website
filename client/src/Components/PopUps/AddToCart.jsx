@@ -24,9 +24,11 @@ const AddToCart = ({ setShowModal, product, userId }) => {
       console.log(err);
     }
   };
+
   useEffect(() => {
     callAbout();
   }, []);
+
   const handleBtn = () => {
     try {
       addtocart(addToCart)
@@ -50,10 +52,9 @@ const AddToCart = ({ setShowModal, product, userId }) => {
     <div className="modal__wrapper">
       <div className="single__modal">
         <span className="close__modal">
-          <i class="ri-close-line" onClick={() => setShowModal(false)}></i>
+          <i className="ri-close-line" onClick={() => setShowModal(false)}></i>
         </span>
         <h6 className="text-center text-light">Add To Cart</h6>
-
         <div className="input__item mb-3">
           <h6>Enter Quantity, {product.count} available</h6>
           <input
@@ -63,10 +64,14 @@ const AddToCart = ({ setShowModal, product, userId }) => {
             onChange={(e) => {
               if (e.target.value <= 0) {
                 setAddToCart({ ...addToCart, count: 1 });
-                alert("Value Cannot Be Less Than Zero");
+                toast.warn("Value Cannot Be Less Than Zero", {
+                  position: toast.POSITION.BOTTOM_RIGHT,
+                });
               } else if (e.target.value > product.count) {
                 setAddToCart({ ...addToCart, count: product.count });
-                alert("Count is more than available");
+                toast.warn("Count is more than available", {
+                  position: toast.POSITION.BOTTOM_RIGHT,
+                });
               } else if (
                 !(e.target.value > product.count) &&
                 !(e.target.value < 0)

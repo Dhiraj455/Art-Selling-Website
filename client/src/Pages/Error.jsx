@@ -17,10 +17,10 @@ function Error404() {
     <>
       <section>
         <div id="container">
-          <div class="content">
-            <h2 class="h2">404</h2>
-            <h4 class="h4">Oops! Page not found</h4>
-            <p class="p">
+          <div className="content">
+            <h2 className="h2">404</h2>
+            <h4 className="h4">Oops! Page not found</h4>
+            <p className="p">
               The page you were looking for doesn't exist. You may have mistyped
               the address or the page may have moved.
             </p>

@@ -4,7 +4,6 @@ import DeletePopUp from "../PopUps/DeletePopUp";
 import "./card.css";
 
 const AdminProductCard = (props) => {
-  console.log(props);
   const [showModal, setShowModal] = useState(false);
 
   return (

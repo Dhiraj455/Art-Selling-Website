@@ -7,10 +7,21 @@
   background: #14141f8a;
   z-index: 4444444;
 }
-
-img {
-  width: 400px;
+.userImage{
+  margin-left: 10%;
+  width: 80%;
 }
+
+.userData{
+  margin-left: 5%;
+  width: 90%;
+}
+
+.creditcard{
+  margin-left: 10%;
+  width: 80%;
+}
+
 
 .single__modal {
   align-items: center;

@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { suspend } from "../../Services/Admin";
 import SuspendPopUp from "../PopUps/SuspendPopUp";
-// import { isNotDelivered } from "../../Services/Buy";
 
 import "./card.css";
 
 const UsersCard = (props) => {
   const [showModal, setShowModal] = useState(false);
   const handleBtn = () => {
+    setShowModal(true)
   };
 
   return (

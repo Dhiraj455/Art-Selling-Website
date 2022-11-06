@@ -71,10 +71,10 @@ export const post = async (form) => {
   });
 };
 
-export const getPost = async () => {
+export const getPost = async (page, limit) => {
   return await axios({
     method: "get",
-    url: "/getPosts",
+    url: `/getPosts?page=${page}&limit=${limit}`,
   });
 };
 
@@ -110,24 +110,24 @@ export const updatePost = async (form) => {
   });
 };
 
-export const getMyPosts = async () => {
+export const getMyPosts = async (page, limit) => {
   return await axios({
     method: "get",
-    url: "/getMyPosts",
+    url: `/getMyPosts?page=${page}&limit=${limit}`,
   });
 };
 
-export const getBoughtItems = async () => {
+export const getBoughtItems = async (page, limit) => {
   return await axios({
     method: "get",
-    url: "/getBoughtItems",
+    url: `/getBoughtItems?page=${page}&limit=${limit}`,
   });
 };
 
-export const getUsersPosts = async (id) => {
+export const getUsersPosts = async (id,page,limit) => {
   return await axios({
     method: "get",
-    url: `/getUsersPosts/${id}`,
+    url: `/getUsersPosts/${id}?page=${page}&limit=${limit}`,
   });
 };
 

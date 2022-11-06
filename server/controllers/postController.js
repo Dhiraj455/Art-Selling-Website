@@ -56,7 +56,11 @@ module.exports.getPosts = async (req, res) => {
     message: "",
     errMessage: "",
     result: "",
+    totalPage : 0,
   };
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 12;
+  const startIndex = (page - 1) * limit;
   try {
     await Post.find({ userSuspended: false })
       .sort({ createdAt: -1 })
@@ -66,11 +70,21 @@ module.exports.getPosts = async (req, res) => {
         model: "User",
         select: "name image",
       })
-      .then((data) => {
-        response.success = true;
-        response.result = data;
-        console.log(data);
-        res.status(200).json(response);
+      .then((result) => {
+        if (result.length > 0) {
+          totalPage = Math.ceil(result.length / limit);
+          result = result.slice(startIndex, page * limit);
+          response.success = true;
+          response.errMessage = undefined;
+          response.message = undefined;
+          response.result = result;
+          response.totalPage = totalPage;
+        } else {
+          response.errMessage = undefined;
+          response.totalPage = 1;
+          response.message = "No results found";
+        }
+        return res.status(200).json(response);
       });
   } catch (err) {
     console.log("Error", err);
@@ -303,7 +317,11 @@ module.exports.getMyPosts = async (req, res) => {
     message: "",
     errMessage: "",
     result: "",
+    totalPage: "",
   };
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 12;
+  const startIndex = (page - 1) * limit;
   try {
     await Post.find({ createdBy: userId, userSuspended: false })
       .sort({ createdAt: -1 })
@@ -313,11 +331,21 @@ module.exports.getMyPosts = async (req, res) => {
         model: "User",
         select: "name image",
       })
-      .then((data) => {
-        response.success = true;
-        response.result = data;
-        console.log(data);
-        res.status(200).json(response);
+      .then((result) => {
+        if (result.length > 0) {
+          totalPage = Math.ceil(result.length / limit);
+          result = result.slice(startIndex, page * limit);
+          response.success = true;
+          response.errMessage = undefined;
+          response.message = undefined;
+          response.result = result;
+          response.totalPage = totalPage;
+        } else {
+          response.errMessage = undefined;
+          response.totalPage = 1;
+          response.message = "No results found";
+        }
+        return res.status(200).json(response);
       });
   } catch (err) {
     console.log("Error", err);
@@ -334,7 +362,11 @@ module.exports.getBoughtItems = async (req, res) => {
     message: "",
     errMessage: "",
     result: "",
+    totalPage: "",
   };
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 12;
+  const startIndex = (page - 1) * limit;
   try {
     await Post.find({ boughtBy: userId, userSuspended: false })
       .sort({ createdAt: -1 })
@@ -344,11 +376,21 @@ module.exports.getBoughtItems = async (req, res) => {
         model: "User",
         select: "name image",
       })
-      .then((data) => {
-        response.success = true;
-        response.result = data;
-        console.log(data);
-        res.status(200).json(response);
+      .then((result) => {
+        if (result.length > 0) {
+          totalPage = Math.ceil(result.length / limit);
+          result = result.slice(startIndex, page * limit);
+          response.success = true;
+          response.errMessage = undefined;
+          response.message = undefined;
+          response.result = result;
+          response.totalPage = totalPage;
+        } else {
+          response.errMessage = undefined;
+          response.totalPage = 1;
+          response.message = "No results found";
+        }
+        return res.status(200).json(response);
       });
   } catch (err) {
     console.log("Error", err);
@@ -364,8 +406,12 @@ module.exports.getUsersPosts = async (req, res) => {
     message: "",
     errMessage: "",
     result: "",
+    totalPage: "",
   };
   const id = req.params.id;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 12;
+  const startIndex = (page - 1) * limit;
   try {
     await Post.find({ createdBy: id, userSuspended: false })
       .sort({ createdAt: -1 })
@@ -375,11 +421,21 @@ module.exports.getUsersPosts = async (req, res) => {
         model: "User",
         select: "name image",
       })
-      .then((data) => {
-        response.success = true;
-        response.result = data;
-        console.log(data);
-        res.status(200).json(response);
+      .then((result) => {
+        if (result.length > 0) {
+          totalPage = Math.ceil(result.length / limit);
+          result = result.slice(startIndex, page * limit);
+          response.success = true;
+          response.errMessage = undefined;
+          response.message = undefined;
+          response.result = result;
+          response.totalPage = totalPage;
+        } else {
+          response.errMessage = undefined;
+          response.totalPage = 1;
+          response.message = "No results found";
+        }
+        return res.status(200).json(response);
       });
   } catch (err) {
     console.log("Error", err);

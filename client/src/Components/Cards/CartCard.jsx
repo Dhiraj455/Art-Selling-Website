@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { deleteItem } from "../../Services/Buy";
 import UpdateCardPopUp from "../PopUps/UpdateCardPopUp";
 import "./card.css";
@@ -19,11 +20,15 @@ const CartCard = (props) => {
   const handleBtn = () => {
     deleteItem(deleteData)
       .then((data) => {
-        alert(data.data.message);
+        toast.warn(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
         window.location.reload();
       })
       .catch((err) => {
-        alert(err.message);
+        toast.warn(err.response.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       });
   };
 
@@ -55,12 +60,12 @@ const CartCard = (props) => {
           </div>
         </div>
 
-        <div className=" mt-3 d-flex align-items-center justify-content-between">
+        <div className=" mt-3 d-flex align-items-center justify-content-between gap-1">
           <button
             className="bid__btn d-flex align-items-center gap-1"
             onClick={handleBtn}
           >
-            <i class="ri-shopping-bag-line"></i> Delete
+            <i className="ri-delete-bin-6-line"></i> Delete
           </button>
 
           {showModal && <UpdateCardPopUp setShowModal={setShowModal} product={props.product} counts={props.product.count}/>}
@@ -68,7 +73,7 @@ const CartCard = (props) => {
             className="bid__btn d-flex align-items-center gap-1"
             onClick={handleUpdate}
           >
-            <i class="ri-shopping-bag-line"></i> Update
+            <i className="ri-refresh-line"></i> Update
           </button>
         </div>
       </div>

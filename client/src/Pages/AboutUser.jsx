@@ -8,6 +8,11 @@ import CommonSection from "../Components/Common-section/CommonSection";
 import "../Assets/css/userprofile.css";
 import AddWalletPopUp from "../Components/PopUps/AddWalletPopUp";
 import BoughtCard from "../Components/Cards/BoughtCard";
+import Pagination from "../Components/Pagination/Pagination";
+import styled from "styled-components";
+import { toast } from "react-toastify";
+
+const Page = styled.div``;
 
 function About() {
   const navigate = useNavigate();
@@ -16,22 +21,36 @@ function About() {
   const [desc, setDesc] = useState("");
   const [products, setProducts] = useState([]);
   const [x, setX] = useState([]);
-  const callAbout = async () => {
+  const [toggle, setToggle] = useState(1);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  let limit = 4;
+
+  const pageChange = (pageNo) => {
+    setPage(pageNo);
+  };
+
+  const handleSort = (e) => {
+    const filterValue = e.target.value;
+    if (filterValue === "My Posts") {
+      setToggle(1);
+    } else if (filterValue === "Bought Posts") {
+      setToggle(2);
+    }
+  };
+
+  useEffect(() => {
     try {
-      const data = await Autho();
-      setX(data);
-      getProfile(data._id).then((profile) => {
-        console.log(profile.data);
-        setData(profile.data.result);
-        if (profile.data.result.description === "") {
-          setDesc("No description added");
-        } else {
-          setDesc(profile.data.result.description);
-        }
-      });
-      getMyPosts().then((data) => {
-        setProducts(data.data.result);
-        console.log(data.data.result);
+      Autho().then((data) => {
+        setX(data);
+        getProfile(data._id).then((profile) => {
+          setData(profile.data.result);
+          if (profile.data.result.description === "") {
+            setDesc("No description added");
+          } else {
+            setDesc(profile.data.result.description);
+          }
+        });
       });
       // const base64string = btoa(
       //   String.fromCharCode(...new Uint8Array(data.image.data.data)).toString()
@@ -40,25 +59,31 @@ function About() {
     } catch (err) {
       console.log(err);
     }
-  };
+  }, []);
 
-  const handleSort = (e) => {
-    const filterValue = e.target.value;
-    if (filterValue === "My Posts") {
-      getMyPosts().then((data) => {
+  useEffect(() => {
+    if (toggle === 1) {
+      getMyPosts(page, limit).then((data) => {
         setProducts(data.data.result);
-        console.log(data.data.result);
+        setTotalPages(data.data.totalPage);
+        if (data.data.message) {
+          toast.warn(data.data.message, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+          });
+        }
       });
-    } else if (filterValue === "Bought Posts") {
-      getBoughtItems().then((data) => {
+    } else if (toggle === 2) {
+      getBoughtItems(page, limit).then((data) => {
         setProducts(data.data.result);
-        console.log(data.data.result);
+        setTotalPages(data.data.result.totalPage);
+        if (data.data.message) {
+          toast.warn(data.data.message, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+          });
+        }
       });
     }
-  };
-  useEffect(() => {
-    callAbout();
-  }, []);
+  }, [page, toggle, totalPages, products, limit]);
 
   return (
     <>
@@ -66,30 +91,34 @@ function About() {
       <section>
         <Container>
           <Row>
-            <Col lg="5" md="8" sm="8">
-              <img src={data.image} alt="" className="w-60 single__nft-img" />
+            <Col lg="4" md="6" sm="6">
+              <img
+                src={data.image}
+                alt=""
+                className="w-60 single__nft-img userImage"
+              />
             </Col>
 
-            <Col lg="6" md="6" sm="6">
-              <div className="single__nft__content">
+            <Col lg="8" md="6" sm="6">
+              <div className="single__nft__content userData">
                 <h2>{data.name}</h2>
 
                 <div className=" d-flex align-items-center justify-content-between mt-4 mb-4">
                   <div className=" d-flex align-items-center gap-4 single__nft-seen">
                     <span>
-                      <i class="ri-eye-line"></i> 234
+                      <i className="ri-eye-line"></i> 234
                     </span>
                     <span>
-                      <i class="ri-heart-line"></i> 123
+                      <i className="ri-heart-line"></i> 123
                     </span>
                   </div>
 
                   <div className=" d-flex align-items-center gap-2 single__nft-more">
                     <span>
-                      <i class="ri-send-plane-line"></i>
+                      <i className="ri-send-plane-line"></i>
                     </span>
                     <span>
-                      <i class="ri-more-2-line"></i>
+                      <i className="ri-more-2-line"></i>
                     </span>
                   </div>
                 </div>
@@ -157,19 +186,27 @@ function About() {
                 </div>
               </div>
             </Col>
-            {products.map((product, key) => (
-              <Col lg="3" md="4" sm="6" className="mb-4">
-                {product.createdBy._id === x._id ? (
-                  <MyProductCard
-                    key={product._id}
-                    product={product}
-                    userId={x._id}
-                  />
-                ) : (
-                  <BoughtCard key={product._id} product={product} />
-                )}
-              </Col>
-            ))}
+            {products &&
+              products.map((product, key) => (
+                <Col lg="3" md="4" sm="6" className="mb-4" key={key}>
+                  {product.createdBy._id === x._id ? (
+                    <MyProductCard
+                      key={product._id}
+                      product={product}
+                      userId={x._id}
+                    />
+                  ) : (
+                    <BoughtCard key={product._id} product={product} />
+                  )}
+                </Col>
+              ))}
+            <Page>
+              <Pagination
+                pageChange={pageChange}
+                totalPages={totalPages}
+                page={page}
+              />
+            </Page>
           </Row>
         </Container>
       </section>

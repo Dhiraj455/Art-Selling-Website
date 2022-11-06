@@ -1,9 +1,9 @@
 const axios = require("axios").default;
 
-export const getAllUser = async () => {
+export const getAllUser = async (page,limit) => {
   return await axios({
     method: "get",
-    url: `/users`,
+    url: `/users?page=${page}&limit=${limit}`,
   });
 };
 

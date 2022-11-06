@@ -19,7 +19,7 @@ const DeletePopUp = ({ setShowModal, postName, id, userId }) => {
     <div className="modal__wrapper">
       <div className="single__modal">
         <span className="close__modal">
-          <i class="ri-close-line" onClick={() => setShowModal(false)}></i>
+          <i className="ri-close-line" onClick={() => setShowModal(false)}></i>
         </span>
         <h6 className="text-center text-light">Delete Post</h6>
         <div className="input__item mb-3">
@@ -30,14 +30,14 @@ const DeletePopUp = ({ setShowModal, postName, id, userId }) => {
             className="bid__btn d-flex align-items-center gap-1"
             onClick={handleDelete}
           >
-            <i class="ri-delete-bin-6-line"></i> Delete
+            <i className="ri-delete-bin-6-line"></i> Delete
           </button>
 
           <button
             className="bid__btn d-flex align-items-center gap-1"
             onClick={() => setShowModal(false)}
           >
-            <i class="ri-close-line"></i> Cancel
+            <i className="ri-close-line"></i> Cancel
           </button>
         </div>
       </div>

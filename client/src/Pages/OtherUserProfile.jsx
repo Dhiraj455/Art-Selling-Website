@@ -1,52 +1,59 @@
 import React, { useEffect, useState } from "react";
 import Autho from "../Helpers/AuthHelp";
-// import "./s.css";
 import { getProfile, getUsersPosts } from "../Services/User";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
-// import ProductCard from "./ProductCard5";
-// import MyProductCard from "../Components/MyProductCard/MyProductCard";
 import ProductCard from "../Components/Cards/ProductCard";
 import CommonSection from "../Components/Common-section/CommonSection";
-// import { useParams } from "react-router-dom";
+import Pagination from "../Components/Pagination/Pagination";
+import styled from "styled-components";
+import Header from "../Components/Header/Header";
+import Footer from "../Components/Footer/Footer";
 
-function About(res) {
+const Page = styled.div``;
+
+function About() {
   let { id } = useParams();
-  const [x,setX] = useState();
+  const [x, setX] = useState();
   const [data, setData] = useState([]);
   const [desc, setDesc] = useState("");
   const [products, setProducts] = useState([]);
-  // const [image, setImage] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  let limit = 12;
 
-  const callAbout = async () => {
+  const pageChange = (pageNo) => {
+    setPage(pageNo);
+  };
+
+  useEffect(() => {
+    Autho().then((user) => {
+      setX(user);
+    });
+    getProfile(id).then((profile) => {
+      setData(profile.data.result);
+      if (profile.data.result.description === "") {
+        setDesc("No description added");
+      } else {
+        setDesc(profile.data.result.description);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     try {
-      const user = await Autho();
-      setX(user)
-      // console.log(data);
-      getProfile(id).then((profile) => {
-        console.log(profile.data);
-        setData(profile.data.result);
-        if (profile.data.result.description === "") {
-          setDesc("No description added");
-        } else {
-          setDesc(profile.data.result.description);
-        }
-      });
-      getUsersPosts(id).then((data) => {
-        console.log(data.data.result);
+      getUsersPosts(id, page, limit).then((data) => {
         setProducts(data.data.result);
+        setTotalPages(data.data.totalPage);
       });
     } catch (err) {
       console.log(err);
     }
-  };
-
-  useEffect(() => {
-    callAbout();
-  }, []);
+  }, [page, limit, id]);
 
   return (
     <>
+      <Header />
       <CommonSection title="Users Profile" />
       <section>
         <Container>
@@ -62,24 +69,23 @@ function About(res) {
                 <div className=" d-flex align-items-center justify-content-between mt-4 mb-4">
                   <div className=" d-flex align-items-center gap-4 single__nft-seen">
                     <span>
-                      <i class="ri-eye-line"></i> 234
+                      <i className="ri-eye-line"></i> 234
                     </span>
                     <span>
-                      <i class="ri-heart-line"></i> 123
+                      <i className="ri-heart-line"></i> 123
                     </span>
                   </div>
 
                   <div className=" d-flex align-items-center gap-2 single__nft-more">
                     <span>
-                      <i class="ri-send-plane-line"></i>
+                      <i className="ri-send-plane-line"></i>
                     </span>
                     <span>
-                      <i class="ri-more-2-line"></i>
+                      <i className="ri-more-2-line"></i>
                     </span>
                   </div>
                 </div>
                 <p className="my-4">{data.email}</p>
-                {/* <UserData user={userdata} /> */}
                 <p className="my-4">{desc}</p>
               </div>
             </Col>
@@ -92,24 +98,29 @@ function About(res) {
             <Col lg="12" className="mb-5">
               <div className="live__auction__top d-flex align-items-center justify-content-between ">
                 <h3>Users Posts</h3>
-                {/* <span>
-                <Link to="/market">Explore more</Link>
-              </span> */}
               </div>
             </Col>
 
-            {products.map((product, key) => (
-              <Col lg="3" md="4" sm="6" className="mb-4">
-                <ProductCard
-                  key={product._id}
-                  product={product}
-                  userId={x._id}
-                />
-              </Col>
-            ))}
+            {products &&
+              products.map((product, key) => (
+                <Col lg="3" md="4" sm="6" className="mb-4" key={key}>
+                  <ProductCard
+                    key={product._id}
+                    product={product}
+                  />
+                </Col>
+              ))}
+            <Page>
+              <Pagination
+                pageChange={pageChange}
+                totalPages={totalPages}
+                page={page}
+              />
+            </Page>
           </Row>
         </Container>
       </section>
+      <Footer />
     </>
   );
 }

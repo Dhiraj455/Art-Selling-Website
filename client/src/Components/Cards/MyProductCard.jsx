@@ -44,19 +44,19 @@ const MyProductCard = (props) => {
           </div>
         </div>
 
-        <div className=" mt-3 d-flex align-items-center justify-content-between">
+        <div className=" mt-3 d-flex align-items-center justify-content-between gap-1">
           <button
             className="bid__btn d-flex align-items-center gap-1"
             onClick={() => setShowModal(true)}
           >
-            <i class="ri-delete-bin-6-line"></i> Delete
+            <i className="ri-delete-bin-6-line"></i> Delete
           </button>
 
           <button
             className="bid__btn d-flex align-items-center gap-1"
             onClick={handleUpdate}
           >
-            <i class="ri-refresh-line"></i> Update
+            <i className="ri-refresh-line"></i> Update
           </button>
         </div>
         {showModal && <DeletePopUp setShowModal={setShowModal} postName={props.product.title} id={props.product._id} userId={props.product.createdBy._id} />}

@@ -6,27 +6,34 @@ import CommonSection from "../Components/Common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import "../Assets/css/allProduct.css";
 import MyProductCard from "../Components/Cards/MyProductCard";
+import Pagination from "../Components/Pagination/Pagination";
+import styled from "styled-components";
+
+const Page = styled.div``;
 
 function AllProducts() {
   const [products, setProducts] = useState([]);
   const [x, setX] = useState([]);
-  const Update = async () => {
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  let limit = 4;
+  const pageChange = (pageNo) => {
+    setPage(pageNo);
+  };
+
+  useEffect(() => {
     try {
-      let user = await Autho();
-      setX(user);
-      console.log(user._id);
-      getPost().then((data) => {
+      Autho().then((data) => {
+        setX(data);
+      });
+      getPost(page,limit).then((data) => {
         setProducts(data.data.result);
-        console.log(data.data.result);
+        setTotalPages(data.data.totalPage);
       });
     } catch (err) {
       console.log(err);
     }
-  };
-  console.log(x);
-  useEffect(() => {
-    Update();
-  }, []);
+  }, [page, limit, totalPages, products]);
 
   return (
     <>
@@ -37,14 +44,11 @@ function AllProducts() {
             <Col lg="12" className="mb-5">
               <div className="live__auction__top d-flex align-items-center justify-content-between ">
                 <h3>Market</h3>
-                {/* <span>
-                <Link to="/market">Explore more</Link>
-              </span> */}
               </div>
             </Col>
 
             {products.map((product, key) => (
-              <Col lg="3" md="4" sm="6" className="mb-4">
+              <Col lg="3" md="4" sm="6" className="mb-4" key={key}>
                 {product.createdBy._id === x._id ? (
                   <MyProductCard key={key} product={product} userId={x._id} />
                 ) : (
@@ -52,6 +56,15 @@ function AllProducts() {
                 )}
               </Col>
             ))}
+            <Col lg="12">
+            <Page>
+              <Pagination
+                pageChange={pageChange}
+                totalPages={totalPages}
+                page={page}
+              />
+            </Page>
+            </Col>
           </Row>
         </Container>
       </section>

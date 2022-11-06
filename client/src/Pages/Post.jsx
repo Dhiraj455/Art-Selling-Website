@@ -1,13 +1,13 @@
 import React, { useRef } from "react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import Autho from "../Helpers/AuthHelp";
-import { post, getAPost } from "../Services/User";
+import { post } from "../Services/User";
 import { useNavigate } from "react-router-dom";
 import CommonSection from "../Components/Common-section/CommonSection";
 import styled from "styled-components";
 import { Container, Row, Col } from "reactstrap";
 import "../Assets/css/create-item.css";
+import { toast } from "react-toastify";
 
 const ProfilePic = styled.div`
   display: flex;
@@ -50,12 +50,9 @@ const PseudoProfile = styled.div`
 `;
 
 const Post = () => {
-    
   const fileRef = useRef(null);
   const navigate = useNavigate();
-  const { id } = useParams();
   const [images, setImages] = useState();
-  const [userId, setUserId] = useState();
   const [posts, setPosts] = useState({
     title: "",
     description: "",
@@ -64,25 +61,21 @@ const Post = () => {
     userId: "",
     count: "",
   });
-  
-  const Update = async () => {
+
+  useEffect(() => {
     try {
-      let x = await Autho();
-      setPosts({ ...posts, userId: x._id });
+      Autho().then((data) => {
+        setPosts({ ...posts, userId: data._id });
+      });
     } catch (err) {
       console.log(err);
     }
-  };
-
-  useEffect(() => {
-    Update();
   }, []);
 
   const handlePic = (e) => {
     const fileReader = new FileReader();
     e.preventDefault();
     var pic = e.target.files[0];
-    console.log(pic);
     fileReader.onload = function (e) {
       setImages(e.target.result);
       setPosts({ ...posts, pic: pic });
@@ -97,21 +90,22 @@ const Post = () => {
   form.append("post", posts.pic);
   form.append("userId", posts.userId);
   form.append("count", posts.count);
-  console.log(posts);
 
   const handleAdd = async (e) => {
     e.preventDefault();
     post(form).then((data) => {
-      console.log(data.data);
       if (data.data.message === "Posted successfully") {
         navigate("/profile");
-        alert(data.data.message);
+        toast.success(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       } else {
-        alert(data.data.message);
+        toast.warn(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       }
     });
   };
-  
 
   return (
     <>
@@ -122,12 +116,11 @@ const Post = () => {
           <Row>
             <Col lg="3" md="4" sm="6">
               <h5 className="mb-4 text-light">Post Image</h5>
-              {/* <NftCard item={item} /> */}
               <ProfilePic>
                 <Profile>
                   {images === "" || images === undefined || images === null ? (
                     <PseudoProfile
-                    dangerouslySetInnerHTML={{
+                      dangerouslySetInnerHTML={{
                         __html: "P",
                       }}
                     />
@@ -149,7 +142,7 @@ const Post = () => {
                       fileRef.current.click();
                     }}
                   >
-                    <i class="ri-refresh-line"></i> Change
+                    <i className="ri-upload-line"></i> Upload
                   </button>
                 </Profile>
               </ProfilePic>
@@ -158,49 +151,17 @@ const Post = () => {
             <Col lg="9" md="8" sm="6">
               <div className="create__item">
                 <form>
-                  {/* <div className="form__input">
-                    <label htmlFor="">Upload File</label>
-                    <input type="file" className="upload__input" />
-                  </div> */}
-
                   <div className="form__input">
                     <label htmlFor="">Title</label>
                     <input
                       type="text"
                       name="title"
                       placeholder="Enter Name"
-                      onChange={(e) => setPosts({ ...posts, title: e.target.value })}
-                    />
-                  </div>
-
-                  {/* <div className="form__input">
-                    <label htmlFor="">Description</label>
-                    <input
-                      type="number"
-                      placeholder="Enter Description"
-                      value={user.description}
                       onChange={(e) =>
-                        setUser({ ...user, description: e.target.value })
+                        setPosts({ ...posts, title: e.target.value })
                       }
                     />
                   </div>
-
-                  <div className=" d-flex align-items-center gap-4">
-                    <div className="form__input w-50">
-                      <label htmlFor="">Starting Date</label>
-                      <input type="date" />
-                    </div>
-
-                    <div className="form__input w-50">
-                      <label htmlFor="">Expiration Date</label>
-                      <input type="date" />
-                    </div>
-                  </div>
-
-                  <div className="form__input">
-                    <label htmlFor="">Title</label>
-                    <input type="text" placeholder="Enter title" />
-                  </div> */}
 
                   <div className="form__input">
                     <label htmlFor="">Description</label>
@@ -216,12 +177,14 @@ const Post = () => {
                     ></textarea>
                   </div>
                   <div className="form__input">
-                    <label htmlFor="">Price</label>
+                    <label htmlFor="">Price (Include Delivery Charges)</label>
                     <input
                       type="number"
                       name="price"
                       placeholder="Enter Name"
-                      onChange={(e) => setPosts({ ...posts, price: e.target.value })}
+                      onChange={(e) =>
+                        setPosts({ ...posts, price: e.target.value })
+                      }
                     />
                   </div>
                   <div className="form__input">
@@ -230,14 +193,16 @@ const Post = () => {
                       type="number"
                       name="count"
                       placeholder="Enter Name"
-                      onChange={(e) => setPosts({ ...posts, count: e.target.value })}
+                      onChange={(e) =>
+                        setPosts({ ...posts, count: e.target.value })
+                      }
                     />
                   </div>
                   <button
                     className="bid__btn d-flex align-items-center gap-5 pad"
                     onClick={handleAdd}
                   >
-                    <i class="ri-add-line"></i> Post
+                    <i className="ri-add-line"></i> Post
                   </button>
                 </form>
               </div>

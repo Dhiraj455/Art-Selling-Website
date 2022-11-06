@@ -10,7 +10,6 @@ async function Autho() {
       credentials: "include",
     });
     const data = await response.json();
-    console.log(data);
     if (data.message === "Unauthorized") {
       console.log("Error");
       const error = new Error(data.message);

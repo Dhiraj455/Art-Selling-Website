@@ -14,26 +14,7 @@ function SinglePost() {
   const [deletePosts, setDeletePosts] = useState([]);
   const [x, setX] = useState([]);
   const { id } = useParams();
-  const User = async () => {
-    try {
-      let user = await Autho();
-      console.log(user);
-      setX(user);
-      getAPost(id).then((data) => {
-        setProduct(data.data.result);
-        setUserdata(data.data.result.createdBy);
-        setDeletePosts({
-          ...deletePosts,
-          id: data.data.result._id,
-          userId: user._id,
-        });
-        console.log(data.data.result);
-      });
-      console.log(product);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+
   const handleDelete = () => {
     try {
       deletePost(deletePosts).then((data) => {
@@ -49,13 +30,27 @@ function SinglePost() {
   const handleUpdate = () => {
     navigate(`/updatePost/${product._id}`);
   };
+
   useEffect(() => {
-    User();
+    try {
+      Autho().then((user) => {
+        setX(user);
+        getAPost(id).then((data) => {
+          setProduct(data.data.result);
+          setUserdata(data.data.result.createdBy);
+          setDeletePosts({
+            ...deletePosts,
+            id: data.data.result._id,
+            userId: user._id,
+          });
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
 
   const UserData = (props) => {
-    console.log(props.user);
-    console.log(x);
     return (
       <>
         <div className="nft__creator d-flex gap-3 align-items-center">
@@ -101,19 +96,19 @@ function SinglePost() {
                 <div className=" d-flex align-items-center justify-content-between mt-4 mb-4">
                   <div className=" d-flex align-items-center gap-4 single__nft-seen">
                     <span>
-                      <i class="ri-eye-line"></i> 234
+                      <i className="ri-eye-line"></i> 234
                     </span>
                     <span>
-                      <i class="ri-heart-line"></i> 123
+                      <i className="ri-heart-line"></i> 123
                     </span>
                   </div>
 
                   <div className=" d-flex align-items-center gap-2 single__nft-more">
                     <span>
-                      <i class="ri-send-plane-line"></i>
+                      <i className="ri-send-plane-line"></i>
                     </span>
                     <span>
-                      <i class="ri-more-2-line"></i>
+                      <i className="ri-more-2-line"></i>
                     </span>
                   </div>
                 </div>
@@ -122,7 +117,7 @@ function SinglePost() {
                 <p className="my-4">{product.description}</p>
                 {userdata._id !== x._id ? (
                   <button className="singleNft-btn d-flex align-items-center gap-2 w-100">
-                    <i class="ri-shopping-bag-line"></i>
+                    <i className="ri-shopping-bag-line"></i>
                     <Link to="/">Add To Cart</Link>
                   </button>
                 ) : (
@@ -132,16 +127,14 @@ function SinglePost() {
                         className="bid__btn d-flex align-items-center gap-1"
                         onClick={handleDelete}
                       >
-                        <i class="ri-delete-bin-6-line"></i> Delete
+                        <i className="ri-delete-bin-6-line"></i> Delete
                       </button>
-
-                      {/* {showModal && <Modal setShowModal={setShowModal} />} */}
 
                       <button
                         className="bid__btn d-flex align-items-center gap-1"
                         onClick={handleUpdate}
                       >
-                        <i class="ri-refresh-line"></i> Update
+                        <i className="ri-refresh-line"></i> Update
                       </button>
                     </div>
                   </>

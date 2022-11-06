@@ -4,74 +4,62 @@ import { mycart, buyCart } from "../Services/Buy";
 import { Container, Row, Col } from "reactstrap";
 import CommonSection from "../Components/Common-section/CommonSection";
 import CartCard from "../Components/Cards/CartCard";
+import { toast } from "react-toastify";
 
 function MyCart() {
-  // const [buy, setBuy] = useState({
-  //   totals: 0,
-  //   postsDetails: [],
-  // });
   const [postsDetails, setPostsDetails] = useState([]);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const [count, setCount] = useState([]);
   const [price, setPrice] = useState([]);
   const [x, setX] = useState([]);
-  const User = async () => {
-    try {
-      let user = await Autho();
-      setX(user);
-      console.log(user);
-      mycart(user._id)
-        .then((data) => {
-          console.log(data.data.result);
-          setData(data.data.result);
-          for (let i = 0; i < data.data.result.length; i++) {
-            setPostsDetails((postsDetails) => [
-              ...postsDetails,
-              data.data.result[i].postBy,
-            ]);
-            setCount((counts) => [...counts, data.data.result[i].count]);
-            setPrice((price) => [...price, data.data.result[i].price]);
-            // setBoughtFrom((current) => [
-            //   ...current,
-            //   data.data.result[i].postBy.createdBy,
-            // ]);
-          }
-          setTotal(data.data.total);
-          console.log(postsDetails);
-        })
-        .catch((err) => {
-          console.log("Error" + err);
-        });
-      console.log(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const handleBuy = () => {
-    // console.log(boughtFrom);
     buyCart({
       totals: total,
       postsDetails: postsDetails,
       userId: x._id,
       count: count,
       price: price,
-      // boughtFrom: boughtFrom,
     })
       .then((data) => {
-        console.log(data.data);
-        alert(data.data.message);
+        toast.warn(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
         window.location.reload();
       })
       .catch((err) => {
         console.log(err);
-        alert(err.message);
+        toast.warn(err.response.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       });
   };
 
   useEffect(() => {
-    User();
+    try {
+      Autho().then((user) => {
+        setX(user);
+        mycart(user._id)
+          .then((data) => {
+            setData(data.data.result);
+            for (let i = 0; i < data.data.result.length; i++) {
+              setPostsDetails((postsDetails) => [
+                ...postsDetails,
+                data.data.result[i].postBy,
+              ]);
+              setCount((counts) => [...counts, data.data.result[i].count]);
+              setPrice((price) => [...price, data.data.result[i].price]);
+            }
+            setTotal(data.data.total);
+          })
+          .catch((err) => {
+            console.log("Error" + err);
+          });
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
 
   return (
@@ -86,7 +74,7 @@ function MyCart() {
               </div>
             </Col>
             {data.map((products, key) => (
-              <Col lg="3" md="4" sm="6" className="mb-4">
+              <Col lg="3" md="4" sm="6" className="mb-4" key={key}>
                 <CartCard product={products} userId={x._id} />
               </Col>
             ))}

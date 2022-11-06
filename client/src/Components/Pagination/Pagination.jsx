@@ -20,33 +20,26 @@ const Num = styled.button`
   height: 30px;
   border-radius: 50%;
   border: 0;
-  background: ${(props) => props.theme.Colors.LoadBg};
-  color: ${(props) => props.theme.Colors.PageNum};
+  background: #F0F3FB;
+  color: black;
   font-weight: bold;
   font-size: 12px;
-  /* margin-top: ${(props) => (props.arrow ? "5px" : null)}; */
-  @media ${(props) => props.theme.MediaQueries.m.query} {
-    /* width: 40px; */
-    /* width: 40px;
-    height: 40px;
-    font-size: 15px; */
-  }
+  margin-top: "5px"
 
   &.active {
-    background-color: ${(props) => props.theme.Colors.ActivePage};
-    color: ${(props) => props.theme.Colors.White};
+    background-color: #83CCFF;
+    color: #ffffff;
   }
 
   &:hover {
-    background-color: ${(props) => props.theme.Colors.ActivePage};
+    background-color: #83CCFF;
     cursor: pointer;
   }
 
   &.disabled {
-    /* cursor: not-allowed; */
     display: none;
     &:hover {
-      background: ${(props) => props.theme.Colors.LoadBg};
+      background: #F0F3FB;
     }
   }
 
@@ -54,16 +47,10 @@ const Num = styled.button`
     margin-top: 2.5px;
     width: 17px !important;
     height: 17px !important;
-    fill: ${(props) => props.theme.Colors.PageNum};
-    @media ${(props) => props.theme.MediaQueries.m.query} {
-      /* padding-bottom: 10px; */
-      /* margin: 0; */
-      /* width: 30px !important;
-      height: 30px !important; */
-    }
+    fill: #959AAC;
   }
   &:hover box-icon {
-    fill: ${(props) => props.theme.Colors.White};
+    fill: #ffffff;
   }
 `;
 
@@ -72,7 +59,7 @@ const Pagination = ({ pageChange, page, totalPages }) => {
     if (page > 1) {
       pageChange(page - 1);
     }
-    if ((page - 1) % 3 == 0) {
+    if ((page - 1) % 3 === 0) {
       setMaxPageLimit(maxPageLimit - 3);
       setMinPageLimit(minPageLimit - 3);
     }
@@ -101,7 +88,7 @@ const Pagination = ({ pageChange, page, totalPages }) => {
             onClick={() => (page !== 1 ? pageDecrement() : null)}
             className={page === 1 ? "disabled" : ""}
           >
-            <box-icon name="chevron-left"></box-icon>
+            <i className="ri-arrow-left-s-line"></i>
           </Num>
         </Page>
         {new Array(totalPages).fill("").map((el, index) => {
@@ -126,7 +113,7 @@ const Pagination = ({ pageChange, page, totalPages }) => {
             onClick={() => (page !== totalPages ? pageIncrement() : null)}
             className={page === totalPages ? "disabled" : ""}
           >
-            <box-icon name="chevron-right"></box-icon>
+            <i className="ri-arrow-right-s-line"></i>
           </Num>
         </Page>
       </Wrapper>

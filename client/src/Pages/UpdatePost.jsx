@@ -8,6 +8,9 @@ import CommonSection from "../Components/Common-section/CommonSection";
 import styled from "styled-components";
 import { Container, Row, Col } from "reactstrap";
 import "../Assets/css/create-item.css";
+import Header from "../Components/Header/Header";
+import Footer from "../Components/Footer/Footer";
+import { toast } from "react-toastify";
 
 const ProfilePic = styled.div`
   display: flex;
@@ -64,12 +67,12 @@ const UpdatePost = () => {
     price: "",
     count: "",
   });
-  console.log(update);
-  const Update = async () => {
+
+  useEffect(() => {
     try {
-      const x = await Autho();
-      setUserId(x._id);
-      console.log(x);
+      Autho().then((data) => {
+        setUserId(data._id);
+      });
       getAPost(id).then((data) => {
         setUpdate({
           ...update,
@@ -85,17 +88,12 @@ const UpdatePost = () => {
     } catch (err) {
       console.log(err);
     }
-  };
-
-  useEffect(() => {
-    Update();
   }, []);
 
   const handlePic = (e) => {
     const fileReader = new FileReader();
     e.preventDefault();
     var pic = e.target.files[0];
-    console.log(pic);
     fileReader.onload = function (e) {
       setImages(e.target.result);
       setUpdate({ ...update, pic: pic });
@@ -116,12 +114,15 @@ const UpdatePost = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     updatePost(form2).then((data) => {
-      alert(data.data.message);
+      toast.success(data.data.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
       navigate("/profile");
     });
   };
   return (
     <>
+    <Header />
       <CommonSection title="Create Item" />
 
       <section>
@@ -129,7 +130,6 @@ const UpdatePost = () => {
           <Row>
             <Col lg="3" md="4" sm="6">
               <h5 className="mb-4 text-light">Preview Item</h5>
-              {/* <NftCard item={item} /> */}
               <ProfilePic>
                 <Profile>
                   {images === "" || images === undefined || images === null ? (
@@ -156,7 +156,7 @@ const UpdatePost = () => {
                       fileRef.current.click();
                     }}
                   >
-                    <i class="ri-refresh-line"></i> Change
+                    <i className="ri-refresh-line"></i> Change
                   </button>
                 </Profile>
               </ProfilePic>
@@ -182,35 +182,6 @@ const UpdatePost = () => {
                       }
                     />
                   </div>
-
-                  {/* <div className="form__input">
-                    <label htmlFor="">Description</label>
-                    <input
-                      type="number"
-                      placeholder="Enter Description"
-                      value={user.description}
-                      onChange={(e) =>
-                        setUser({ ...user, description: e.target.value })
-                      }
-                    />
-                  </div>
-
-                  <div className=" d-flex align-items-center gap-4">
-                    <div className="form__input w-50">
-                      <label htmlFor="">Starting Date</label>
-                      <input type="date" />
-                    </div>
-
-                    <div className="form__input w-50">
-                      <label htmlFor="">Expiration Date</label>
-                      <input type="date" />
-                    </div>
-                  </div>
-
-                  <div className="form__input">
-                    <label htmlFor="">Title</label>
-                    <input type="text" placeholder="Enter title" />
-                  </div> */}
 
                   <div className="form__input">
                     <label htmlFor="">Description</label>
@@ -254,7 +225,7 @@ const UpdatePost = () => {
                     className="bid__btn d-flex align-items-center gap-5 pad"
                     onClick={handleUpdate}
                   >
-                    <i class="ri-pencil-fill"></i> Update
+                    <i className="ri-pencil-fill"></i> Update
                   </button>
                 </form>
               </div>
@@ -262,6 +233,7 @@ const UpdatePost = () => {
           </Row>
         </Container>
       </section>
+      <Footer />
     </>
   );
 };

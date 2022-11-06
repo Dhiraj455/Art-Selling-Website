@@ -18,6 +18,7 @@ const DeliveryCard = (props) => {
       window.location.reload();
     });
   };
+
   return (
     <div className="single__nft__card m-2">
       <div className="nft__img">
@@ -25,9 +26,7 @@ const DeliveryCard = (props) => {
       </div>
 
       <div className="nft__content">
-        <h5 className="nft__title">
-          {props.product.postId.title}
-        </h5>
+        <h5 className="nft__title">{props.product.postId.title}</h5>
         <div className="creator__info w-100 d-flex align-items-center justify-content-between">
           <div>
             <h6>Price</h6>
@@ -42,11 +41,7 @@ const DeliveryCard = (props) => {
             className="bid__btn d-flex align-items-center gap-1"
             onClick={handleBtn}
           >
-            {Delivereds ? (
-              <i class="ri-check-line">Delivered</i>
-            ) : (
-              <i class="ri-check-line">Deliver</i>
-            )}
+            {Delivereds ? <span className="dp"> Delivered</span> : <span className="dp"> Deliver</span>}
           </button>
         </div>
       </div>

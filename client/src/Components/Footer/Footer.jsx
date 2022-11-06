@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Container, Row, Col, ListGroup, ListGroupItem } from "reactstrap";
 import "./footer.css";
 
@@ -71,7 +70,7 @@ const Footer = () => {
             <div className="logo">
               <h2 className=" d-flex gap-2 align-items-center ">
                 <span>
-                  <i class="ri-fire-fill"></i>
+                  <i className="ri-fire-fill"></i>
                 </span>
                 METART
               </h2>
@@ -122,27 +121,27 @@ const Footer = () => {
             <div className="social__links d-flex gap-3 align-items-center ">
               <span>
                 <Link to="#">
-                  <i class="ri-facebook-line"></i>
+                  <i className="ri-facebook-line"></i>
                 </Link>
               </span>
               <span>
                 <Link to="#">
-                  <i class="ri-instagram-line"></i>
+                  <i className="ri-instagram-line"></i>
                 </Link>
               </span>
               <span>
                 <Link to="#">
-                  <i class="ri-twitter-line"></i>
+                  <i className="ri-twitter-line"></i>
                 </Link>
               </span>
               <span>
                 <Link to="#">
-                  <i class="ri-telegram-line"></i>
+                  <i className="ri-telegram-line"></i>
                 </Link>
               </span>
               <span>
                 <Link to="#">
-                  <i class="ri-discord-line"></i>
+                  <i className="ri-discord-line"></i>
                 </Link>
               </span>
             </div>

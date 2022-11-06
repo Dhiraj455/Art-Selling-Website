@@ -12,11 +12,12 @@ const SuspendPopUp = ({ setShowModal, userName, userId }) => {
       setShowModal(false);
     });
   };
+
   return (
     <div className="modal__wrapper">
       <div className="single__modal">
         <span className="close__modal">
-          <i class="ri-close-line" onClick={() => setShowModal(false)}></i>
+          <i className="ri-close-line" onClick={() => setShowModal(false)}></i>
         </span>
         <h6 className="text-center text-light">Suspend user</h6>
         <div className="input__item mb-3">
@@ -27,14 +28,14 @@ const SuspendPopUp = ({ setShowModal, userName, userId }) => {
             className="bid__btn d-flex align-items-center gap-1"
             onClick={handleDelete}
           >
-            <i class="ri-delete-bin-6-line"></i> Suspend
+            <i className="ri-delete-bin-6-line"></i> Suspend
           </button>
 
           <button
             className="bid__btn d-flex align-items-center gap-1"
             onClick={() => setShowModal(false)}
           >
-            <i class="ri-close-line"></i> Cancel
+            <i className="ri-close-line"></i> Cancel
           </button>
         </div>
       </div>

@@ -11,23 +11,23 @@ const AddWalletPopUp = ({ setShowModal }) => {
   const navigate = useNavigate();
   const [x, setX] = useState([]);
   const [amount, setAmount] = useState(0);
-  const callAbout = async () => {
+
+  useEffect(() => {
     try {
-      const data = await Autho();
-      setX(data);
+      Autho().then((data) => {
+        setX(data);
+      });
     } catch (err) {
       console.log(err);
     }
-  };
-
-  useEffect(() => {
-    callAbout();
   }, []);
 
   const handleBtn = (e) => {
     e.preventDefault();
     if (amount === 0) {
-      alert("please enter amount");
+      toast.warn("Please Enter A Valid Amount", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
     } else {
       var options = {
         key: "rzp_test_tupa66FxDzP1Ys",
@@ -37,7 +37,6 @@ const AddWalletPopUp = ({ setShowModal }) => {
         name: "METART",
         description: "for testing purpose",
         handler: function (response) {
-          console.log(response);
           try {
             addWallet({ id: x._id, wallet: amount }).then((data) => {
               toast.success(data.data.message, {
@@ -69,9 +68,9 @@ const AddWalletPopUp = ({ setShowModal }) => {
   return (
     <div className="modal__wrapper">
       <div className="single__modal">
-        <img src={payment} alt="" />
+        <img className="creditcard" src={payment} alt="" />
         <span className="close__modal">
-          <i class="ri-close-line" onClick={() => setShowModal(false)}></i>
+          <i className="ri-close-line" onClick={() => setShowModal(false)}></i>
         </span>
         <h6 className="text-center text-light">Add To Wallet</h6>
 
@@ -84,10 +83,6 @@ const AddWalletPopUp = ({ setShowModal }) => {
             }}
           />
         </div>
-
-        {/* <div className="input__item mb-4">
-          <input type="number" placeholder="Enter Amount" />
-        </div> */}
 
         <button className="place__bid-btn" onClick={handleBtn}>
           Add

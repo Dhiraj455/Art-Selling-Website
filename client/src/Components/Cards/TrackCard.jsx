@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 import { isNotDelivered } from "../../Services/Buy";
 import "./card.css";
 
@@ -8,7 +9,9 @@ const TrackCard = (props) => {
       id: props.id,
       postId: props.product._id,
     }).then((data) => {
-      alert(data.data.message);
+      toast.warn(data.data.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
       window.location.reload();
     });
   };
@@ -35,7 +38,7 @@ const TrackCard = (props) => {
               className="bid__btn d-flex align-items-center gap-1"
               onClick={handleBtn}
             >
-              <i class="ri-check-line">Decline</i>
+              <i className="ri-check-line">Decline</i>
             </button>
           ) : null}
         </div>

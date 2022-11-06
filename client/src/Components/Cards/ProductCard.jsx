@@ -52,7 +52,7 @@ const ProductCard = (props) => {
             className="bid__btn d-flex align-items-center gap-1"
             onClick={handleBtn}
           >
-            <i class="ri-shopping-cart-line"></i> Add To Cart
+            <i className="ri-shopping-cart-line"></i> Add To Cart
           </button>
 
           {showModal && <AddToCart setShowModal={setShowModal} product={props.product} userId={props.userId}/>}

@@ -20,6 +20,10 @@
   }
 }
 
+.dp{
+  color: #fff;
+}
+
 .input__item input {
   width: 20px;
   border: 1px solid rgba(221, 221, 221, 0.274);

@@ -32,7 +32,6 @@ const Progress = styled(BaseBox)`
 function TrackBox(props) {
   const [percent, setPercent] = useState(20);
   useEffect(() => {
-    console.log(props.postsDetails);
     let count = 0;
     let p = 0;
     for (var i = 0; i < props.postsDetails.length; i++) {

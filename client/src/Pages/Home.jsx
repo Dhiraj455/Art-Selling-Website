@@ -13,27 +13,23 @@ function Home() {
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
   const [x, setX] = useState([]);
-  const Update = async () => {
+
+  useEffect(() => {
+    Autho().then((data) => {
+      setX(data);
+    });
     try {
-      let user = await Autho();
-      setX(user);
-      console.log(user._id);
       getSomePosts().then((data) => {
         setProducts(data.data.result);
-        console.log(data.data.result);
       });
       getSomeUser().then((data) => {
         setUsers(data.data.result);
-        console.log(data.data.result);
       });
     } catch (err) {
       console.log(err);
     }
-  };
-  console.log(x);
-  useEffect(() => {
-    Update();
   }, []);
+
   return (
     <>
       <HeroSection />
@@ -49,15 +45,25 @@ function Home() {
               </div>
             </Col>
 
-            {products.map((product, key) => (
-              <Col lg="3" md="4" sm="6" className="mb-4">
-                {product.createdBy._id === x._id ? (
-                  <MyProductCard key={key} product={product} userId={x._id} />
-                ) : (
-                  <ProductCard key={key} product={product} userId={x._id} />
-                )}
-              </Col>
-            ))}
+            {products &&
+              products.map((product, key) => (
+                <Col lg="3" md="4" sm="6" className="mb-4" key={product._id}>
+                  {product.createdBy._id === x._id ? (
+                    <MyProductCard
+                      key={product._id}
+                      product={product}
+                      userId={x._id}
+                    />
+                  ) : (
+                    <ProductCard
+                      key={product._id}
+                      product={product}
+                      userId={x._id}
+                    />
+                  )}
+                </Col>
+              ))}
+            {!products ? <h2>No Products</h2> : null}
           </Row>
         </Container>
       </section>
@@ -69,29 +75,37 @@ function Home() {
                 <h3>Top Seller</h3>
               </div>
             </Col>
+            {users &&
+              users.map((user, key) => (
+                <Col
+                  lg="3"
+                  md="6"
+                  sm="12"
+                  xs="8"
+                  key={user._id}
+                  className="mb-4"
+                >
+                  <div className="single__seller-card d-flex align-items-center gap-1">
+                    <div className="seller__img">
+                      <img src={user.image} alt="" className="w-100" />
+                    </div>
 
-            {users.map((user, key) => (
-              <Col lg="3" md="3" sm="4" xs="6" key={user._id} className="mb-4">
-                <div className="single__seller-card d-flex align-items-center gap-1">
-                  <div className="seller__img">
-                    <img src={user.image} alt="" className="w-100" />
+                    <div className="seller__content">
+                      {x._id === user._id ? (
+                        <Link to={`/profile`}>
+                          <p>{user.name}</p>
+                        </Link>
+                      ) : (
+                        <Link to={`/otherUser/${user._id}`}>
+                          <p>{user.name}</p>
+                        </Link>
+                      )}
+                      <p>{user.email}</p>
+                    </div>
                   </div>
-
-                  <div className="seller__content">
-                    {x._id === user._id ? (
-                      <Link to={`/profile`}>
-                        <p>{user.name}</p>
-                      </Link>
-                    ) : (
-                      <Link to={`/otherUser/${user._id}`}>
-                        <p>{user.name}</p>
-                      </Link>
-                    )}
-                    <p>{user.email}</p>
-                  </div>
-                </div>
-              </Col>
-            ))}
+                </Col>
+              ))}
+            {!users ? <h2>No users</h2> : null}
           </Row>
         </Container>
       </section>
