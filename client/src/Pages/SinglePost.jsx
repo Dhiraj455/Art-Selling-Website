@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 import CommonSection from "../Components/Common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import "../Assets/css/singlepost.css";
+import Header from "../Components/Header/Header";
+import Footer from "../Components/Footer/Footer";
+import { toast } from "react-toastify";
 
 function SinglePost() {
   const navigate = useNavigate();
@@ -19,7 +22,9 @@ function SinglePost() {
     try {
       deletePost(deletePosts).then((data) => {
         console.log(data.data);
-        alert(data.data.message);
+        toast.warn(data.data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
         navigate("/profile");
       });
     } catch (err) {
@@ -53,6 +58,7 @@ function SinglePost() {
   const UserData = (props) => {
     return (
       <>
+        <Header />
         <div className="nft__creator d-flex gap-3 align-items-center">
           <div className="creator__img">
             <img src={props.user.image} alt="" className="w-100" />
@@ -144,7 +150,7 @@ function SinglePost() {
           </Row>
         </Container>
       </section>
-
+      <Footer />
       {/* <LiveAuction /> */}
     </>
   );

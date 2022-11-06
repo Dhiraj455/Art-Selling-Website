@@ -11,8 +11,6 @@ module.exports.postArt = async (req, res) => {
     errMessage: "",
   };
   const { title, description, price, userId, count } = req.body;
-  console.log(req.body);
-  console.log(req.file);
   let post;
   if (req.file) {
     post = process.env.URL + "/images/Posts/" + req.file.filename;
@@ -32,7 +30,6 @@ module.exports.postArt = async (req, res) => {
     await postArt
       .save()
       .then((data) => {
-        console.log(data);
         response.success = true;
         response.message = "Posted successfully";
         res.status(200).json(response);
@@ -56,7 +53,7 @@ module.exports.getPosts = async (req, res) => {
     message: "",
     errMessage: "",
     result: "",
-    totalPage : 0,
+    totalPage: 0,
   };
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 12;
@@ -114,7 +111,6 @@ module.exports.getSomePosts = async (req, res) => {
       .then((data) => {
         response.success = true;
         response.result = data;
-        console.log(data);
         res.status(200).json(response);
       });
   } catch (err) {
@@ -135,7 +131,6 @@ module.exports.deletePost = async (req, res) => {
   try {
     const posts = await Post.findOneAndDelete({ _id: id, createdBy: userId });
     if (posts) {
-      console.log(posts);
       imageName = posts.post.split("/");
       let imagepath =
         path.join(__dirname, "../public/images/Posts/") +
@@ -147,8 +142,6 @@ module.exports.deletePost = async (req, res) => {
         postsDetails: { $elemMatch: { postId: id } },
       })
         .then(async (data) => {
-          console.log(data.length);
-          console.log(data);
           await Track.updateMany(
             {
               postsDetails: { $elemMatch: { postId: id } },
@@ -159,7 +152,6 @@ module.exports.deletePost = async (req, res) => {
             .then(async () => {
               for (let i = 0; i < data.length; i++) {
                 await Track.findOne({ _id: data[i]._id }).then(async (data) => {
-                  console.log(data.postsDetails.length);
                   if (
                     data.postsDetails.length <= 0 ||
                     data.postsDetails == []
@@ -167,9 +159,7 @@ module.exports.deletePost = async (req, res) => {
                     await Track.findOneAndDelete({
                       _id: data._id,
                     })
-                      .then((data) => {
-                        console.log("Track", data);
-                      })
+                      .then((data) => {})
                       .catch((err) => {
                         console.log("Track", err);
                       });
@@ -182,10 +172,6 @@ module.exports.deletePost = async (req, res) => {
             .catch((err) => {
               console.log(err);
             });
-
-          // }
-          console.log(data);
-          console.log("Track Deleted");
         })
         .catch((err) => {
           console.log(err);
@@ -258,12 +244,9 @@ module.exports.updatePost = async (req, res) => {
     // oldImage != "" &&
     if (post != oldPost) {
       let imageName = oldPost.split("/");
-      console.log(imageName);
-      console.log(imageName[imageName.length - 1]);
       let imagePath =
         path.join(__dirname, "../public/images/Posts/") +
         imageName[imageName.length - 1];
-      console.log(imagePath);
       fs.unlink(imagePath, (err) => {
         if (err) {
           response.errMessage = err.message;
@@ -299,7 +282,6 @@ module.exports.getAPost = async (req, res) => {
       .then((data) => {
         response.success = true;
         response.result = data;
-        console.log(data);
         res.status(200).json(response);
       });
   } catch (err) {

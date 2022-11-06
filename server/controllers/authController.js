@@ -31,7 +31,6 @@ module.exports.register = async (req, res) => {
     await newUser.save();
     response.success = true;
     response.message = "User created successfully";
-    console.log(response);
     res.status(200).json(response);
   } catch (err) {
     console.log(err);
@@ -72,7 +71,6 @@ module.exports.login = async (req, res) => {
 };
 
 module.exports.google = async (req, res) => {
-  console.log("hello Login");
   const { token } = req.body;
   let tokens = "";
   let response = {
@@ -83,9 +81,6 @@ module.exports.google = async (req, res) => {
   let audience;
 
   try {
-    // if (process.env.NODE_ENV === "dev") audience = process.env.OAUTH_DEV_ID;
-    // else if (process.env.NODE_ENV === "prod") audience = process.env.OAUTH_ID;
-    // else if (process.env.NODE_ENV === "test")
     audience = process.env.OAUTH_ID;
     const ticket = await client.verifyIdToken({
       idToken: token,
@@ -108,7 +103,6 @@ module.exports.google = async (req, res) => {
         secure: true,
         path: "/refreshToken",
       });
-      console.log(response.accessToken);
       return res.status(200).json(response);
     } else {
       response.message = "Please register to sign in";
@@ -117,7 +111,6 @@ module.exports.google = async (req, res) => {
   } catch (err) {
     console.log(err);
     response.errorMessage = err.message;
-    // console.log(err, "error");
     response.message = "Failed to sign in , please try again";
     return res.status(400).json(response);
   }
@@ -160,7 +153,6 @@ module.exports.refreshToken = async (req, res) => {
     // console.log(response.accessToken)
     return res.status(200).send(response);
   } catch (err) {
-    // console.log(err);
     response.errMessage = err.message;
     return res.send(response);
   }

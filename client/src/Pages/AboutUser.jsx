@@ -83,7 +83,7 @@ function About() {
         }
       });
     }
-  }, [page, toggle, totalPages, products, limit]);
+  }, [page,products, limit]);
 
   return (
     <>

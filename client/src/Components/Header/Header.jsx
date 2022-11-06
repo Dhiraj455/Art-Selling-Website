@@ -22,6 +22,28 @@ const NAV__LINKS = [
   },
 ];
 
+const ADMIN_NAV__LINKS = [
+  {
+    display: "Users",
+    url: "/admin",
+  },
+  {
+    display: "Products",
+    url: "/adminPosts",
+  },
+];
+
+const USER_NAV__LINKS = [
+  {
+    display: "Track",
+    url: "/track",
+  },
+  {
+    display: "Delivery",
+    url: "/delivery",
+  },
+];
+
 const Header = () => {
   const navigate = useNavigate();
   const headerRef = useRef(null);
@@ -37,9 +59,9 @@ const Header = () => {
           document.body.scrollTop > 80 ||
           document.documentElement.scrollTop > 80
         ) {
-          document.getElementById("head").classList.add("header__shrink")
+          document.getElementById("head").classList.add("header__shrink");
         } else {
-          document.getElementById("head").classList.remove("header__shrink")
+          document.getElementById("head").classList.remove("header__shrink");
         }
       });
     });
@@ -76,6 +98,37 @@ const Header = () => {
                   </NavLink>
                 </li>
               ))}
+              {!x.isAdmin ? (
+                <>
+                  {USER_NAV__LINKS.map((item, index) => (
+                    <li className="nav__item" key={index}>
+                      <NavLink
+                        to={item.url}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                      >
+                        {item.display}
+                      </NavLink>
+                    </li>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {ADMIN_NAV__LINKS.map((item, index) => (
+                    <li className="nav__item" key={index}>
+                      <NavLink
+                        to={item.url}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                      >
+                        {item.display}
+                      </NavLink>
+                    </li>
+                  ))}
+                </>
+              )}
             </ul>
           </div>
 
@@ -92,9 +145,7 @@ const Header = () => {
               <Link to="#">Cart</Link>
             </button>
             <div className="nav__icons">
-              <div
-                className="profile"
-              >
+              <div className="profile">
                 <motion.img
                   whileTap={{ scale: 1.2 }}
                   src={x ? x.image : user_icon1}
@@ -107,75 +158,23 @@ const Header = () => {
                   ref={profileActionRef}
                   onClick={toggleProfileActions}
                 >
-                  {!x.isAdmin ? (
-                    <>
-                      <span
-                        onClick={() => {
-                          navigate("/profile");
-                        }}
-                      >
-                        Profile
-                      </span>
-                      <DropdownItem divider />
-                      <span
-                        onClick={() => {
-                          navigate("/track");
-                        }}
-                      >
-                        Track
-                      </span>
-                      <DropdownItem divider />
-                      <span
-                        onClick={() => {
-                          navigate("/delivery");
-                        }}
-                      >
-                        Delivery
-                      </span>
-                      <DropdownItem divider />
-                      <span
-                        onClick={() => {
-                          navigate("/logout");
-                        }}
-                      >
-                        Logout
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <span
-                        onClick={() => {
-                          navigate("/profile");
-                        }}
-                      >
-                        Profile
-                      </span>
-                      <DropdownItem divider />
-                      <span
-                        onClick={() => {
-                          navigate("/admin");
-                        }}
-                      >
-                        All Users
-                      </span>
-                      <DropdownItem divider />
-                      <span
-                        onClick={() => {
-                          navigate("/adminPosts");
-                        }}
-                      >
-                        All Posts
-                      </span>
-                      <DropdownItem divider />
-                      <span
-                        onClick={() => {
-                          navigate("/logout");
-                        }}
-                      >
-                        Logout
-                      </span>
-                    </>
-                  )}
+                  <>
+                    <span
+                      onClick={() => {
+                        navigate("/profile");
+                      }}
+                    >
+                      Profile
+                    </span>
+                    <DropdownItem divider />
+                    <span
+                      onClick={() => {
+                        navigate("/logout");
+                      }}
+                    >
+                      Logout
+                    </span>
+                  </>
                 </div>
               </div>
             </div>

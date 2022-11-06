@@ -1,5 +1,4 @@
 const multer = require("multer");
-const path = require("path");
 const fs = require("fs");
 
 
@@ -19,7 +18,7 @@ const storage = multer.diskStorage({
     }
     return cb(null, dir);
   },
-  // let filetype = file.mimetype.split("/")[1]
+
   filename: (req, file, cb) => {
     return cb(
       null,
@@ -31,7 +30,6 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
 });
-// const upload = multer({ storage: storage });
 
 exports.upload = upload;
 exports.setDestination = setDestination;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { isDelivered } from "../../Services/Buy";
+import { toast } from "react-toastify";
 import "./card.css";
 
 const DeliveryCard = (props) => {
@@ -14,7 +15,9 @@ const DeliveryCard = (props) => {
       id: props.id,
       postId: props.product._id,
     }).then((data) => {
-      alert(data.data.message);
+      toast.success(data.data.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
       window.location.reload();
     });
   };
@@ -41,7 +44,11 @@ const DeliveryCard = (props) => {
             className="bid__btn d-flex align-items-center gap-1"
             onClick={handleBtn}
           >
-            {Delivereds ? <span className="dp"> Delivered</span> : <span className="dp"> Deliver</span>}
+            {Delivereds ? (
+              <span className="dp"> Delivered</span>
+            ) : (
+              <span className="dp"> Deliver</span>
+            )}
           </button>
         </div>
       </div>

@@ -11,13 +11,10 @@ module.exports.addToCart = async (req, res) => {
   };
   try {
     const { userId, count, price, postImage, title } = req.body;
-    console.log(req.body.id);
-    console.log(req.body);
     const carts = await Cart.findOne({
       postBy: req.body.id,
       createdBy: userId,
     });
-    console.log(carts);
     if (carts) {
       const post = await Post.findOne({ _id: req.body.id });
       if (post.count < carts.count + count) {
@@ -37,7 +34,6 @@ module.exports.addToCart = async (req, res) => {
         { new: true }
       )
         .then((data) => {
-          console.log("Updated cart", data);
           response.success = true;
           response.message = "Added To Cart";
           return res.status(200).json(response);
@@ -60,7 +56,6 @@ module.exports.addToCart = async (req, res) => {
         title,
       });
       await cart.save().then((data) => {
-        console.log(data);
         response.success = true;
         response.message = "Added To Cart";
         res.status(200).json(response);
@@ -98,12 +93,10 @@ module.exports.getMyCart = async (req, res) => {
           for (let i = 0; i < result.length; i++) {
             total += result[i].count * result[i].price;
           }
-          console.log(result);
           response.success = true;
           response.message = "My Cart";
           response.result = result;
           response.total = total;
-          console.log(response);
           res.status(200).json(response);
         } else {
           response.message = "No Item In Cart";
@@ -125,7 +118,6 @@ module.exports.updateCart = async (req, res) => {
     errMessage: "",
   };
   const { id, count } = req.body;
-  console.log(req.body);
   try {
     await Cart.findOneAndUpdate(
       { _id: id },
@@ -135,12 +127,9 @@ module.exports.updateCart = async (req, res) => {
         },
       },
       { new: true }
-    ).then((data) => {
-      console.log("Updated");
-    });
+    );
     response.success = true;
     response.message = "Cart Updated Successful";
-    console.log(response);
     res.status(200).json(response);
   } catch (err) {
     console.log("Error", err);
@@ -151,8 +140,6 @@ module.exports.updateCart = async (req, res) => {
 };
 
 module.exports.buyCart = async (req, res) => {
-  console.log("Buying");
-  console.log(req.body);
   const response = {
     success: true,
     message: "",
@@ -168,16 +155,13 @@ module.exports.buyCart = async (req, res) => {
       price: req.body.price[i],
     });
   }
-  console.log(postDetail);
   try {
     const user = await User.findOne({ _id: userId });
     if (user.wallet < totals) {
       response.message = "Less Balance In Wallet";
-      console.log(response);
       return res.status(200).json(response);
     } else if (!req.body.postsDetails) {
       response.message = "No Products";
-      console.log(response);
       return res.status(200).json(response);
     } else {
       await User.findOneAndUpdate(
@@ -190,12 +174,11 @@ module.exports.buyCart = async (req, res) => {
         { new: true }
       );
       await Cart.find({ createdBy: userId }, (err, item) => {
-        console.log("Items", item);
         const len = item.length;
         for (var i = 0; i < len; i++) {
           Cart.findOneAndDelete({ createdBy: item[i].createdBy })
             .then((data) => {
-              console.log(data);
+              // console.log(data);
             })
             .catch((err) => {
               console.log(err);
@@ -210,7 +193,6 @@ module.exports.buyCart = async (req, res) => {
             { new: true }
           )
             .then(async (data) => {
-              console.log("Data By Me", data._id);
               if (
                 data.count <= 0 ||
                 (data.count == 0 && data.isSold == false)
@@ -220,8 +202,6 @@ module.exports.buyCart = async (req, res) => {
                   { $set: { isSold: true } },
                   { new: true }
                 );
-              } else {
-                console.log("Else mai hai tu");
               }
             })
             .catch((err) => {
@@ -232,7 +212,6 @@ module.exports.buyCart = async (req, res) => {
         }
         response.success = true;
         response.message = "Bought Successfully";
-        console.log(response);
         res.status(200).json(response);
       }).clone();
       const track = new Track({
@@ -262,7 +241,6 @@ module.exports.deleteItem = async (req, res) => {
     if (item) {
       await Cart.findOneAndDelete({ _id: id, createdBy: userId }).then(
         async (data) => {
-          console.log(data);
           await Post.findOneAndUpdate(
             { _id: data.postBy._id },
             { $inc: { count: data.count } },
@@ -307,7 +285,6 @@ module.exports.getTrack = async (req, res) => {
         },
       })
       .then((data) => {
-        console.log(data);
         response.success = true;
         response.result = data;
         res.status(200).json(response);
@@ -322,7 +299,6 @@ module.exports.getTrack = async (req, res) => {
 
 module.exports.getDeliveredTrack = async (req, res) => {
   const userId = req.userid;
-  console.log(userId);
   let response = {
     success: false,
     result: "",
@@ -346,7 +322,6 @@ module.exports.getDeliveredTrack = async (req, res) => {
         },
       })
       .then((data) => {
-        console.log(data);
         response.success = true;
         response.result = data;
         res.status(200).json(response);
@@ -386,7 +361,6 @@ module.exports.isDelivered = async (req, res) => {
       _id: id,
       postsDetails: { $elemMatch: { boughtFrom: userId } },
     }).then((data) => {
-      console.log(data);
       for (let i = 0; i < data.postsDetails.length; i++) {
         if (data.postsDetails[i].isDelivered == true) {
           count += 1;
@@ -395,7 +369,6 @@ module.exports.isDelivered = async (req, res) => {
         }
       }
     });
-    console.log(count);
     if (count === track.postsDetails.length) {
       await Track.findOneAndUpdate(
         {
@@ -421,7 +394,6 @@ module.exports.isDelivered = async (req, res) => {
 };
 
 module.exports.isAccepted = async (req, res) => {
-  console.log(req.userid);
   const response = {
     success: true,
     message: "",
@@ -436,7 +408,6 @@ module.exports.isAccepted = async (req, res) => {
       { new: true }
     );
     const len = track.postsDetails.length;
-    console.log(track, len);
     for (var i = 0; i < len; i++) {
       User.findOneAndUpdate(
         { _id: track.postsDetails[i].boughtFrom },
@@ -445,18 +416,17 @@ module.exports.isAccepted = async (req, res) => {
         },
         { new: true }
       ).then((data) => {
-        console.log(data);
+        // console.log(data);
       });
       Post.findOneAndUpdate(
         { _id: track.postsDetails[i].postId },
         {
-          // $inc: { count: -track.postsDetails[i].count },
           $push: { boughtBy: userId },
         },
         { new: true }
       )
         .then((data) => {
-          console.log(data);
+          // console.log(data);
         })
         .catch((err) => {
           console.log(err);
@@ -487,13 +457,11 @@ module.exports.isNotDelivered = async (req, res) => {
   try {
     const track = await Track.findOne({
       _id: id,
-      // postsDetails: { $elemMatch: { boughtFrom: userId } },
       createdBy: userId,
     });
     await Track.updateOne(
       {
         _id: id,
-        // postsDetails: { $elemMatch: { boughtFrom: userId } },
         createdBy: userId,
         "postsDetails._id": postId,
       },
@@ -502,10 +470,8 @@ module.exports.isNotDelivered = async (req, res) => {
     );
     await Track.findOne({
       _id: id,
-      // postsDetails: { $elemMatch: { boughtFrom: userId } },
       createdBy: userId,
     }).then((data) => {
-      console.log(data);
       for (let i = 0; i < data.postsDetails.length; i++) {
         if (data.postsDetails[i].isDelivered == true) {
           count += 1;
@@ -514,12 +480,10 @@ module.exports.isNotDelivered = async (req, res) => {
         }
       }
     });
-    console.log(count);
     if (count === track.postsDetails.length) {
       await Track.findOneAndUpdate(
         {
           _id: id,
-          // postsDetails: { $elemMatch: { boughtFrom: userId } },
           createdBy: userId,
         },
         { $set: { isDelivered: true } }
@@ -531,7 +495,6 @@ module.exports.isNotDelivered = async (req, res) => {
       await Track.findOneAndUpdate(
         {
           _id: id,
-          // postsDetails: { $elemMatch: { boughtFrom: userId } },
           createdBy: userId,
         },
         { $set: { isDelivered: false } }
