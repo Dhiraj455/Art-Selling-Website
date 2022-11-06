@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Autho from "../Helpers/AuthHelp";
 // import "./s.css";
 import { getProfile, getUsersPosts } from "../Services/User";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 // import ProductCard from "./ProductCard5";
 // import MyProductCard from "../Components/MyProductCard/MyProductCard";

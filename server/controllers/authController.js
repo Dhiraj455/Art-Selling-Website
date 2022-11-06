@@ -110,7 +110,7 @@ module.exports.google = async (req, res) => {
       res.cookie("jwttoken", tokens, response.refreshToken, {
         maxAge: 1000 * 60 * 60 * 24 * 30,
         httpOnly: true,
-        // signed: true,
+        signed: true,
         secure: true,
         path: "/refreshToken",
       });

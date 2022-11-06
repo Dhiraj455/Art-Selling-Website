@@ -1,6 +1,6 @@
 
-async function Autho(){
-  try {;
+async function Autho() {
+  try {
     const response = await fetch("/auth", {
       method: "GET",
       headers: {
@@ -12,6 +12,7 @@ async function Autho(){
     const data = await response.json();
     console.log(data);
     if (data.message === "Unauthorized") {
+      console.log("Error");
       const error = new Error(data.message);
       throw error;
     }
@@ -20,6 +21,6 @@ async function Autho(){
     window.location.href = "/login";
     console.log(err);
   }
-};
+}
 
 export default Autho;
