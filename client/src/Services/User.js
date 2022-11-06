@@ -29,6 +29,14 @@ export const googleLogin = (googleData) => {
   });
 };
 
+export const autho = () => {
+  return axios({
+    method: "get",
+    url: "/auth",
+    // headers : {"Content-Type": "application/json"}
+  });
+};
+
 export const refreshRoute = () => {
   return axios({
     method: "post",

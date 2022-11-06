@@ -14,22 +14,22 @@ import UpdatePost from "../Pages/UpdatePost";
 import Track from "../Pages/Track";
 import Delivery from "../Pages/Delivery";
 import AllUser from "../Pages/AllUsers";
-import { useEffect } from "react";
-import Autho from "../Helpers/AuthHelp";
-import { useState } from "react";
+// import { useEffect } from "react";
+// import Autho from "../Helpers/AuthHelp";
+// import { useState } from "react";
 import Error404 from "../Pages/Error";
 
 function Routers() {
-  const [x, setX] = useState([]);
-  useEffect(() => {
-    Autho().then((data) => {
-      setX(data);
-    });
-  }, []);
+  // const [x, setX] = useState([]);
+  // useEffect(() => {
+  //   Autho().then((data) => {
+  //     setX(data);
+  //   });
+  // }, []);
   return (
     <Routes>
-      {x.isAdmin ? (
-        <>
+      {/* {x.isAdmin ? (
+        <> */}
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<About />} />
           <Route path="/signup" element={<Signup />} />
@@ -46,10 +46,10 @@ function Routers() {
           <Route path="/mycart" element={<MyCart />} />
           <Route path="*" element={<Error404 />} />
           <Route path="/updatePost/:id" element={<UpdatePost />} />
-        </>
+        {/* </>
       ) : (
-        <>
-          <Route path="/" element={<Home />} />
+        <> */}
+          {/* <Route path="/" element={<Home />} />
           <Route path="/profile" element={<About />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
@@ -65,7 +65,7 @@ function Routers() {
           <Route path="/updatePost/:id" element={<UpdatePost />} />
           <Route element={<Error404 />} />
         </>
-      )}
+      )} */}
     </Routes>
   );
 }

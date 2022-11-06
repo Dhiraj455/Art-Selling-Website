@@ -1,5 +1,7 @@
 // import { useNavigate } from "react-router-dom";
 
+import { autho } from "../Services/User";
+
 async function Autho() {
   // const navigate = useNavigate();
   try {
@@ -11,6 +13,7 @@ async function Autho() {
       },
       credentials: "include",
     });
+    // const response = await autho();
     const data = await response.json();
     console.log(data);
     if (data.message === "Unauthorized") {
