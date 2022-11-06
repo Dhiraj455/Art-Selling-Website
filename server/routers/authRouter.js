@@ -6,8 +6,6 @@ const set = require("../middleware/image");
 
 router.post(
   "/register",
-  // set.setDestination("./public/images/UserPic/"),
-  // set.upload.single("pic"),
   authcontrol.register
 );
 
@@ -18,7 +16,6 @@ router.post("/googleLogin", authcontrol.google);
 router.post("/refreshToken", authcontrol.refreshToken);
 
 router.get("/auth", authentication, (req, res) => {
-  console.log("Authorization");
   res.send(req.user);
 });
 

@@ -47,7 +47,7 @@ function AllProducts() {
               </div>
             </Col>
 
-            {products.map((product, key) => (
+            {products && products.map((product, key) => (
               <Col lg="3" md="4" sm="6" className="mb-4" key={key}>
                 {product.createdBy._id === x._id ? (
                   <MyProductCard key={key} product={product} userId={x._id} />
