@@ -168,6 +168,14 @@ const Header = () => {
                       <DropdownItem divider />
                       <span
                         onClick={() => {
+                          navigate("/adminPosts");
+                        }}
+                      >
+                        All Posts
+                      </span>
+                      <DropdownItem divider />
+                      <span
+                        onClick={() => {
                           navigate("/logout");
                         }}
                       >

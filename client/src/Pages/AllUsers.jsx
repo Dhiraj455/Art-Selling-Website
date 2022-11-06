@@ -4,8 +4,10 @@ import { getAllUser } from "../Services/Admin";
 import CommonSection from "../Components/Common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import UsersCard from "../Components/Cards/UserCards";
+import { useNavigate } from "react-router-dom";
 
 function AllUser() {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [x, setX] = useState([]);
   const Update = async () => {
@@ -13,6 +15,9 @@ function AllUser() {
       let user = await Autho();
       setX(user);
       console.log(user._id);
+      if(!user.isAdmin){
+        navigate("/")
+      }
       getAllUser().then((data) => {
         setUsers(data.data.result);
         console.log(data.data.result);

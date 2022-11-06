@@ -1,30 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { deletePost } from "../../Services/User";
+import DeletePopUp from "../PopUps/DeletePopUp";
 import "./card.css";
 
 const MyProductCard = (props) => {
   const navigate = useNavigate();
-  const [deletePosts, setDeletePosts] = useState([]);
-
-  useEffect(() => {
-    setDeletePosts({
-      ...deletePosts,
-      id: props.product._id,
-      userId: props.userId,
-    });
-  }, []);
-
-  const handleDelete = () => {
-    try {
-      deletePost(deletePosts).then((data) => {
-        alert(data.data.message);
-        navigate(`/profile`);
-      });
-    } catch (err) {
-      alert(err.message)
-    }
-  };
+  const [showModal, setShowModal] = useState(false);
 
   const handleUpdate = () => {
     navigate(`/updatePost/${props.product._id}`)
@@ -66,7 +47,7 @@ const MyProductCard = (props) => {
         <div className=" mt-3 d-flex align-items-center justify-content-between">
           <button
             className="bid__btn d-flex align-items-center gap-1"
-            onClick={handleDelete}
+            onClick={() => setShowModal(true)}
           >
             <i class="ri-delete-bin-6-line"></i> Delete
           </button>
@@ -78,6 +59,7 @@ const MyProductCard = (props) => {
             <i class="ri-refresh-line"></i> Update
           </button>
         </div>
+        {showModal && <DeletePopUp setShowModal={setShowModal} postName={props.product.title} id={props.product._id} userId={props.product.createdBy._id} />}
       </div>
     </div>
   );

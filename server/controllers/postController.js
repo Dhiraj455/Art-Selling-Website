@@ -58,7 +58,7 @@ module.exports.getPosts = async (req, res) => {
     result: "",
   };
   try {
-    await Post.find({ isSold: false, userSuspended : false  })
+    await Post.find({ userSuspended: false })
       .sort({ createdAt: -1 })
       .select("title description price post count")
       .populate({
@@ -88,7 +88,7 @@ module.exports.getSomePosts = async (req, res) => {
     result: "",
   };
   try {
-    await Post.find({ isSold: false , userSuspended : false })
+    await Post.find({ isSold: false, userSuspended: false })
       .sort({ createdAt: -1 })
       .select("title description price post count")
       .populate({
@@ -275,7 +275,7 @@ module.exports.getAPost = async (req, res) => {
   };
   try {
     const { id } = req.params;
-    Post.findOne({ _id: id, userSuspended : false  })
+    Post.findOne({ _id: id, userSuspended: false })
       .select("title description price post count")
       .populate({
         path: "createdBy",
@@ -305,7 +305,7 @@ module.exports.getMyPosts = async (req, res) => {
     result: "",
   };
   try {
-    await Post.find({ createdBy: userId, userSuspended : false })
+    await Post.find({ createdBy: userId, userSuspended: false })
       .sort({ createdAt: -1 })
       .select("title description price post count")
       .populate({
@@ -336,7 +336,7 @@ module.exports.getBoughtItems = async (req, res) => {
     result: "",
   };
   try {
-    await Post.find({ boughtBy: userId, userSuspended : false  })
+    await Post.find({ boughtBy: userId, userSuspended: false })
       .sort({ createdAt: -1 })
       .select("title description price post count")
       .populate({
@@ -367,7 +367,7 @@ module.exports.getUsersPosts = async (req, res) => {
   };
   const id = req.params.id;
   try {
-    await Post.find({ createdBy: id, userSuspended : false  })
+    await Post.find({ createdBy: id, userSuspended: false })
       .sort({ createdAt: -1 })
       .select("title description price post count")
       .populate({

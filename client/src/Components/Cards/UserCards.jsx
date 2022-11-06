@@ -1,22 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { suspend } from "../../Services/Admin";
+import SuspendPopUp from "../PopUps/SuspendPopUp";
 // import { isNotDelivered } from "../../Services/Buy";
 
 import "./card.css";
 
 const UsersCard = (props) => {
+  const [showModal, setShowModal] = useState(false);
   const handleBtn = () => {
-    suspend({ id: props.user._id }).then((data) => {
-        alert(data.data.message);
-        window.location.reload();
-    })
-    // isNotDelivered({
-    //   id: props.id,
-    //   postId: props.product._id,
-    // }).then((data) => {
-    //   alert(data.data.message);
-    //   window.location.reload();
-    // });
   };
 
   return (
@@ -43,6 +34,7 @@ const UsersCard = (props) => {
             </button>
           ) : null}
         </div>
+        {showModal && <SuspendPopUp setShowModal={setShowModal} userName={props.user.name} userId={props.user._id} />}
       </div>
     </div>
   );

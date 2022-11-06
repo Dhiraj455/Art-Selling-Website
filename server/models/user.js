@@ -7,6 +7,7 @@ dotenv.config();
 const UserSchema = new mongoose.Schema({
   image: {
     type: String,
+    default: "https://jeffjbutler.com/wp-content/uploads/2018/01/default-user.png"
   },
   name: {
     type: String,

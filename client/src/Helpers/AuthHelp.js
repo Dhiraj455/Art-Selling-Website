@@ -1,9 +1,5 @@
-// import { useNavigate } from "react-router-dom";
-
-import { autho } from "../Services/User";
 
 async function Autho() {
-  // const navigate = useNavigate();
   try {
     const response = await fetch("/auth", {
       method: "GET",
@@ -13,19 +9,16 @@ async function Autho() {
       },
       credentials: "include",
     });
-    // const response = await autho();
     const data = await response.json();
     console.log(data);
     if (data.message === "Unauthorized") {
       console.log("Error");
-      // navigate("/login");
-      window.location.href = "/login";
-      // const error = new Error(data.message);
-      // throw error;
+      const error = new Error(data.message);
+      throw error;
     }
     return data;
   } catch (err) {
-    // navigate("/login");
+    window.location.href = "/login";
     console.log(err);
   }
 }
