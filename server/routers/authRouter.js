@@ -24,7 +24,7 @@ router.get("/auth", authentication, (req, res) => {
 
 router.get("/logout", (req, res) => {
   console.log("Logout");
-  res.clearCookie("jwttoken", { path: "/refreshToken" });
+  res.clearCookie("jwttoken", { path: "/" });
   res.send("Logout Successful");
 });
 

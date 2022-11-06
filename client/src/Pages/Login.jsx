@@ -71,7 +71,7 @@ function Login() {
         toast.success(data.data.message, {
           position: toast.POSITION.BOTTOM_RIGHT,
         });
-        window.location.href = "/";
+        navigate("/")
       }
       // console.log(user);
     });
