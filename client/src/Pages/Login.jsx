@@ -48,7 +48,6 @@ function Login() {
       [name]: value,
     });
   };
-
   const handleLogin = async (e) => {
     e.preventDefault();
     login(user).then((data) => {
@@ -137,7 +136,7 @@ function Login() {
             </button>
           </div>
           <GoogleLogin
-            clientId="762768919343-nupuvkq6iqso8gh92esvpa1dl6rgjmd4.apps.googleusercontent.com"
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
             onSuccess={handleGoogleLogin}
             onFailure={handleFailure}
             cookiePolicy="single_host_origin"

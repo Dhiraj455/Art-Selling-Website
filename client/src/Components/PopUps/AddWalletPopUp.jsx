@@ -30,8 +30,8 @@ const AddWalletPopUp = ({ setShowModal }) => {
       });
     } else {
       var options = {
-        key: "rzp_test_tupa66FxDzP1Ys",
-        key_secret: "9ieux6YxadTdX3qRIHnY4F2U",
+        key: process.env.REACT_APP_RAZORPAY_KEY,
+        key_secret: process.env.REACT_APP_RAZORPAY_KEY_SECRET,
         amount: amount * 100,
         currency: "INR",
         name: "METART",
