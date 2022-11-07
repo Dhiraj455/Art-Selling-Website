@@ -62,7 +62,7 @@ function TrackBox(props) {
           product={product}
           userId={props.userId}
           id={props.id}
-          isdelivered={props.delivery}
+          isdelivered={product.isDelivered}
         />
       ))}
     </>
