@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const dotenv = require('dotenv');
 dotenv.config();
 
+app.get("/", (req, res) => {res.send("Hello World")});
 app.use(express.json());
 
 initRoute(app);
