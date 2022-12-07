@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authentication = require("../middleware/Authentication");
-const authcontrol = require("../controllers/authcontroller");
+const authcontrol = require("../controllers/authController");
 const set = require("../middleware/image");
 
 router.post(
