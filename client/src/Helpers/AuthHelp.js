@@ -1,7 +1,8 @@
 
+const url = "https://art-selling-website.onrender.com";
 async function Autho() {
   try {
-    const response = await fetch("/auth", {
+    const response = await fetch(`${url}/auth`, {
       method: "GET",
       headers: {
         Accept: "application/json",
