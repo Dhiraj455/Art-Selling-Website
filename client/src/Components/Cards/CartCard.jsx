@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { deleteItem } from "../../Services/Buy";
@@ -33,8 +33,8 @@ const CartCard = (props) => {
   };
 
   const handleUpdate = () => {
-    setShowModal(true)
-  }
+    setShowModal(true);
+  };
 
   return (
     <div className="single__nft__card">
@@ -50,12 +50,12 @@ const CartCard = (props) => {
         </h5>
 
         <div className="creator__info-wrapper d-flex gap-3">
-
           <div className="creator__info w-100 d-flex align-items-center justify-content-between">
-
             <div>
               <h6>Price</h6>
-              <p>Rs. {props.product.price} x {props.product.count}</p>
+              <p>
+                Rs. {props.product.price} x {props.product.count}
+              </p>
             </div>
           </div>
         </div>
@@ -68,7 +68,13 @@ const CartCard = (props) => {
             <i className="ri-delete-bin-6-line"></i> Delete
           </button>
 
-          {showModal && <UpdateCardPopUp setShowModal={setShowModal} product={props.product} counts={props.product.count}/>}
+          {showModal && (
+            <UpdateCardPopUp
+              setShowModal={setShowModal}
+              product={props.product}
+              counts={props.product.count}
+            />
+          )}
           <button
             className="bid__btn d-flex align-items-center gap-1"
             onClick={handleUpdate}
