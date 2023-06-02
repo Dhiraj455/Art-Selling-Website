@@ -37,13 +37,7 @@ module.exports.update = async (req, res) => {
       let imagePath =
         path.join(__dirname, "../public/images/UserPic/") +
         imageName[imageName.length - 1];
-      fs.unlink(imagePath, (err) => {
-        if (err) {
-          response.errMessage = err.message;
-          response.message = "Failed to update event , please try again";
-          return res.status(400).json(response);
-        }
-      });
+      fs.unlink(imagePath);
     }
   } catch (err) {
     console.log("Error", err);
