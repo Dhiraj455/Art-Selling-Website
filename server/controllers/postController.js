@@ -16,7 +16,7 @@ module.exports.postArt = async (req, res) => {
     post = process.env.URL + "/images/Posts/" + req.file.filename;
   } else {
     response.message = "Set Post Image";
-    return res.status(200).json(response);
+    return res.status(200).send(response);
   }
   try {
     const postArt = new Post({
@@ -32,7 +32,7 @@ module.exports.postArt = async (req, res) => {
       .then((data) => {
         response.success = true;
         response.message = "Posted successfully";
-        res.status(200).json(response);
+        res.status(200).send(response);
       })
       .catch((err) => {
         console.log(err);
@@ -43,7 +43,7 @@ module.exports.postArt = async (req, res) => {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -81,13 +81,13 @@ module.exports.getPosts = async (req, res) => {
           response.totalPage = 1;
           response.message = "No results found";
         }
-        return res.status(200).json(response);
+        return res.status(200).send(response);
       });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -111,13 +111,13 @@ module.exports.getSomePosts = async (req, res) => {
       .then((data) => {
         response.success = true;
         response.result = data;
-        res.status(200).json(response);
+        return res.status(200).send(response);
       });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -179,16 +179,16 @@ module.exports.deletePost = async (req, res) => {
         });
       response.success = true;
       response.message = "Post Deleted Successfully";
-      res.status(200).json(response);
+      return res.status(200).send(response);
     } else {
       response.message = "No Post Found";
-      res.status(200).json(response);
+      return res.status(200).send(response);
     }
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -240,7 +240,7 @@ module.exports.updatePost = async (req, res) => {
       );
     }
 
-    res.json({ message: "Post updated successfully", post1 });
+    res.send({ message: "Post updated successfully", post1 });
     // oldImage != "" &&
     if (post != oldPost) {
       let imageName = oldPost.split("/");
@@ -251,7 +251,7 @@ module.exports.updatePost = async (req, res) => {
         if (err) {
           response.errMessage = err.message;
           response.message = "Failed to update event , please try again";
-          return res.status(400).json(response);
+          return res.status(400).send(response);
         }
       });
     }
@@ -259,7 +259,7 @@ module.exports.updatePost = async (req, res) => {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -282,13 +282,13 @@ module.exports.getAPost = async (req, res) => {
       .then((data) => {
         response.success = true;
         response.result = data;
-        res.status(200).json(response);
+        return res.status(200).send(response);
       });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -327,13 +327,13 @@ module.exports.getMyPosts = async (req, res) => {
           response.totalPage = 1;
           response.message = "No results found";
         }
-        return res.status(200).json(response);
+        return res.status(200).send(response);
       });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -372,13 +372,13 @@ module.exports.getBoughtItems = async (req, res) => {
           response.totalPage = 1;
           response.message = "No results found";
         }
-        return res.status(200).json(response);
+        return res.status(200).send(response);
       });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -417,12 +417,12 @@ module.exports.getUsersPosts = async (req, res) => {
           response.totalPage = 1;
           response.message = "No results found";
         }
-        return res.status(200).json(response);
+        return res.status(200).send(response);
       });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };

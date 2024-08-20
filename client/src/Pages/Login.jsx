@@ -56,6 +56,7 @@ function Login() {
         });
         navigate("/");
       }).catch((err) => {
+        console.log(err)
         toast.warn(err.response.data.message, {
           position: toast.POSITION.BOTTOM_RIGHT,
         });

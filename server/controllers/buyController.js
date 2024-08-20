@@ -20,7 +20,7 @@ module.exports.addToCart = async (req, res) => {
       if (post.count < carts.count + count) {
         response.success = true;
         response.message = "Count Is Out Of Stock";
-        return res.status(400).json(response);
+        return res.status(400).send(response);
       } else {
         await Post.findOneAndUpdate(
           { _id: req.body.id },
@@ -36,7 +36,7 @@ module.exports.addToCart = async (req, res) => {
         .then((data) => {
           response.success = true;
           response.message = "Added To Cart";
-          return res.status(200).json(response);
+          return res.status(200).send(response);
         })
         .catch((err) => {
           console.error("Error 5", err);
@@ -58,14 +58,14 @@ module.exports.addToCart = async (req, res) => {
       await cart.save().then((data) => {
         response.success = true;
         response.message = "Added To Cart";
-        res.status(200).json(response);
+        return res.status(200).send(response);
       });
     }
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -97,17 +97,17 @@ module.exports.getMyCart = async (req, res) => {
           response.message = "My Cart";
           response.result = result;
           response.total = total;
-          res.status(200).json(response);
+          return res.status(200).send(response);
         } else {
           response.message = "No Item In Cart";
-          res.status(400).json(response);
+          return res.status(400).send(response);
         }
       });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -130,12 +130,12 @@ module.exports.updateCart = async (req, res) => {
     );
     response.success = true;
     response.message = "Cart Updated Successful";
-    res.status(200).json(response);
+    return res.status(200).send(response);
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -159,10 +159,10 @@ module.exports.buyCart = async (req, res) => {
     const user = await User.findOne({ _id: userId });
     if (user.wallet < totals) {
       response.message = "Less Balance In Wallet";
-      return res.status(200).json(response);
+      return res.status(200).send(response);
     } else if (!req.body.postsDetails) {
       response.message = "No Products";
-      return res.status(200).json(response);
+      return res.status(200).send(response);
     } else {
       await User.findOneAndUpdate(
         { _id: userId },
@@ -183,7 +183,7 @@ module.exports.buyCart = async (req, res) => {
             .catch((err) => {
               console.log(err);
               response.message = "Error In Buying 2";
-              return res.status(400).json(response);
+              return res.status(400).send(response);
             });
           Post.findOneAndUpdate(
             { _id: item[i].postBy },
@@ -207,12 +207,12 @@ module.exports.buyCart = async (req, res) => {
             .catch((err) => {
               console.log(err);
               response.message = "Error In Buying";
-              res.status(400).json(response);
+              return res.status(400).send(response);
             });
         }
         response.success = true;
         response.message = "Bought Successfully";
-        res.status(200).json(response);
+        return res.status(200).send(response);
       }).clone();
       const track = new Track({
         totals,
@@ -225,7 +225,7 @@ module.exports.buyCart = async (req, res) => {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -248,18 +248,18 @@ module.exports.deleteItem = async (req, res) => {
           );
           response.success = true;
           response.message = "Cart Item Deleted Successfully";
-          res.status(200).json(response);
+          return res.status(200).send(response);
         }
       );
     } else {
       response.message = "Item Not Found";
-      res.status(200).json(response);
+      return res.status(200).send(response);
     }
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -287,13 +287,13 @@ module.exports.getTrack = async (req, res) => {
       .then((data) => {
         response.success = true;
         response.result = data;
-        res.status(200).json(response);
+        return res.status(200).send(response);
       });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -324,13 +324,13 @@ module.exports.getDeliveredTrack = async (req, res) => {
       .then((data) => {
         response.success = true;
         response.result = data;
-        res.status(200).json(response);
+        return res.status(200).send(response);
       });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -379,17 +379,17 @@ module.exports.isDelivered = async (req, res) => {
       );
       response.success = true;
       response.message = "All Delivered";
-      res.status(200).json(response);
+      return res.status(200).send(response);
     } else {
       response.success = true;
       response.message = "Delivered";
-      res.status(200).json(response);
+      return res.status(200).send(response);
     }
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -431,17 +431,17 @@ module.exports.isAccepted = async (req, res) => {
         .catch((err) => {
           console.log(err);
           response.message = "Error In Buying";
-          res.status(400).json(response);
+          return res.status(400).send(response);
         });
     }
     response.success = true;
     response.message = "Accepted";
-    res.status(200).json(response);
+    return res.status(200).send(response);
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -490,7 +490,7 @@ module.exports.isNotDelivered = async (req, res) => {
       );
       response.success = true;
       response.message = "Successfully Declined 2";
-      res.status(200).json(response);
+      return res.status(200).send(response);
     } else {
       await Track.findOneAndUpdate(
         {
@@ -501,12 +501,12 @@ module.exports.isNotDelivered = async (req, res) => {
       );
       response.success = true;
       response.message = "Successfully Declined";
-      res.status(200).json(response);
+      return res.status(200).send(response);
     }
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };

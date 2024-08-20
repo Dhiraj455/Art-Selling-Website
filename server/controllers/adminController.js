@@ -29,12 +29,12 @@ module.exports.getAllUsers = async (req, res) => {
       response.totalPage = 1;
       response.message = "No results found";
     }
-    return res.status(200).json(response);
+    return res.status(200).send(response);
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -49,12 +49,12 @@ module.exports.getSomeUsers = async (req, res) => {
     const user = await User.find({}).limit(8);
     response.success = true;
     response.result = user;
-    res.status(200).json(response);
+    return res.status(200).send(response);
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -99,11 +99,11 @@ module.exports.suspend = async (req, res) => {
     await Cart.deleteMany({ createdBy: id });
     response.success = true;
     response.message = "User Suspended";
-    res.status(200).json(response);
+    return res.status(200).send(response);
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };

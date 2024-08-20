@@ -31,7 +31,8 @@ module.exports.update = async (req, res) => {
       },
       { new: true }
     );
-    res.json({ message: "User updated successfully", user });
+    res.send({ message: "User updated successfully", user });
+    console.log(oldImage)
     if (oldImage != "" && image != oldImage) {
       let imageName = oldImage.split("/");
       let imagePath =
@@ -43,7 +44,7 @@ module.exports.update = async (req, res) => {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).json(response);
   }
 };
 
@@ -59,13 +60,13 @@ module.exports.getProfile = async (req, res) => {
     await User.findOne({ _id: id }).then((result) => {
       response.result = result;
       response.success = true;
-      res.status(200).json(response);
+      return res.status(200).send(response);
     });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -83,13 +84,13 @@ module.exports.getMyPost = async (req, res) => {
       .then((result) => {
         response.result = result;
         response.success = true;
-        res.status(200).json(response);
+        return res.status(200).send(response);
       });
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
@@ -110,11 +111,11 @@ module.exports.addWallet = async (req, res) => {
     );
     response.success = true;
     response.message = "Wallet added successfully";
-    res.status(200).json(response);
+    return res.status(200).send(response);
   } catch (err) {
     console.log("Error", err);
     response.message = "Something went wrong!";
     response.errMessage = err.message;
-    res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };

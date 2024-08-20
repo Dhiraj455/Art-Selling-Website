@@ -2,17 +2,16 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://art-selling-website.onrender.com",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^0.27.2",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
+    "axios": "^1.7.4",
     "bootstrap": "^5.2.2",
     "boxicons": "^2.1.4",
     "framer-motion": "^7.6.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-google-login": "^5.2.2",
     "react-images-uploading": "^3.1.7",
     "react-router-dom": "^6.3.0",
@@ -49,6 +48,6 @@
     ]
   },
   "engines": {
-    "node":"16.14.1"
+    "node": "20.16.0"
   }
 }

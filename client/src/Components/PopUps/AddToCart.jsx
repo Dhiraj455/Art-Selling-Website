@@ -39,6 +39,7 @@ const AddToCart = ({ setShowModal, product, userId }) => {
           setShowModal(false);
         })
         .catch((err) => {
+          console.log(err)
           toast.warn(err.response.data.message, {
             position: toast.POSITION.BOTTOM_RIGHT,
           });

@@ -15,12 +15,12 @@ module.exports.register = async (req, res) => {
   };
   const { name, email, password, cpassword } = req.body;
   if (!name || !email || !password || !cpassword) {
-    return res.status(422).json({ message: "Please fill all the fields" });
+    return res.status(422).send({ message: "Please fill all the fields" });
   }
   try {
     const user = await User.findOne({ email: email });
     if (user) {
-      return res.json({ message: "User already exists" }).status(200);
+      return res.send({ message: "User already exists" }).status(200);
     }
     const newUser = new User({
       name,
@@ -31,7 +31,7 @@ module.exports.register = async (req, res) => {
     await newUser.save();
     response.success = true;
     response.message = "User created successfully";
-    res.status(200).json(response);
+    return res.status(200).send(response);
   } catch (err) {
     console.log(err);
   }
@@ -41,13 +41,13 @@ module.exports.login = async (req, res) => {
   const { email, password } = req.body;
   let token = "";
   if (!email || !password) {
-    return res.status(400).json({ message: "Please fill all the fields" });
+    return res.status(400).send({ message: "Please fill all the fields" });
   }
   try {
     const user = await User.findOne({ email: email });
 
     if (!user) {
-      return res.status(400).json({ message: "User does not exist" });
+      return res.status(400).send({ message: "User does not exist" });
     } else {
       const isMatch = await bcrypt.compare(password, user.password);
       token = await user.generateAuthToken();
@@ -60,9 +60,9 @@ module.exports.login = async (req, res) => {
       });
 
       if (!isMatch) {
-        return res.status(400).json({ message: "Invalid Credentials" });
+        return res.status(400).send({ message: "Invalid Credentials" });
       } else {
-        res.json({ message: "Login Successful" });
+        return res.send({ message: "Login Successful" });
       }
     }
   } catch (err) {
@@ -103,16 +103,16 @@ module.exports.google = async (req, res) => {
         secure: true,
         path: "/refreshToken",
       });
-      return res.status(200).json(response);
+      return res.status(200).send(response);
     } else {
       response.message = "Please register to sign in";
-      return res.status(400).json(response);
+      return res.status(400).send(response);
     }
   } catch (err) {
     console.log(err);
     response.errorMessage = err.message;
     response.message = "Failed to sign in , please try again";
-    return res.status(400).json(response);
+    return res.status(400).send(response);
   }
 };
 
